@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 
+#include "components/headers/item.hpp"
+#include "components/headers/inventory.hpp"
+
 using namespace std;
 
 int main() {
@@ -24,7 +27,11 @@ int main() {
     // read from file and do something
   }
 
+  // test display inventory
+  Inventory<Item> inv;
+  inv.display();
   // sample interaction
+  cout << "\n\nInput command: ";
   string command;
   while (cin >> command) {
     if (command == "EXPORT") {
@@ -58,6 +65,8 @@ int main() {
       // todo
       cout << "Invalid command" << endl;
     }
+    cout << "Input command: ";
   }
   return 0;
 }
+
