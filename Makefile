@@ -4,7 +4,7 @@ EXT_IN = in
 EXT_OUT = out
 EXT_ANS = ans
 EXECUTABLE_FILENAME = main
-ALL_SRCS := $(call rwildcard, components,*.cpp)
+ALL_SRCS := $(call rwildcard, core,*.cpp)
 SRCS     := $(filter-out check.cpp, $(ALL_SRCS))
 
 all: compile test check

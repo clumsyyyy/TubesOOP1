@@ -44,7 +44,7 @@ string Item::getBType() const{
 }
 
 void Item::displayInfo() const{
-    cout << setw(WIDTH) << this->ID << " | " << setw(WIDTH) << this->name << " | " << setw(WIDTH) << this->type << " | " << setw(WIDTH) << this->basetype << endl;
+    cout << this->ID << " | " << setw(WIDTH) << this->name << " | " << setw(WIDTH) << this->type << " | " << setw(WIDTH) << this->basetype << endl;
 }
 
 int Item::getQuantity() const{ return 0; }

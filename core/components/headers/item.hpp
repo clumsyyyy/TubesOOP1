@@ -1,7 +1,7 @@
 #ifndef ITEM_CPP
 #define ITEM_CPP
 
-#include "globals.hpp"
+#include "vars.hpp"
 #include <iostream>
 #include <iomanip>
 #include <string>

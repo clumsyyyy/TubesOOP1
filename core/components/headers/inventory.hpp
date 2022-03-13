@@ -1,7 +1,7 @@
 #ifndef INVENTORY_HPP
 #define INVENTORY_HPP
 
-#include "globals.hpp"
+#include "vars.hpp"
 #include "item.hpp"
 #include <iostream>
 using namespace std;
@@ -15,8 +15,10 @@ class Inventory{
         ~Inventory();
         Item get(int i, int j);
         void set(int i, int j, Item* item);
-        void display();
-        void add(Item* item, int quant);
+        void specify(int i, int j);
+        void displayMenu();
+        void displayDetails();
+        void add(NonTool* item);
 };
 
 #endif
