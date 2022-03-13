@@ -44,16 +44,24 @@ string Item::getBType() const{
 }
 
 void Item::displayInfo() const{
-    cout << this->ID << " | " << setw(WIDTH) << this->name << " | " << setw(WIDTH) << this->type << " | " << setw(WIDTH) << this->basetype << endl;
+    cout << setw(NUMWIDTH) << this->ID << " | " 
+    << setw(WIDTH) << this->name << " | " 
+    << setw(WIDTH) << this->type << " | " 
+    << setw(WIDTH) << this->basetype;
 }
 
 int Item::getQuantity() const{ return 0; }
-void Item::setQuantity(int) const{}
+int Item::getDurability() const { return 0; }
+void Item::setQuantity(int) const {}
 
 // Implementasi bagian Non Tool Item
 NonTool::NonTool(int ID, string name, string type, string basetype, int quant) 
 : Item(ID, name, type, basetype){
     this->quantity = quant;
+}
+
+NonTool::NonTool(const NonTool& nt) : Item(nt){
+    this->quantity = nt.quantity;
 }
 
 NonTool::~NonTool(){
@@ -85,7 +93,7 @@ void NonTool::useItem(int quant){
 
 void NonTool::displayInfo() const{
     Item::displayInfo();
-    cout << setw(WIDTH) << this->quantity << endl;
+    cout << " | QTY: " << this->quantity;
 }
 
 // Implementasi bagian Tool Item
@@ -113,7 +121,7 @@ void Tool::useItem(){
 
 void Tool::displayInfo() const{
     Item::displayInfo();
-    cout << setw(WIDTH) << this->durability << endl;
+    cout << " | DUR: " << this->durability;
 }
 
 

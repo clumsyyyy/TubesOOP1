@@ -25,12 +25,14 @@ class Item{
         virtual void displayInfo() const;
         virtual int getQuantity() const;
         virtual void setQuantity(int) const;
+        virtual int getDurability() const;
 };
 class NonTool : public Item {
     private:
         int quantity;
     public:
         NonTool(int, string, string, string, int);
+        NonTool(const NonTool& nt);
         ~NonTool();
         int getQuantity() const;
         void setQuantity(int);

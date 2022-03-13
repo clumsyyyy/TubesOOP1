@@ -10,6 +10,7 @@ void DetailsHandler(){
         int i, j;
         cin >> i >> j;
         inv->specify(i, j);
+        cout << endl;
     }
 }
 

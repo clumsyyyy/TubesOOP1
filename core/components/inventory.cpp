@@ -22,7 +22,10 @@ void Inventory::set(int i, int j, Item* item){
 void Inventory::displayMenu(){
     for (int i = 0; i < INV_ROWS; i++){
         for (int j = 0; j < INV_COLS; j++){
-            cout << "[" << (i * INV_COLS + j + 1) << " " << this->get(i, j).getID() << "] ";
+            cout << "[(" << i << ", " << j << ") " 
+            << (this->inv_buffer[i * INV_COLS + j])->getID() << " "
+            << (this->inv_buffer[i * INV_COLS + j])->getQuantity() << " "
+            << (this->inv_buffer[i * INV_COLS + j])->getDurability() << "] ";
             if (j == INV_COLS - 1){
                 cout << endl;
             }
@@ -41,6 +44,7 @@ void Inventory::displayDetails(){
         for (int j = 0; j < INV_COLS; j++){
             cout << "(" << i << ", " << j << ") | ";
             this->specify(i, j);
+            cout << endl;
         }
     }
 };
@@ -54,10 +58,19 @@ void Inventory::add(NonTool* item){
         for (int j = 0; j < INV_COLS; j++){
             // base case if no such item exists in inventory
             if (this->get(i, j).getID() == UNDEFINED_ID){
-                this->set(i ,j, item);
-                cout << "set item " << item->getID() << " to (" << i << ", " << j << ")" << endl;
-                return;
-                
+                if (item->getQuantity() <= MAX_STACK){
+                    this->set(i ,j, item);
+                    cout << "set item " << item->getID() << " to (" << i << ", " << j << ")" << endl;
+                    return;
+                } else {
+                    NonTool* temp = new NonTool(*item);
+                    temp->setQuantity(MAX_STACK);
+                    this->set(i ,j, temp);
+                    cout << "set item " << temp->getID() << " to (" << i << ", " << j << ")" << endl;
+                    cout << item->getQuantity()<< " stacks left" << endl;
+                    item->setQuantity(item->getQuantity() - MAX_STACK);
+                    continue;
+                }
             // case 1: other item exists (stackable)
             } else if (this->get(i, j).getID() == item->getID()){
                 // if current slot less than max stack, increase quantity
@@ -65,7 +78,6 @@ void Inventory::add(NonTool* item){
                     this->get(i, j).setQuantity(this->get(i, j).getQuantity() + item->getQuantity());
                     return;
                 } else {
-                    // if item is not stackable, increase slot
                     if (j == INV_COLS - 1){
                         if (i == INV_ROWS - 1){
                             cout << "Inventory is full" << endl;

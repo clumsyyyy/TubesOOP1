@@ -26,9 +26,7 @@ int main() {
     // read item from config file
     ifstream itemConfigFile(itemConfigPath);
     for (string line; getline(itemConfigFile, line);) {
-        cout << line << endl;
         itemConfig.push_back(parse(line));
-        // do something
     }
 
     // read recipes
