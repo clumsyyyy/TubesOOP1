@@ -52,7 +52,7 @@ void Item::displayInfo() const{
 
 int Item::getQuantity() const{ return 0; }
 int Item::getDurability() const { return 0; }
-void Item::setQuantity(int) const {}
+void Item::setQuantity(int) {}
 
 // Implementasi bagian Non Tool Item
 NonTool::NonTool(int ID, string name, string type, string basetype, int quant) 
@@ -97,9 +97,9 @@ void NonTool::displayInfo() const{
 }
 
 // Implementasi bagian Tool Item
-Tool::Tool(int ID, string name, string type, string basetype) 
+Tool::Tool(int ID, string name, string type, string basetype, int dur) 
 : Item(ID, name, type, basetype) {
-    this->durability = 10;
+    this->durability = dur;
 }
 
 Tool::~Tool(){

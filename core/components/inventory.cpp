@@ -53,7 +53,7 @@ void Inventory::specify(int i, int j){
     (this->inv_buffer[i * INV_COLS + j])->displayInfo();
 }
 
-void Inventory::add(NonTool* item){
+void Inventory::addNonTool(NonTool* item){
     for (int i = 0; i < INV_ROWS; i++){
         for (int j = 0; j < INV_COLS; j++){
             // base case if no such item exists in inventory
@@ -94,5 +94,26 @@ void Inventory::add(NonTool* item){
                 return;
             }
         }
+    }
+}
+
+void Inventory::addTool(Tool* item){
+     for (int i = 0; i < INV_ROWS; i++){
+        for (int j = 0; j < INV_COLS; j++){
+            // base case if no such item exists in inventory
+            if (this->get(i, j).getID() == UNDEFINED_ID){
+                this->set(i ,j, item);
+                cout << "set item " << item->getID() << " to (" << i << ", " << j << ")" << endl;
+                return;
+            }
+        }
+     }
+}
+
+void Inventory::discard(int quant, int slot){
+    if (this->inv_buffer[slot]->getQuantity() - quant >= 0){
+        this->inv_buffer[slot]->setQuantity(this->inv_buffer[slot]->getQuantity() - quant);
+    } else {
+        cout << "Not enough items in slot" << endl;
     }
 }

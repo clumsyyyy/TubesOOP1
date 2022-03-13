@@ -24,7 +24,7 @@ class Item{
         string getBType() const;
         virtual void displayInfo() const;
         virtual int getQuantity() const;
-        virtual void setQuantity(int) const;
+        virtual void setQuantity(int);
         virtual int getDurability() const;
 };
 class NonTool : public Item {
@@ -45,7 +45,7 @@ class Tool : public Item {
     private: 
         int durability; // durability of the tool
     public:
-        Tool(int, string, string, string);
+        Tool(int, string, string, string, int);
         ~Tool();
         int getDurability() const;
         void useItem();

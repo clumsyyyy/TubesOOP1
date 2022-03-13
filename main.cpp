@@ -46,9 +46,10 @@ int main() {
             inv->displayMenu();
         } else if (command == "DETAILS"){
             DetailsHandler();
-        }
-        else if (command == "GIVE"){
+        } else if (command == "GIVE"){
             GiveHandler();
+        } else if (command == "DISCARD"){
+            DiscardHandler();
         }
         else if (command == "EXPORT") {
             string outputPath;

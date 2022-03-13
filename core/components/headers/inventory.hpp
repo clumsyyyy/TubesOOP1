@@ -18,7 +18,9 @@ class Inventory{
         void specify(int i, int j);
         void displayMenu();
         void displayDetails();
-        void add(NonTool* item);
+        void addNonTool(NonTool* item);
+        void addTool(Tool* item);
+        void discard(int quant, int slot);
 };
 
 #endif
