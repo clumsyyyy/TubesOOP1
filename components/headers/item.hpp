@@ -1,8 +1,9 @@
 #ifndef ITEM_CPP
 #define ITEM_CPP
 
-#define MAX_STACK 64
+#include "globals.hpp"
 #include <iostream>
+#include <iomanip>
 #include <string>
 using namespace std;
 
@@ -13,33 +14,40 @@ class Item{
         string type;     // item type (TOOL/NONTOOL)
         string basetype; // basetype (oak log basetypenya log)
     public:
+        Item(); //default constructor
         Item(int, string, string, string); // user-defined constructor
+        Item(const Item& i); // copy constructor
         virtual ~Item(); // virtual destructor
         int getID() const;
         string getName() const;
         string getType() const;
+        string getBType() const;
+        virtual void displayInfo() const;
+        virtual int getQuantity() const;
+        virtual void setQuantity(int) const;
 };
-
-class NonToolItem : public Item {
+class NonTool : public Item {
     private:
         int quantity;
     public:
-        NonToolItem(int, string, string, string, int);
-        ~NonToolItem();
+        NonTool(int, string, string, string, int);
+        ~NonTool();
         int getQuantity() const;
         void setQuantity(int);
         void useItem(int);
         void addItem(int);
+        void displayInfo() const;
 };
 
-class ToolItem : public Item {
+class Tool : public Item {
     private: 
         int durability; // durability of the tool
     public:
-        ToolItem(int, string, string, string);
-        ~ToolItem();
+        Tool(int, string, string, string);
+        ~Tool();
         int getDurability() const;
         void useItem();
+        void displayInfo() const;
 };
 
 #endif

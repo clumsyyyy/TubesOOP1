@@ -1,18 +1,22 @@
 #ifndef INVENTORY_HPP
 #define INVENTORY_HPP
-#define INV_COLS 9
-#define INV_ROWS 3
 
-template <class T>
+#include "globals.hpp"
+#include "item.hpp"
+#include <iostream>
+using namespace std;
+
+
 class Inventory{
     private:
-        T* inv_buffer;
+        Item** inv_buffer;
     public:
-        //user-defined: create empty inventory
         Inventory();
         ~Inventory();
-        T getItem(int x, int y);
-        T setItem(int x, int y, T item);
+        Item get(int i, int j);
+        void set(int i, int j, Item* item);
         void display();
+        void add(Item* item, int quant);
 };
+
 #endif
