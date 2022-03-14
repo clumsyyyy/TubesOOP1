@@ -68,6 +68,15 @@ NonTool::~NonTool(){
 
 }
 
+NonTool& NonTool::operator=(const NonTool& other) {
+    this->ID = other.ID;
+    this->name = other.name;
+    this->type = other.type;
+    this->basetype = other.basetype;
+    this->quantity = other.quantity;
+    return *this;
+}
+
 int NonTool::getQuantity() const{
     return this->quantity;
 }
@@ -104,6 +113,15 @@ Tool::Tool(int ID, string name, string type, string basetype, int dur)
 
 Tool::~Tool(){
     
+}
+
+Tool& Tool::operator=(const Tool& other) {
+    this->ID = other.ID;
+    this->name = other.name;
+    this->type = other.type;
+    this->basetype = other.basetype;
+    this->durability = other.durability;
+    return *this;
 }
 
 int Tool::getDurability() const{

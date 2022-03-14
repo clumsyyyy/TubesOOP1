@@ -34,6 +34,7 @@ class NonTool : public Item {
         NonTool(int, string, string, string, int);
         NonTool(const NonTool& nt);
         ~NonTool();
+        NonTool& operator=(const NonTool& other);
         int getQuantity() const;
         void setQuantity(int);
         void useItem(int);
@@ -47,6 +48,7 @@ class Tool : public Item {
     public:
         Tool(int, string, string, string, int);
         ~Tool();
+        Tool& operator=(const Tool& other);
         int getDurability() const;
         void useItem();
         void displayInfo() const;

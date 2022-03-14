@@ -19,6 +19,42 @@ tuple <string, string, string, string> parse(string line){
     return make_tuple(ID, nameTok, typeTok, btypeTok);
 }
 
+tuple <int, vector<string>, tuple<int,string>> parse(ifstream* file) {
+    int i = 0, n = 0;
+    vector<string> recipeList;
+    string name;
+    int quantity;
+    for (string line; getline(*file, line);) {
+        if (i == 0) {
+            istringstream iss(line);
+            string col;
+            getline(iss, col, ' ');
+            n = stoi(col);
+        } else if (i <= n) {
+            istringstream iss(line);
+            for (int j = 0; j < n; j++) {
+                string temp;
+                getline(iss, temp, ' ');
+                if (temp == "-") {
+                    recipeList.push_back("UNDEFINED");
+                } else {
+                    recipeList.push_back(temp);
+                }
+                
+            }
+        } else {
+            istringstream iss(line);
+            string tempname, tempquantity;
+            getline(iss, tempname, ' ');
+            getline(iss, tempquantity, ' ');
+            name = tempname;
+            quantity = stoi(tempquantity);
+        }
+        i++;
+    }
+    return make_tuple(n,recipeList,make_tuple(quantity,name));
+}
+
 int main() {
     string configPath = "./config";
     string itemConfigPath = configPath + "/item.txt";
@@ -28,21 +64,22 @@ int main() {
     for (string line; getline(itemConfigFile, line);) {
         itemConfig.push_back(parse(line));
     }
-
     // read recipes
     for (const auto &entry :
         filesystem::directory_iterator(configPath + "/recipe")) {
-        cout << entry.path() << endl;
+        ifstream* recipeConfigFile = new ifstream(entry.path());
+        recipeConfig.push_back(parse(recipeConfigFile));
         // read from file and do something
     }
-
+    
     // test display inventory
-    cout << inv->get(0, 0).getID() << endl;
+    // cout << inv->get(0, 0).getID() << endl;
     // sample interaction
     cout << "\n\nInput command: ";
     string command;
     while (cin >> command) {
         if (command == "SHOW"){
+            crftab->displayMenu();
             inv->displayMenu();
         } else if (command == "DETAILS"){
             DetailsHandler();

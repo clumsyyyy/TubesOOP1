@@ -30,7 +30,6 @@ void Inventory::displayMenu(){
                 cout << endl;
             }
         }
-        cout << endl;
     }
 };
 
@@ -107,7 +106,7 @@ void Inventory::addTool(Tool* item){
                 return;
             }
         }
-     }
+    }
 }
 
 void Inventory::discard(int quant, int slot){
