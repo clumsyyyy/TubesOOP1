@@ -3,9 +3,6 @@
 
 #define INV_COLS 9
 #define INV_ROWS 3
-#define TYPE1 1
-#define TYPE2 2
-#define TYPE3 3
 #define CRAFT_COLS 3
 #define CRAFT_ROWS 3
 #define MAX_STACK 64

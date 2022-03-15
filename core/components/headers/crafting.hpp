@@ -24,9 +24,7 @@ class Crafting {
         void set_crafting_table(int min);
         string getName() const;
         int getSum() const;
-        void type1(tuple<int,vector<string>,tuple<int,string>> tup);
-        void type2(tuple<int,vector<string>,tuple<int,string>> tup);
-        void type3(tuple<int,vector<string>,tuple<int,string>> tup);
+        void recipe(tuple<tuple<int,int>,vector<string>,tuple<int,string>> tup);
         int tools();
         void returning();
 };

@@ -19,20 +19,22 @@ tuple <string, string, string, string> parse(string line){
     return make_tuple(ID, nameTok, typeTok, btypeTok);
 }
 
-tuple <int, vector<string>, tuple<int,string>> parse(ifstream* file) {
-    int i = 0, n = 0;
+tuple <tuple<int,int>, vector<string>, tuple<int,string>> parse(ifstream* file) {
+    int i = 0, n = 0, m = 0;
     vector<string> recipeList;
     string name;
     int quantity;
     for (string line; getline(*file, line);) {
         if (i == 0) {
             istringstream iss(line);
-            string col;
+            string row, col;
+            getline(iss, row, ' ');
             getline(iss, col, ' ');
-            n = stoi(col);
+            n = stoi(row);
+            m = stoi(col);    
         } else if (i <= n) {
             istringstream iss(line);
-            for (int j = 0; j < n; j++) {
+            for (int j = 0; j < m; j++) {
                 string temp;
                 getline(iss, temp, ' ');
                 if (temp == "-") {
@@ -52,7 +54,7 @@ tuple <int, vector<string>, tuple<int,string>> parse(ifstream* file) {
         }
         i++;
     }
-    return make_tuple(n,recipeList,make_tuple(quantity,name));
+    return make_tuple(make_tuple(n, m),recipeList,make_tuple(quantity,name));
 }
 
 int main() {
@@ -71,6 +73,7 @@ int main() {
         recipeConfig.push_back(parse(recipeConfigFile));
         // read from file and do something
     }
+
     //
     // test display inventory
     // cout << inv->get(0, 0).getID() << endl;

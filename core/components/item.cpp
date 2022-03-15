@@ -14,7 +14,6 @@ Item::Item(int ID, string name, string type, string basetype) {
     this->name = name;
     this->type = type;
     this->basetype = basetype;
-    this->quantity = 8;
 }
 
 Item::Item(const Item& i) {

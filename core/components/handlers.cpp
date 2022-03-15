@@ -69,47 +69,21 @@ void CraftingHandler() {
         int min = 0;        
         string name;
         Crafting crf;
-        switch (get<0>(tup)) {
-        case TYPE3:
-            crf.type3(tup);
-            name = crf.getName();
-            sum = crf.getSum();
-            if (sum > 0){
-                GiveChecker(name, sum);
-                cout << "crafted " << sum << " " << name << endl;
-                crf.returning();
-                return; 
-            }
-            break;
-        case TYPE2:
-            crf.type2(tup);
-            name = crf.getName();
-            sum = crf.getSum();
-            if (sum > 0){
-                GiveChecker(name, sum);
-                cout << "crafted " << sum << " " << name << endl;
-                crf.returning();
-                return; 
-            }
-            break;
-        case TYPE1:
-            // Check Recipe
-            crf.type1(tup);
-            name = crf.getName();
-            sum = crf.getSum();
-            if (sum > 0){
-                GiveChecker(name, sum);
-                cout << "crafted " << sum << " " << name << endl;
-                crf.returning();
-                return; 
-            }
-            break;
+        crf.recipe(tup);
+        name = crf.getName();
+        sum = crf.getSum();
+        if (sum > 0){
+            GiveChecker(name, sum);
+            cout << "crafted " << sum << " " << name << endl;
+            crf.returning();
+            return; 
         }
     }
     Crafting crf;
     int durability = crf.tools(); 
     int sum = crf.getSum();
     string name = crf.getName();
+
     if (sum == 2) {
         for (int i = 0; i < CRAFT_COLS; i++) {
             for (int j = 0; j < CRAFT_ROWS; j++) {
