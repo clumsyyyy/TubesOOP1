@@ -43,20 +43,35 @@ int Crafting::getSum() const {
 void Crafting::recipe(tuple<tuple<int,int>,vector<string>,tuple<int,string>> tup) {
     int row = get<0>(get<0>(tup));
     int col = get<1>(get<0>(tup));
-    for (int i = 0; i < CRAFT_ROWS-row; i++) {
-        for (int j = 0; j < CRAFT_ROWS-row; j++) {
-            int min = crftab->get(i * CRAFT_COLS + j).getQuantity();
+    for (int i = 0; i <= CRAFT_ROWS-row; i++) {
+        for (int j = 0; j <= CRAFT_ROWS-col; j++) {
+            int min = UNDEFINED_QUANTITY, count = 0;
+            string check; 
             // Check recipe
-            for (int k = i, n = 0; k < CRAFT_ROWS-row+i && n < row; k++, n++) {
-                for (int l = j, m = 0; l < CRAFT_ROWS-row+j && m < col; l++, m++) {
+            for (int k = i, n = 0; k < row+i && n < row; k++, n++) {
+                for (int l = j, m = 0; l < col+j && m < col; l++, m++) {
                     if (crftab->get(k * CRAFT_COLS + l).getName() != get<1>(tup)[n*col+m]) {
+                        if (crftab->get(k * CRAFT_COLS + l).getBType() != get<1>(tup)[n*col+m]) {
+                            min = 0;
+                            break;
+                        } else {
+                            if (count == 0) {
+                            check = crftab->get(k * CRAFT_COLS + l).getName();
+                            }
+                            count++;
+                        }
+                        
+                    }
+                    // check name (if recipe using btype)
+                    if (count > 0 && check != crftab->get(k * CRAFT_COLS + l).getName()) {
                         min = 0;
                         break;
                     }
+
                     if (crftab->get(i * CRAFT_COLS + j).getQuantity() < min) {
                         min = crftab->get(i * CRAFT_COLS + j).getQuantity();
-                        }
                     }
+                }
                 if (min == 0) {
                     break;
                 }
@@ -68,19 +83,34 @@ void Crafting::recipe(tuple<tuple<int,int>,vector<string>,tuple<int,string>> tup
                 this->setEnd(row+i,col+j);
                 this->set_crafting_table(min);
             }
+            min = UNDEFINED_QUANTITY, count = 0; 
             // Check recipe (reflection y)
-            for (int k = i, n = 0; k < CRAFT_ROWS-row+i && n < row; k++, n++) {
-                for (int l = CRAFT_ROWS-row+j-1, m = 0; l >= j && m < col; l--, m++) {
+            for (int k = i, n = 0; k < row+i && n < row; k++, n++) {
+                for (int l = col+j-1, m = 0; l >= j && m < col; l--, m++) {
                     if (crftab->get(k * CRAFT_COLS + l).getName() != get<1>(tup)[n*col+m]) {
+                        if (crftab->get(k * CRAFT_COLS + l).getBType() != get<1>(tup)[n*col+m]) {
+                            min = 0;
+                            break;
+                        } else {
+                            if (count == 0) {
+                            check = crftab->get(k * CRAFT_COLS + l).getName();
+                            }
+                            count++;
+                        }
+                        
+                    }
+                    // check name (if recipe using btype)
+                    if (count > 0 && check != crftab->get(k * CRAFT_COLS + l).getName()) {
                         min = 0;
                         break;
                     }
+
                     if (crftab->get(i * CRAFT_COLS + j).getQuantity() < min) {
                         min = crftab->get(i * CRAFT_COLS + j).getQuantity();
                     }
                 }
-            if (min == 0) {
-                break;
+                if (min == 0) {
+                    break;
                 }
             } 
             if (min > 0) {

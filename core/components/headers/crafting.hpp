@@ -14,6 +14,7 @@ class Crafting {
     private:
         string name;
         int sum;
+
         int i, j;
         int n, m;
     public:

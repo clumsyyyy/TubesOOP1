@@ -24,6 +24,7 @@ void CraftingTable::displayMenu() {
     for (int i = 0; i < CRAFT_SIZE; i++) {
         cout << "[(C" << i << ") "
         << this->crftab_buffer[i]->getID() << " "
+        << this->crftab_buffer[i]->getName() << " "
         << this->crftab_buffer[i]->getQuantity();
         if (this->crftab_buffer[i]->getType() == "TOOL") {
             cout << " " << this->crftab_buffer[i]->getDurability(); 
