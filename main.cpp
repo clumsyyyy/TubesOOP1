@@ -117,10 +117,15 @@ int main() {
         } else if (command == "MOVE") {
             string slotSrc;
             int slotQty;
-            string slotDest;
             // need to handle multiple destinations
-            cin >> slotSrc >> slotQty >> slotDest;
-            cout << "TODO" << endl;
+            cin >> slotSrc >> slotQty;
+            try{
+                MoveHandler(slotSrc,slotQty);
+                cout << "Move succeeded\n";
+            }catch(string err){
+                cout << err;
+            }
+            
         } else {
         // todo
             cout << "Invalid command!" << endl;
