@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include "core/all_headers.hpp"
@@ -58,19 +59,19 @@ tuple <tuple<int,int>, vector<string>, tuple<int,string>> parse(ifstream* file) 
 }
 
 int main() {
-    string configPath = "./config";
+    string configPath = "../config";
     string itemConfigPath = configPath + "/item.txt";
 
     // read item from config file
     ifstream itemConfigFile(itemConfigPath);
     for (string line; getline(itemConfigFile, line);) {
-        itemConfig.push_back(parse(line));
+        itemConfig->push_back(parse(line));
     }
     // read recipes
     for (const auto &entry :
         filesystem::directory_iterator(configPath + "/recipe")) {
         ifstream* recipeConfigFile = new ifstream(entry.path());
-        recipeConfig.push_back(parse(recipeConfigFile));
+        recipeConfig->push_back(parse(recipeConfigFile));
         // read from file and do something
     }
 

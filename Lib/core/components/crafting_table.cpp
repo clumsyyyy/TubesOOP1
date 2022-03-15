@@ -37,7 +37,7 @@ void CraftingTable::displayMenu() {
 }
 
 void CraftingTable::addNonTool(NonTool* item) {
-    for (int i, n = 0; i < CRAFT_ROWS; i++) {
+    for (int i = 0, n = 0; i < CRAFT_ROWS; i++) {
         for (int j = 0; j < CRAFT_COLS; j++) {
             if (this->get(i).getID() == UNDEFINED_ID) {
                 if (item->getQuantity() <= MAX_STACK) {
@@ -71,7 +71,7 @@ void CraftingTable::addNonTool(NonTool* item) {
 }
 
 void CraftingTable::addTool(Tool* item) {
-     for (int i, n = 0; i < INV_ROWS; i++){
+     for (int i = 0, n = 0; i < INV_ROWS; i++){
         for (int j = 0; j < INV_COLS; j++){
             // base case if no such item exists in inventory
             if (this->get(i).getID() == UNDEFINED_ID){

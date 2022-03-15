@@ -24,7 +24,7 @@ void GiveHandler() {
 }
 
 void GiveChecker(string name, int temp) {
-    for(tuple tup : itemConfig) {
+    for(tuple tup : *itemConfig) {
         if(get<1>(tup) == name) {
             if (get<3>(tup) == "NONTOOL"){
                 NonTool* NT = new NonTool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), temp);
@@ -54,7 +54,7 @@ void DiscardHandler(){
 }
 
 void CraftingHandler() {
-    for (tuple tup: recipeConfig) {
+    for (tuple tup: *recipeConfig) {
         int sum = 0;
         int min = 0;        
         string name;

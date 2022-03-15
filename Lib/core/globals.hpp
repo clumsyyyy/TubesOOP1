@@ -10,6 +10,6 @@
 
 extern Inventory* inv;
 extern CraftingTable* crftab;
-extern vector <tuple<string, string, string, string>> itemConfig;
-extern vector <tuple<tuple<int,int>,vector<string>,tuple<int,string>>> recipeConfig;
+extern vector <tuple<string, string, string, string>> *itemConfig;
+extern vector <tuple<tuple<int,int>,vector<string>,tuple<int,string>>> *recipeConfig;
 #endif
