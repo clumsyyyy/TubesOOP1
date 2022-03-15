@@ -12,5 +12,7 @@ void GiveHandler();
 void DiscardHandler();
 void CraftingHandler();
 void GiveChecker(string name, int temp);
+void MoveHandler(string source, int slotCount);
+void ClearBuffer();
 
 #endif
