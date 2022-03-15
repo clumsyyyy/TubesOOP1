@@ -66,10 +66,11 @@ void DiscardHandler(){
 void CraftingHandler() {
     for (tuple tup: recipeConfig) {
         int sum = 0;
+        int min = 0;
         string name, temp;
         switch (get<0>(tup)) {
         case TYPE3:
-            int min = crftab->get(0,0).getQuantity();
+            min = crftab->get(0,0).getQuantity();
             // Check recipe
             for (int i = 0; i < TYPE3; i++) {
                 for (int j = 0; j < TYPE3; j++) {
@@ -116,10 +117,11 @@ void CraftingHandler() {
                 // balikin ke inventory
                 return; 
             }
+            break;
         case TYPE2:
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 2; j++) {
-                    int min = crftab->get(i,j).getQuantity();
+                    min = crftab->get(i,j).getQuantity();
                     // Check recipe
                     for (int k = i, n = 0; k < 2 + i && n < 2; k++, n++) {
                         for (int l = j, m = 0; l < 2 + j && m < 2; l++, m++) {
@@ -168,6 +170,7 @@ void CraftingHandler() {
                 // balikin ke inventory
                 return; 
             }
+            break;
         case TYPE1:
             // Check Recipe
             for (int i = 0; i < CRAFT_ROWS; i++) {
@@ -187,6 +190,7 @@ void CraftingHandler() {
                 // balikin ke inventory
                 return; 
             }
+            break;
         }
     }
     int sum = 0, durability = 0;
