@@ -11,101 +11,82 @@ Inventory::~Inventory(){
     delete[] this->inv_buffer;
 }
 
-Item Inventory::get(int i, int j){
-    return *(this->inv_buffer[i*INV_COLS + j]) ;
+Item Inventory::get(int pos){
+    return *(this->inv_buffer[pos]) ;
 }
 
-void Inventory::set(int i, int j, Item* item){
-    (this->inv_buffer[i * INV_COLS + j]) = item;
+void Inventory::set(int pos, Item* item){
+    (this->inv_buffer[pos]) = item;
 };
 
 void Inventory::displayMenu(){
-    for (int i = 0; i < INV_ROWS; i++){
-        for (int j = 0; j < INV_COLS; j++){
-            cout << "[(" << i << ", " << j << ") " 
-            << (this->inv_buffer[i * INV_COLS + j])->getID() << " "
-            << (this->inv_buffer[i * INV_COLS + j])->getQuantity() << " "
-            << (this->inv_buffer[i * INV_COLS + j])->getDurability() << "] ";
-            if (j == INV_COLS - 1){
-                cout << endl;
-            }
+    for (int i = 0; i < INV_SIZE; i++){
+        cout << "[I" << i << " "
+        << (this->inv_buffer[i])->getID() << " "
+        << (this->inv_buffer[i])->getQuantity() << " "
+        << (this->inv_buffer[i])->getDurability() << "] ";
+        if ((i + 1) % INV_COLS == 0){
+            cout << endl;
         }
+        
     }
 };
 
 void Inventory::displayDetails(){
-    cout <<  "  Slot" << " | " 
+    cout <<  "Slot" << " | " 
     << setw(NUMWIDTH) << "ID" << " | " 
     << setw(WIDTH) << "Name" << " | " 
     << setw(WIDTH) << "Type" << " | " 
     << setw(WIDTH) << "Base Type" << endl;
-    for (int i = 0; i < INV_ROWS; i++){
-        for (int j = 0; j < INV_COLS; j++){
-            cout << "(" << i << ", " << j << ") | ";
-            this->specify(i, j);
-            cout << endl;
-        }
+    for (int i = 0; i < INV_SIZE; i++){
+        cout << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
+        this->specify(i);
+        cout << endl;
     }
 };
 
-void Inventory::specify(int i, int j){
-    (this->inv_buffer[i * INV_COLS + j])->displayInfo();
+void Inventory::specify(int pos){
+    (this->inv_buffer[pos])->displayInfo();
 }
 
 void Inventory::addNonTool(NonTool* item){
-    for (int i = 0; i < INV_ROWS; i++){
-        for (int j = 0; j < INV_COLS; j++){
-            // base case if no such item exists in inventory
-            if (this->get(i, j).getID() == UNDEFINED_ID){
-                if (item->getQuantity() <= MAX_STACK){
-                    this->set(i ,j, item);
-                    cout << "set item " << item->getID() << " to (" << i << ", " << j << ")" << endl;
-                    return;
-                } else {
-                    NonTool* temp = new NonTool(*item);
-                    temp->setQuantity(MAX_STACK);
-                    this->set(i ,j, temp);
-                    cout << "set item " << temp->getID() << " to (" << i << ", " << j << ")" << endl;
-                    cout << item->getQuantity()<< " stacks left" << endl;
-                    item->setQuantity(item->getQuantity() - MAX_STACK);
-                    continue;
-                }
-            // case 1: other item exists (stackable)
-            } else if (this->get(i, j).getID() == item->getID()){
-                // if current slot less than max stack, increase quantity
-                if (this->get(i, j).getQuantity() + item->getQuantity() <= MAX_STACK){
-                    this->get(i, j).setQuantity(this->get(i, j).getQuantity() + item->getQuantity());
-                    return;
-                } else {
-                    if (j == INV_COLS - 1){
-                        if (i == INV_ROWS - 1){
-                            cout << "Inventory is full" << endl;
-                            return;
-                        } else {
-                            this->set(i + 1, 0, item);
-                            return;
-                        }
-                    } else {
-                        this->set(i, j + 1, item);
-                        return;
-                    }
-                }
+    for (int i = 0; i < INV_SIZE; i++){
+        // base case if no such item exists in inventory
+        if (this->get(i).getID() == UNDEFINED_ID){
+            if (item->getQuantity() <= MAX_STACK){
+                this->set(i, item);
+                cout << "set item " << item->getID() << " to I" << i << endl;
                 return;
+            } else {
+                NonTool* temp = new NonTool(*item);
+                temp->setQuantity(MAX_STACK);
+                this->set(i, temp);
+                cout << "set item " << temp->getID() << " to I" << i << endl;
+                cout << item->getQuantity()<< " stacks left" << endl;
+                item->setQuantity(item->getQuantity() - MAX_STACK);
+                continue;
             }
-        }
+        // case 1: other item exists (stackable)
+        } else if (this->get(i).getID() == item->getID()){
+            // if current slot less than max stack, increase quantity
+            if (this->get(i).getQuantity() + item->getQuantity() <= MAX_STACK){
+                this->get(i).setQuantity(this->get(i).getQuantity() + item->getQuantity());
+                return;
+            } 
+        return;
+        } 
     }
 }
 
 void Inventory::addTool(Tool* item){
-     for (int i = 0; i < INV_ROWS; i++){
-        for (int j = 0; j < INV_COLS; j++){
-            // base case if no such item exists in inventory
-            if (this->get(i, j).getID() == UNDEFINED_ID){
-                this->set(i ,j, item);
-                cout << "set item " << item->getID() << " to (" << i << ", " << j << ")" << endl;
-                return;
-            }
+     for (int i = 0; i < INV_SIZE; i++){
+        // base case if no such item exists in inventory
+        if (this->get(i).getID() == UNDEFINED_ID){
+            this->set(i, item);
+            cout << "set item " << item->getID() << " to I" << i << endl;
+            return;
         }
+        
     }
 }
 

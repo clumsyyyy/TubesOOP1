@@ -13,9 +13,9 @@ class Inventory{
     public:
         Inventory();
         ~Inventory();
-        Item get(int i, int j);
-        void set(int i, int j, Item* item);
-        void specify(int i, int j);
+        Item get(int pos);
+        void set(int pos, Item* item);
+        void specify(int pos);
         void displayMenu();
         void displayDetails();
         void addNonTool(NonTool* item);

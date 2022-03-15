@@ -7,9 +7,9 @@ void DetailsHandler(){
     if (mode == "ALL"){
         inv->displayDetails();
     } else if (mode == "ITEM"){
-        int i, j;
-        cin >> i >> j;
-        inv->specify(i, j);
+        int i;
+        cin >> i;
+        inv->specify(i);
         cout << endl;
     }
 }
@@ -45,21 +45,10 @@ void DiscardHandler(){
     int quant;
     cin >> slot >> quant;
     int index = stoi(slot.substr(1, slot.length() - 1));
-    int i = index % INV_ROWS;
-    int j = index / INV_ROWS;
-    string name = inv->get(i, j).getName();
-    for (tuple tup: itemConfig){
-        if (get<1>(tup) == name){
-            if (get<3>(tup) == "NONTOOL"){
-                // if not a tool, discard
-                inv->discard(quant, index);
-                break;
-            } else {
-                // if a tool, set to undefined
-                inv->set(i, j, new Item());
-                break;
-            }
-        }
+    if (inv->get(index).getBType() == "NONTOOL"){
+        inv->discard(quant, index);
+    } else {
+        inv->set(index, new Item());
     }
 }
 
@@ -85,12 +74,11 @@ void CraftingHandler() {
     string name = crf.getName();
 
     if (sum == 2) {
-        for (int i = 0; i < CRAFT_COLS; i++) {
-            for (int j = 0; j < CRAFT_ROWS; j++) {
-                if (crftab->get(i ,j).getName() == name) {
-                    crftab->get(i, j).setQuantity(crftab->get(i,j).getQuantity()-1);
-                }
+        for (int i = 0; i < CRAFT_SIZE; i++) {
+            if (crftab->get(i).getName() == name) {
+                crftab->get(i).setQuantity(crftab->get(i).getQuantity()-1);
             }
+        
         }
         GiveChecker(name, durability);
         crf.returning();

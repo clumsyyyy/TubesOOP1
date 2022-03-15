@@ -3,7 +3,7 @@
 
 #include "vars.hpp"
 #include "item.hpp"
-#include "iostream"
+#include <iostream>
 using namespace std;
 
 class CraftingTable {
@@ -12,8 +12,8 @@ class CraftingTable {
     public:
         CraftingTable();
         ~CraftingTable();
-        Item get(int i, int j);
-        void set(int i, int j, Item* item);
+        Item get(int pos);
+        void set(int pos, Item* item);
         void specify(int i, int j);
         void displayMenu();
         void displayDetails();
