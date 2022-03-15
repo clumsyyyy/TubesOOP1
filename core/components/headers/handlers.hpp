@@ -3,13 +3,14 @@
 
 #include "item.hpp"
 #include "inventory.hpp"
-#include "vars.hpp"
+#include "crafting_table.hpp"
 #include <string>
 
 
 void DetailsHandler();
 void GiveHandler();
 void DiscardHandler();
+void CraftingHandler();
 void GiveChecker(string name, int temp);
 
 #endif

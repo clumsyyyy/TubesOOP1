@@ -71,10 +71,13 @@ int main() {
         recipeConfig.push_back(parse(recipeConfigFile));
         // read from file and do something
     }
-    
+    //
     // test display inventory
     // cout << inv->get(0, 0).getID() << endl;
     // sample interaction
+    
+    // inv->set(0,0, new Item(3,"BIRCH_LOG", "NONTOOL", "LOG"));
+    // crftab = new CraftingTable();
     cout << "\n\nInput command: ";
     string command;
     while (cin >> command) {
@@ -102,7 +105,12 @@ int main() {
 
             cout << "Exported" << endl;
         } else if (command == "CRAFT") {
-            cout << "TODO" << endl;
+            try {
+                CraftingHandler();
+            }
+            catch(const char* e) {
+                cout << e;
+            }    
         } else if (command == "MOVE") {
             string slotSrc;
             int slotQty;

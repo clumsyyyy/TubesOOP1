@@ -13,6 +13,7 @@ class Item{
         string name;     // item name (e.g. "DIAMOND_SWORD")
         string type;     // item type (TOOL/NONTOOL)
         string basetype; // basetype (oak log basetypenya log)
+        int quantity;
     public:
         Item(); //default constructor
         Item(int, string, string, string); // user-defined constructor

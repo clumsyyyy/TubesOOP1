@@ -20,7 +20,6 @@ class CraftingTable {
         void addNonTool(NonTool* item);
         void addTool(Tool* item);
         void discard(int quant, int slot);
-        void craft();
 };
 
 #endif

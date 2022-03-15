@@ -66,156 +66,61 @@ void DiscardHandler(){
 void CraftingHandler() {
     for (tuple tup: recipeConfig) {
         int sum = 0;
-        int min = 0;
-        string name, temp;
+        int min = 0;        
+        string name;
+        Crafting crf;
         switch (get<0>(tup)) {
         case TYPE3:
-            min = crftab->get(0,0).getQuantity();
-            // Check recipe
-            for (int i = 0; i < TYPE3; i++) {
-                for (int j = 0; j < TYPE3; j++) {
-                    if (crftab->get(i, j).getName() != get<1>(tup)[i*3+j]) {
-                        min = 0;
-                        break;
-                    }
-                    if (crftab->get(i,j).getQuantity() < min) {
-                        min = crftab->get(i,j).getQuantity();
-                    }
-                }
-                if (min == 0) {
-                    break;
-                }
-            }
-            if (min > 0) {
-                name = get<1>(get<2>(tup));
-                sum += get<0>(get<2>(tup))*min;
-                // kurangin dari inventory
-            }
-            // Check recipe (reflection y)
-            for (int i = 0; i < CRAFT_ROWS; i++) {
-                for (int j = CRAFT_COLS-1; j >= 0; j--) {
-                    if (crftab->get(i, j).getName() != get<1>(tup)[i*3+j]) {
-                        min = 0;
-                        break;
-                    }
-                    if (crftab->get(i,j).getQuantity() < min) {
-                        min = crftab->get(i,j).getQuantity();
-                    }
-                }
-                if (min == 0) {
-                    break;
-                }
-            }
-            if (min > 0) {
-                name = get<1>(get<2>(tup));
-                sum += get<0>(get<2>(tup))*min;
-                // kurangin dari inventory            
-            }
+            crf.type3(tup);
+            name = crf.getName();
+            sum = crf.getSum();
             if (sum > 0){
                 GiveChecker(name, sum);
                 cout << "crafted " << sum << " " << name << endl;
-                // balikin ke inventory
+                crf.returning();
                 return; 
             }
             break;
         case TYPE2:
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < 2; j++) {
-                    min = crftab->get(i,j).getQuantity();
-                    // Check recipe
-                    for (int k = i, n = 0; k < 2 + i && n < 2; k++, n++) {
-                        for (int l = j, m = 0; l < 2 + j && m < 2; l++, m++) {
-                            if (crftab->get(k, l).getName() != get<1>(tup)[n*2+m]) {
-                                min = 0;
-                                break;
-                            }
-                            if (crftab->get(i,j).getQuantity() < min) {
-                                min = crftab->get(i,j).getQuantity();
-                            }
-                        }
-                        if (min == 0) {
-                            break;
-                        }
-                    }
-                    if (min > 0) {
-                        name = get<1>(get<2>(tup));
-                        sum += get<0>(get<2>(tup))*min;
-                        // kurangin dari inventory 
-                    }
-                    // Check recipe (reflection y)
-                    for (int k = i, n = 0; k < 2 + i && n < 2; k++, n++) {
-                        for (int l = 1+j, m = 1; l >= j && m >= 0; l--, m--) {
-                            if (crftab->get(k, l).getName() != get<1>(tup)[n*2+m]) {
-                                min = 0;
-                                break;
-                            }
-                            if (crftab->get(i,j).getQuantity() < min) {
-                                min = crftab->get(i,j).getQuantity();
-                            }
-                        }
-                        if (min == 0) {
-                            break;
-                        }
-                    } 
-                    if (min > 0) {
-                        name = get<1>(get<2>(tup));
-                        sum += get<0>(get<2>(tup))*min;
-                        // kurangin dari inventory 
-                    } 
-                }
-            }
+            crf.type2(tup);
+            name = crf.getName();
+            sum = crf.getSum();
             if (sum > 0){
                 GiveChecker(name, sum);
                 cout << "crafted " << sum << " " << name << endl;
-                // balikin ke inventory
+                crf.returning();
                 return; 
             }
             break;
         case TYPE1:
             // Check Recipe
-            for (int i = 0; i < CRAFT_ROWS; i++) {
-                for (int j = 0; j < CRAFT_COLS; j++) {
-                    if (crftab->get(i, j).getName() == get<1>(tup)[0]) {
-                        if (crftab->get(i, j).getQuantity() > 0) {
-                            name = get<1>(get<2>(tup));
-                            sum += get<0>(get<2>(tup))*crftab->get(i,j).getQuantity();
-                            crftab->set(i,j,new Item());
-                        }
-                    }
-                }
-            }
+            crf.type1(tup);
+            name = crf.getName();
+            sum = crf.getSum();
             if (sum > 0){
                 GiveChecker(name, sum);
                 cout << "crafted " << sum << " " << name << endl;
-                // balikin ke inventory
+                crf.returning();
                 return; 
             }
             break;
         }
     }
-    int sum = 0, durability = 0;
-    string name; 
-    for (int i = 0; i < TYPE3; i++) {
-        for (int j = 0; j < TYPE3; j++) {
-            if (crftab->get(i, j).getType() != "NONTOOL") {
-                break;
-            } else if (crftab->get(i, j).getType() != "TOOL") {
-                if (sum > 0 && name != crftab->get(i, j).getName()) {
-                    break;
-                }
-                sum++;
-                name = crftab->get(i, j).getName();
-                durability += crftab->get(i, j).getDurability();
-                if (sum > 2) {
-                    break;
+    Crafting crf;
+    int durability = crf.tools(); 
+    int sum = crf.getSum();
+    string name = crf.getName();
+    if (sum == 2) {
+        for (int i = 0; i < CRAFT_COLS; i++) {
+            for (int j = 0; j < CRAFT_ROWS; j++) {
+                if (crftab->get(i ,j).getName() == name) {
+                    crftab->get(i, j).setQuantity(crftab->get(i,j).getQuantity()-1);
                 }
             }
         }
-    }
-    if (sum == 2) {
-        // kurangi
         GiveChecker(name, durability);
-        // balikin inventory
+        crf.returning();
+    } else {
+        throw "Recipe not found\n";    
     }
-    
 }

@@ -4,11 +4,11 @@ CraftingTable::CraftingTable() {
     this->crftab_buffer = new Item*[CRAFT_COLS*CRAFT_ROWS];
     for (int i = 0; i < CRAFT_COLS*CRAFT_ROWS; i++) {
         this->crftab_buffer[i] = new Item();
-    }    
+    }  
 }
 
 CraftingTable::~CraftingTable() {
-    delete[] crftab_buffer;
+    delete[] this->crftab_buffer;
  }
 
 Item CraftingTable::get(int i, int j) {
