@@ -159,7 +159,6 @@ void MoveHandler(string source, int slotCount){
 
     //PROSES PEMINDAHAN BARANG DARI CRAFTING TABLE
     if(sourceCraft){        //KASUS KETIKA BARANG BERASAL DARI CRAFTING TABLE
-        Item *item_craft = new Item(*crftab->get(slotSrc));
         Item* item_craft = NULL;
         if(crftab->get(slotSrc)->getType() == "TOOL"){
             item_craft = new Tool(crftab->get(slotSrc)->getID(),crftab->get(slotSrc)->getName(),crftab->get(slotSrc)->getType(), crftab->get(slotSrc)->getBType(),crftab->get(slotSrc)->getDurability());
@@ -202,16 +201,15 @@ void MoveHandler(string source, int slotCount){
         }
     }
     if(sourceInv){      //KASUS KETIKA BARANG BERASAL DARI INVENTORY
-        Item * item_inv = new Item(*inv->get(slotSrc));
-        NonTool* item_inv = new NonTool(inv->get(slotSrc)->getID(),inv->get(slotSrc)->getName(),inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(),inv->get(slotSrc)->getQuantity());
-        // if(inv->get(slotSrc).getType() == "TOOL"){
-        //     item_inv = new Tool(inv->get(slotSrc).getID(),inv->get(slotSrc).getName(),inv->get(slotSrc).getType(), inv->get(slotSrc).getBType(),inv->get(slotSrc).getDurability());
-        //     tool = true;
-        // }else{
-        //     item_inv = new NonTool(inv->get(slotSrc).getID(),inv->get(slotSrc).getName(),inv->get(slotSrc).getType(), inv->get(slotSrc).getBType(),inv->get(slotSrc).getQuantity());
-        //     nontool = true;
-        // }
-        cout << item_inv->getName() << item_inv->getDurability() << "KONTOL" << endl;
+        Item * item_inv = NULL;
+        if(inv->get(slotSrc)->getType() == "TOOL"){
+            item_inv = new Tool(inv->get(slotSrc)->getID(),inv->get(slotSrc)->getName(),inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(),inv->get(slotSrc)->getDurability());
+            tool = true;
+        }else{
+            item_inv = new NonTool(inv->get(slotSrc)->getID(),inv->get(slotSrc)->getName(),inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(),2);
+            nontool = true;
+        }
+        cout << item_inv->getName() << "\nJumlah dari object: " << item_inv->getQuantity() << "\nJumlah dari inventory: " << inv->get(slotSrc)->getDurability() << endl;
 
         if(item_inv->getID() == UNDEFINED_ID){
             err = "You are trying to move the void...\n";
