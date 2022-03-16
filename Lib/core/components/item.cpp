@@ -50,7 +50,7 @@ void Item::displayInfo() const{
     << setw(WIDTH) << this->basetype;
 }
 
-int Item::getQuantity() const{ return 2; }
+int Item::getQuantity() const{ return 0; }
 int Item::getDurability() const { return 0; }
 void Item::setQuantity(int) {}
 

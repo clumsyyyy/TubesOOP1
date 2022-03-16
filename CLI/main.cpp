@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "core/all_headers.hpp"
+#include "../Lib/core/all_headers.hpp"
 
 using namespace std;
 
@@ -59,7 +59,7 @@ tuple <tuple<int,int>, vector<string>, tuple<int,string>> parse(ifstream* file) 
 }
 
 int main() {
-    string configPath = "../config";
+    string configPath = "./config";
     string itemConfigPath = configPath + "/item.txt";
 
     // read item from config file

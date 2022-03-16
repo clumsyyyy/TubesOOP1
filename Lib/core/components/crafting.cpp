@@ -6,7 +6,7 @@ Crafting::Crafting() {
     this->j = 0;
     this->n = 0;
     this->m = 0;
-    this->name = "UNDIFINED";
+    this->name = "UNDEFINED";
     this->sum = 0;
 }
 
