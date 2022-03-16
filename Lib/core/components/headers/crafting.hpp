@@ -15,18 +15,16 @@ class Crafting {
         string name;
         int sum;
         TupleRecipe TupRecipe;
-
-        int i, j;
-        int n, m;
+        int row, col;
     public:
         Crafting();
         Crafting(TupleRecipe TupRecipe);
         ~Crafting();
-        void setStart(int i, int j);
-        void setEnd(int n, int m);
-        void set_crafting_table(int min);
+        void setBound(int row, int col);
+        void set_crafting_table(int min, int i, int j, bool reverse);
         string getName() const;
         int getSum() const;
+        int calculateResult(int i, int j, bool reverse) const;
         void recipe();
         int tools();
         void returning();

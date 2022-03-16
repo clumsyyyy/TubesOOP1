@@ -2,42 +2,37 @@
 #include "../globals.hpp"
 
 Crafting::Crafting() {
-    this->i = 0; this->j = 0;
-    this->n = 0;this->m = 0;
-
     this->name = "UNDEFINED";
     this->sum = 0;
+    this->row = 0; this->col = 0;
 }
 
 Crafting::Crafting(TupleRecipe TupRecipe) {
-    this->i = 0; this->j = 0;
-    this->n = 0;this->m = 0;
-    this->TupRecipe = TupRecipe;
-    
     this->name = "UNDEFINED";
     this->sum = 0;
+    this->TupRecipe = TupRecipe;
+    this->row = 0; this->col = 0;
 }
 
 Crafting::~Crafting() { }
 
-void Crafting::setStart(int i, int j) {
-    this->i = i;
-    this->j = j;
+void Crafting::setBound(int row, int col) {
+    this->row = row;
+    this->col = col;
 }
 
-void Crafting::setEnd(int n, int m) {
-    this->n = n;
-    this->m = m;
-}
-
-void Crafting::set_crafting_table(int min) {
-    bool flag = this->j < this-> m;
-    for (int idx = this->i; idx < this->n; idx++) {
-        for (int idj = this->j; flag? idj < this->m : idj >= this->m; flag? idj++ : idj--) {
+void Crafting::set_crafting_table(int min, int i, int j, bool reverse) {
+    // cout << start << " " << endl;
+    // int i = start / CRAFT_COLS, j = start % (CRAFT_COLS);
+    // int n = end / CRAFT_COLS, m = end % (CRAFT_COLS);
+    for (int idx = i; idx < this->row+i; idx++) {
+        for (int idj = reverse? j+col : j; reverse ? idj >= this->col+j : idj < this->col+j; reverse ? idj-- : idj++ ) {
             if (crftab->get(idx*CRAFT_COLS + idj)->getName() != "UNDIFINED") {
-                crftab->get(idx*CRAFT_COLS + idj)->setQuantity(
-                    crftab->get(idx*CRAFT_COLS + idj)->getQuantity()-min >= 0 ?
-                        crftab->get(idx*CRAFT_COLS + idj)->getQuantity()-min:0);
+                if (crftab->get(idx*CRAFT_COLS + idj)->getQuantity()-min > 0) {
+                    crftab->get(idx*CRAFT_COLS + idj)->setQuantity(crftab->get(idx*CRAFT_COLS + idj)->getQuantity()-min);
+                } else {
+                    crftab->set(idx*CRAFT_COLS + idj, new Item());
+                }
             }
         }
     }
@@ -49,85 +44,59 @@ string Crafting::getName() const {
 int Crafting::getSum() const {
     return this->sum;
 }
+int Crafting::calculateResult(int i, int j, bool reverse) const {
+    int min = UNDEFINED_QUANTITY, count = 0;
+    string check; 
+    // cout << "Masuk" << endl;
+    for (int k = i, n = 0; k < this->row+i && n < this->row; k++, n++) {
+        for (int l = reverse ? col+j-1 : j, m = 0; (reverse ? l >= j : l < this->col+j) && m < this->col; (reverse? l--: l++), m++) {
+            if (crftab->get(k * CRAFT_COLS + l)->getName() != get<1>(this->TupRecipe)[n*col+m]) {
+                if (crftab->get(k * CRAFT_COLS + l)->getBType() != get<1>(this->TupRecipe)[n*col+m]) {
+                    min = 0;
+                    break;
+                } else {
+                    if (count == 0) {
+                        check = crftab->get(k * CRAFT_COLS + l)->getName();
+                    }
+                    count++;
+                }    
+            }
+            // check name (if recipe using btype)
+            if (count > 0 && check != crftab->get(k * CRAFT_COLS + l)->getName()) {
+                min = 0;
+                break;
+            }
+            if (crftab->get(k * CRAFT_COLS + l)->getQuantity() < min && crftab->get(k * CRAFT_COLS + l)->getName() != "UNDEFINED") {
+                min = crftab->get(k * CRAFT_COLS + l)->getQuantity();
+            }
+        }
+        if (min == 0) {
+            break;
+        }
+    }
+    return min;
+}
 
 void Crafting::recipe() {
     int row = get<0>(get<0>(this->TupRecipe));
     int col = get<1>(get<0>(this->TupRecipe));
+    setBound(row,col);
     for (int i = 0; i <= CRAFT_ROWS-row; i++) {
         for (int j = 0; j <= CRAFT_ROWS-col; j++) {
-            int min = UNDEFINED_QUANTITY, count = 0;
-            string check; 
-            // Check recipe
-            for (int k = i, n = 0; k < row+i && n < row; k++, n++) {
-                for (int l = j, m = 0; l < col+j && m < col; l++, m++) {
-                    if (crftab->get(k * CRAFT_COLS + l)->getName() != get<1>(this->TupRecipe)[n*col+m]) {
-                        if (crftab->get(k * CRAFT_COLS + l)->getBType() != get<1>(this->TupRecipe)[n*col+m]) {
-                            min = 0;
-                            break;
-                        } else {
-                            if (count == 0) {
-                            check = crftab->get(k * CRAFT_COLS + l)->getName();
-                            }
-                            count++;
-                        }
-                        
-                    }
-                    // check name (if recipe using btype)
-                    if (count > 0 && check != crftab->get(k * CRAFT_COLS + l)->getName()) {
-                        break;
-                    }
-
-                    if (crftab->get(k * CRAFT_COLS + l)->getQuantity() < min && crftab->get(k * CRAFT_COLS + l)->getName() != "UNDEFINED") {
-                        min = crftab->get(k * CRAFT_COLS + l)->getQuantity();
-                    }
-                }
-                if (min == 0) {
-                    break;
-                }
-            }
+            int min;
+            // Check recipe 
+            min = calculateResult(i,j,false);
             if (min > 0) {
                 name = get<1>(get<2>(this->TupRecipe));
                 sum += get<0>(get<2>(this->TupRecipe))*min;
-                this->setStart(i,j);
-                this->setEnd(row+i,col+j);
-                this->set_crafting_table(min);                
+                this->set_crafting_table(min,i,j,false);                
             }
-            min = UNDEFINED_QUANTITY, count = 0; 
             // Check recipe (reflection y)
-            for (int k = i, n = 0; k < row+i && n < row; k++, n++) {
-                for (int l = col+j-1, m = 0; l >= j && m < col; l--, m++) {
-                    if (crftab->get(k * CRAFT_COLS + l)->getName() != get<1>(this->TupRecipe)[n*col+m]) {
-                        if (crftab->get(k * CRAFT_COLS + l)->getBType() != get<1>(this->TupRecipe)[n*col+m]) {
-                            min = 0;
-                            break;
-                        } else {
-                            if (count == 0) {
-                            check = crftab->get(k * CRAFT_COLS + l)->getName();
-                            }
-                            count++;
-                        }
-                        
-                    }
-                    // check name (if recipe using btype)
-                    if (count > 0 && check != crftab->get(k * CRAFT_COLS + l)->getName()) {
-                        min = 0;
-                        break;
-                    }
-
-                    if (crftab->get(k * CRAFT_COLS + l)->getQuantity() < min && crftab->get(k * CRAFT_COLS + l)->getName() != "UNDEFINED") {
-                        min = crftab->get(k * CRAFT_COLS + l)->getQuantity();
-                    }
-                }
-                if (min == 0) {
-                    break;
-                }
-            } 
+            min = calculateResult(i,j,true);
             if (min > 0) {
                 name = get<1>(get<2>(this->TupRecipe));
                 sum += get<0>(get<2>(this->TupRecipe))*min;
-                this->setStart(i,col+j);
-                this->setEnd(row+i,j);
-                this->set_crafting_table(min);
+                this->set_crafting_table(min,i,j,true); 
             }
         }
     } 
