@@ -14,18 +14,20 @@ class Crafting {
     private:
         string name;
         int sum;
+        TupleRecipe TupRecipe;
 
         int i, j;
         int n, m;
     public:
         Crafting();
+        Crafting(TupleRecipe TupRecipe);
         ~Crafting();
         void setStart(int i, int j);
         void setEnd(int n, int m);
         void set_crafting_table(int min);
         string getName() const;
         int getSum() const;
-        void recipe(tuple<tuple<int,int>,vector<string>,tuple<int,string>> tup);
+        void recipe();
         int tools();
         void returning();
 };

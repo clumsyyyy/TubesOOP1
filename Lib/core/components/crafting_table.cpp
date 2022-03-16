@@ -11,8 +11,8 @@ CraftingTable::~CraftingTable() {
     delete[] this->crftab_buffer;
  }
 
-Item CraftingTable::get(int pos) {
-    return *this->crftab_buffer[pos];
+Item* CraftingTable::get(int pos) {
+    return this->crftab_buffer[pos];
 }
 
 void CraftingTable::set(int pos, Item* item) {
@@ -39,7 +39,7 @@ void CraftingTable::displayMenu() {
 void CraftingTable::addNonTool(NonTool* item) {
     for (int i = 0, n = 0; i < CRAFT_ROWS; i++) {
         for (int j = 0; j < CRAFT_COLS; j++) {
-            if (this->get(i).getID() == UNDEFINED_ID) {
+            if (this->get(i)->getID() == UNDEFINED_ID) {
                 if (item->getQuantity() <= MAX_STACK) {
                     this->set(i, item);
                     cout << "set item " << item->getID() << "to (C" << n << ")" << endl;
@@ -52,15 +52,15 @@ void CraftingTable::addNonTool(NonTool* item) {
                     cout << "set item " << item->getID() << " to (C" << n << ")" << endl;
                     cout << item->getQuantity() << " stack left" << endl;
                 }
-            } else if (this->get(i).getID() == item->getID()) {
-                if (this->get(i).getQuantity() + item->getQuantity() <= MAX_STACK) {
-                    this->get(i).setQuantity(this->get(i).getQuantity() + item->getQuantity());
+            } else if (this->get(i)->getID() == item->getID()) {
+                if (this->get(i)->getQuantity() + item->getQuantity() <= MAX_STACK) {
+                    this->get(i)->setQuantity(this->get(i)->getQuantity() + item->getQuantity());
                     cout << "item " << item->getID() << " has added to (C" << n << ")" << endl;
                     break;
                 } else {
                     NonTool* temp = new NonTool(*item);
                     temp->setQuantity(MAX_STACK);
-                    item->setQuantity(item->getQuantity()-(MAX_STACK+this->get(i).getQuantity()));
+                    item->setQuantity(item->getQuantity()-(MAX_STACK+this->get(i)->getQuantity()));
                     this->set(i, temp);
                     cout << "item " << item->getID() << " has added to (C" << n << ")" << endl;
                 }
@@ -74,7 +74,7 @@ void CraftingTable::addTool(Tool* item) {
      for (int i = 0, n = 0; i < INV_ROWS; i++){
         for (int j = 0; j < INV_COLS; j++){
             // base case if no such item exists in inventory
-            if (this->get(i).getID() == UNDEFINED_ID){
+            if (this->get(i)->getID() == UNDEFINED_ID){
                 this->set(i, item);
                 cout << "set item " << item->getID() << " to (C" << n << ")" << endl;
                 break;

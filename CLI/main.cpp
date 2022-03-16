@@ -78,8 +78,26 @@ int main() {
     //
     // test display inventory
     // cout << inv->get(0, 0).getID() << endl;
+
     // sample interaction
-    
+    // crftab->set(0, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(1, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(2, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(3, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(4, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(5, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(6, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(7, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(8, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+
+    // crftab->set(0, new NonTool(12, "DIAMOND", "NONTOOL", "-", 2));
+    // crftab->set(1, new NonTool(12, "DIAMOND", "NONTOOL", "-", 2));
+    // crftab->set(3, new NonTool(12, "DIAMOND", "NONTOOL", "-", 2));
+    // crftab->set(4, new NonTool(7, "STICK", "NONTOOL", "-", 2));
+    // crftab->set(7, new NonTool(7, "STICK", "NONTOOL", "-", 2));
+
+    // sample interaction
+    // cout << crftab->get(0)->getQuantity() << " ";
     // inv->set(0,0, new Item(3,"BIRCH_LOG", "NONTOOL", "LOG"));
     // crftab = new CraftingTable();
     cout << "\n\nInput command: ";

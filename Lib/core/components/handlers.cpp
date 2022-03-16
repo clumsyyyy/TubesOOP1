@@ -46,7 +46,7 @@ void DiscardHandler(){
     int quant;
     cin >> slot >> quant;
     int index = stoi(slot.substr(1, slot.length() - 1));
-    if (inv->get(index).getBType() == "NONTOOL"){
+    if (inv->get(index)->getBType() == "NONTOOL"){
         inv->discard(quant, index);
     } else {
         inv->set(index, new Item());
@@ -58,8 +58,8 @@ void CraftingHandler() {
         int sum = 0;
         int min = 0;        
         string name;
-        Crafting crf;
-        crf.recipe(tup);
+        Crafting crf(tup);
+        crf.recipe();
         name = crf.getName();
         sum = crf.getSum();
         if (sum > 0){
@@ -76,8 +76,8 @@ void CraftingHandler() {
 
     if (sum == 2) {
         for (int i = 0; i < CRAFT_SIZE; i++) {
-            if (crftab->get(i).getName() == name) {
-                crftab->get(i).setQuantity(crftab->get(i).getQuantity()-1);
+            if (crftab->get(i)->getName() == name) {
+                crftab->get(i)->setQuantity(crftab->get(i)->getQuantity()-1);
             }
         
         }
@@ -157,7 +157,7 @@ void MoveHandler(string source, int slotCount){
 
     //PROSES PEMINDAHAN BARANG DARI CRAFTING TABLE
     if(sourceCraft){        //KASUS KETIKA BARANG BERASAL DARI CRAFTING TABLE
-        Item *item_craft = new Item(crftab->get(slotSrc));
+        Item *item_craft = new Item(*crftab->get(slotSrc));
         if(item_craft->getID() == UNDEFINED_ID){
             err = "You are trying to move the void...\n";
             throw err;
@@ -166,7 +166,7 @@ void MoveHandler(string source, int slotCount){
                 err = "You can't move item from crafting slot to another crafting slot.\n";
                 throw err;
             }
-            Item *item_inv = new Item(inv->get(allSlot[0]));
+            Item *item_inv = new Item(*inv->get(allSlot[0]));
             bool destKosong = true;
             if(item_inv->getID() != UNDEFINED_ID){
                 destKosong = false;
@@ -191,7 +191,7 @@ void MoveHandler(string source, int slotCount){
         }
     }
     if(sourceInv){      //KASUS KETIKA BARANG BERASAL DARI INVENTORY
-        Item * item_inv = new Item(inv->get(slotSrc));
+        Item * item_inv = new Item(*inv->get(slotSrc));
         if(item_inv->getID() == UNDEFINED_ID){
             err = "You are trying to move the void...\n";
             throw err;
@@ -202,12 +202,12 @@ void MoveHandler(string source, int slotCount){
                     throw err;
                 }else{
                     for(int i = 0; i<slotCount; i++){
-                        Item *item_craft = new Item(crftab->get(allSlot[i]));
+                        Item *item_craft = new Item(*crftab->get(allSlot[i]));
                         if(item_craft->getID() != UNDEFINED_ID){
                             err ="You can't move an item to an already occupied crafting slot!\n";
                             throw err;
                         }else{
-                            Item *item_moved = new Item(inv->get(slotSrc));
+                            Item *item_moved = new Item(*inv->get(slotSrc));
                             item_moved->setQuantity(1);
                             crftab->set(allSlot[i],item_moved);
                         }
@@ -218,7 +218,7 @@ void MoveHandler(string source, int slotCount){
             }
 
             if(bool_inv){
-                Item *item_inv2 = new Item(inv->get(allSlot[0]));
+                Item *item_inv2 = new Item(*inv->get(allSlot[0]));
                 bool destKosong = true;
                 Item *undef_item = new Item();
                 if(item_inv2->getID() != UNDEFINED_ID){

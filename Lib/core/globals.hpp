@@ -5,11 +5,11 @@
 #include "components/headers/inventory.hpp"
 #include "components/headers/crafting_table.hpp"
 #include "components/headers/crafting.hpp"
+#include "components/headers/vars.hpp"
 #include <vector>
-#include <string>
 
 extern Inventory* inv;
 extern CraftingTable* crftab;
-extern vector <tuple<string, string, string, string>> *itemConfig;
-extern vector <tuple<tuple<int,int>,vector<string>,tuple<int,string>>> *recipeConfig;
+extern vector <TupleItem> *itemConfig;
+extern vector <TupleRecipe> *recipeConfig;
 #endif

@@ -12,7 +12,7 @@ class CraftingTable {
     public:
         CraftingTable();
         ~CraftingTable();
-        Item get(int pos);
+        Item* get(int pos);
         void set(int pos, Item* item);
         void specify(int i, int j);
         void displayMenu();

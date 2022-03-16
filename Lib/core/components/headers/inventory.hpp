@@ -13,7 +13,7 @@ class Inventory{
     public:
         Inventory();
         ~Inventory();
-        Item get(int pos);
+        Item* get(int pos);
         void set(int pos, Item* item);
         void specify(int pos);
         void displayMenu();
