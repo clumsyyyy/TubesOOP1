@@ -158,26 +158,23 @@ void Crafting::returning() {
     for (int i = 0; i < CRAFT_COLS*CRAFT_ROWS; i++) {
         // int i = idx % INV_ROWS;
         // int j = idx / INV_ROWS;
-        crftab->discard(crftab->get(i)->getQuantity(), i);
-        if (inv->get(i)->getName() == "UNDEFINED") {
-            Item* temp = new Item(*crftab->get(i));
-            inv->set(i, temp);
-        } else {
-            if (inv->get(i)->getName() == crftab->get(i)->getName()) {
-                Item* temp = new Item(*crftab->get(i));
-                temp->setQuantity(temp->getQuantity()+inv->get(i)->getQuantity());
-                inv->set(i, temp);
+        if (crftab->get(i)->getQuantity() > 0) {
+            if (crftab->get(i)->getType() == "NONTOOL") {
+                NonTool *NT = new NonTool(crftab->get(i)->getID(),
+                                           crftab->get(i)->getName(),
+                                           crftab->get(i)->getType(),
+                                           crftab->get(i)->getBType(),
+                                           crftab->get(i)->getQuantity());
+                inv->addNonTool(NT);
             } else {
-                Item* temp = new Item(*crftab->get(i));
-                for (int i = 0; i < INV_ROWS; i++) {
-                    for (int j = 0; j < INV_COLS; j++) {
-                        if (inv->get(i)->getName() == "UNDEFINED") {
-                            inv->set(i, temp);
-                        }
-                    }
-                }
+                Tool *T = new Tool(crftab->get(i)->getID(),
+                                          crftab->get(i)->getName(),
+                                          crftab->get(i)->getType(),
+                                          crftab->get(i)->getBType(),
+                                          crftab->get(i)->getDurability());
+                inv->addTool(T);
             }
-        }
+        } 
+        crftab->discard(crftab->get(i)->getQuantity(),i);
     }
-    crftab = new CraftingTable();
 }

@@ -85,8 +85,10 @@ void CraftingTable::addTool(Tool* item) {
 }
 
 void CraftingTable::discard(int quant, int slot) {
-    if (this->crftab_buffer[slot]->getQuantity() - quant >= 0){
+    if (this->crftab_buffer[slot]->getQuantity() - quant > 0){
         this->crftab_buffer[slot]->setQuantity(this->crftab_buffer[slot]->getQuantity() - quant);
+    } else if (this->crftab_buffer[slot]->getQuantity() - quant == 0) {
+        this->crftab_buffer[slot] = new Item();
     } else {
         cout << "Not enough items in slot" << endl;
     }
