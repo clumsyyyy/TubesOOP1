@@ -141,10 +141,11 @@ namespace GUI {
 			// 
 			// menuBar
 			// 
+			this->menuBar->ImageScalingSize = System::Drawing::Size(20, 20);
 			this->menuBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) { this->itemMenuBar, this->systemMenuBar });
 			this->menuBar->Location = System::Drawing::Point(0, 0);
 			this->menuBar->Name = L"menuBar";
-			this->menuBar->Size = System::Drawing::Size(646, 24);
+			this->menuBar->Size = System::Drawing::Size(646, 28);
 			this->menuBar->TabIndex = 3;
 			this->menuBar->Text = L"menuStrip1";
 			// 
@@ -152,44 +153,45 @@ namespace GUI {
 			// 
 			this->itemMenuBar->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->itemAdd });
 			this->itemMenuBar->Name = L"itemMenuBar";
-			this->itemMenuBar->Size = System::Drawing::Size(43, 20);
+			this->itemMenuBar->Size = System::Drawing::Size(53, 24);
 			this->itemMenuBar->Text = L"Item";
 			// 
 			// itemAdd
 			// 
 			this->itemAdd->Name = L"itemAdd";
-			this->itemAdd->Size = System::Drawing::Size(96, 22);
+			this->itemAdd->Size = System::Drawing::Size(120, 26);
 			this->itemAdd->Text = L"Add";
 			// 
 			// systemMenuBar
 			// 
 			this->systemMenuBar->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->systemExport });
 			this->systemMenuBar->Name = L"systemMenuBar";
-			this->systemMenuBar->Size = System::Drawing::Size(57, 20);
+			this->systemMenuBar->Size = System::Drawing::Size(70, 24);
 			this->systemMenuBar->Text = L"System";
 			// 
 			// systemExport
 			// 
 			this->systemExport->Name = L"systemExport";
-			this->systemExport->Size = System::Drawing::Size(108, 22);
+			this->systemExport->Size = System::Drawing::Size(135, 26);
 			this->systemExport->Text = L"Export";
 			// 
 			// itemMenu
 			// 
+			this->itemMenu->ImageScalingSize = System::Drawing::Size(20, 20);
 			this->itemMenu->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) { this->itemUse, this->itemDiscard });
 			this->itemMenu->Name = L"contextMenuStrip1";
-			this->itemMenu->Size = System::Drawing::Size(181, 70);
+			this->itemMenu->Size = System::Drawing::Size(129, 52);
 			// 
 			// itemUse
 			// 
 			this->itemUse->Name = L"itemUse";
-			this->itemUse->Size = System::Drawing::Size(180, 22);
+			this->itemUse->Size = System::Drawing::Size(128, 24);
 			this->itemUse->Text = L"Use";
 			// 
 			// itemDiscard
 			// 
 			this->itemDiscard->Name = L"itemDiscard";
-			this->itemDiscard->Size = System::Drawing::Size(180, 22);
+			this->itemDiscard->Size = System::Drawing::Size(128, 24);
 			this->itemDiscard->Text = L"Discard";
 			// 
 			// craftingResult
