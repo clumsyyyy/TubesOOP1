@@ -130,11 +130,23 @@ namespace Lib {
 
         bool tool = false, nontool = false;
         //MENGECEK TIPE ITEM YANG AKAN DIPINDAHKAN
-        if (inv->get(slotSrc)->getType() == "TOOL") {
+        if (sourceInv && inv->get(slotSrc)->getBType() == "TOOL") {
             tool = true;
         }
-        else {
+        else if(sourceInv) {
             nontool = true;
+        }
+        if (sourceCraft && crftab->get(slotSrc)->getBType() == "TOOL") {
+            tool = true;
+        }
+        else if(sourceCraft) {
+            nontool = true;
+        }
+
+        if (tool && slotCount != 1) {
+            ClearBuffer();
+            err = "You can't split a tool!\n";
+            throw err;
         }
 
         //INPUT DESTINATION SLOT
@@ -171,18 +183,19 @@ namespace Lib {
             err = "You can only move this item to 1 inventory slot\n";
             throw err;
         }
+        
 
-
+        Item* undef_item = new Item();
+        Item* item_inv = NULL;
+        Item* item_craft = NULL;
+        Item* item_moved = NULL;
         //PROSES PEMINDAHAN BARANG DARI CRAFTING TABLE
         if (sourceCraft) {        //KASUS KETIKA BARANG BERASAL DARI CRAFTING TABLE
-            Item* item_craft = NULL;
-            if (crftab->get(slotSrc)->getType() == "TOOL") {
+            if (tool) {
                 item_craft = new Tool(crftab->get(slotSrc)->getID(), crftab->get(slotSrc)->getName(), crftab->get(slotSrc)->getType(), crftab->get(slotSrc)->getBType(), crftab->get(slotSrc)->getDurability());
-                tool = true;
             }
             else {
                 item_craft = new NonTool(crftab->get(slotSrc)->getID(), crftab->get(slotSrc)->getName(), crftab->get(slotSrc)->getType(), crftab->get(slotSrc)->getBType(), crftab->get(slotSrc)->getQuantity());
-                nontool = true;
             }
 
             if (item_craft->getID() == UNDEFINED_ID) {
@@ -194,7 +207,7 @@ namespace Lib {
                     err = "You can't move item from crafting slot to another crafting slot.\n";
                     throw err;
                 }
-                Item* item_inv = new Item(*inv->get(allSlot[0]));
+                item_inv = new Item(*inv->get(allSlot[0]));
                 bool destKosong = true;
                 if (item_inv->getID() != UNDEFINED_ID) {
                     destKosong = false;
@@ -204,65 +217,99 @@ namespace Lib {
                     throw err;
                 }
 
-                Item* undef_item = new Item();
+                
                 if (destKosong) {
-                    item_craft->setQuantity(1);
                     inv->set(allSlot[0], item_craft);
                     crftab->set(slotSrc, undef_item);
                 }
                 else {
-                    item_inv->setQuantity(item_inv->getQuantity() + 1);
-                    crftab->set(slotSrc, undef_item);
-                    inv->set(allSlot[0], item_inv);
+                    if (nontool) {
+                        item_inv = new NonTool(inv->get(allSlot[0])->getID(), inv->get(allSlot[0])->getName(), inv->get(allSlot[0])->getType(), inv->get(allSlot[0])->getBType(), inv->get(allSlot[0])->getQuantity());
+                        if (item_inv->getQuantity() + 1 > 64) {
+                            err = "The slot is full, you can't move it there!\n";
+                            throw err;
+                        }
+                        item_inv->setQuantity(item_inv->getQuantity() + 1);
+                        crftab->set(slotSrc, undef_item);
+                        inv->set(allSlot[0], item_inv);
+                    }
+                    else {
+                        err = "This slot is occupied by another tool!\n";
+                        throw err;
+                    }
+                    
 
                 }
 
             }
         }
         if (sourceInv) {      //KASUS KETIKA BARANG BERASAL DARI INVENTORY
-            Item* item_inv = NULL;
-            if (inv->get(slotSrc)->getType() == "TOOL") {
+            if (tool) {
                 item_inv = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
-                tool = true;
             }
             else {
-                item_inv = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), 2);
-                nontool = true;
+                item_inv = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
             }
-            cout << item_inv->getName() << "\nJumlah dari object: " << item_inv->getQuantity() << "\nJumlah dari inventory: " << inv->get(slotSrc)->getDurability() << endl;
-
             if (item_inv->getID() == UNDEFINED_ID) {
                 err = "You are trying to move the void...\n";
                 throw err;
             }
             else {
                 if (craft) {
-                    if (slotCount > item_inv->getQuantity()) {
-                        err = "You don't have enough item to move\n";
-                        throw err;
+                    if (nontool) {
+                        if (slotCount > item_inv->getQuantity()) {
+                            err = "You don't have enough item to move\n";
+                            throw err;
+                        }
+                        else {
+                            item_moved = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
+                            item_moved->setQuantity(1);
+                            
+                            for (int i = 0; i < slotCount; i++) {
+                                item_craft = new Item(*crftab->get(allSlot[i]));
+                                if (item_craft->getID() != UNDEFINED_ID) {
+                                    err = "You can't move an item to an already occupied crafting slot!\n";
+                                    throw err;
+                                }
+                                else {
+                                    crftab->set(allSlot[i], item_moved);
+                                }
+                            }
+                            if (item_inv->getQuantity() - slotCount == 0) {
+                                inv->set(slotSrc, undef_item);
+                            }
+                            else {
+                                item_inv->setQuantity(item_inv->getQuantity() - slotCount);
+                                inv->set(slotSrc, item_inv);
+                            }
+                        }
                     }
                     else {
-                        for (int i = 0; i < slotCount; i++) {
-                            Item* item_craft = new Item(*crftab->get(allSlot[i]));
+                        if (slotCount > 1) {
+                            err = "You can only move tools to one slot\n";
+                            throw err;
+                        }
+                        else {
+                            Item* item_craft = new Item(*crftab->get(allSlot[0]));
                             if (item_craft->getID() != UNDEFINED_ID) {
                                 err = "You can't move an item to an already occupied crafting slot!\n";
                                 throw err;
                             }
                             else {
-                                Item* item_moved = new Item(*inv->get(slotSrc));
-                                item_moved->setQuantity(1);
-                                crftab->set(allSlot[i], item_moved);
+                                Tool* item_moved = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
+                                inv->set(slotSrc, undef_item);
+                                crftab->set(allSlot[0], item_moved);
+
                             }
                         }
-                        item_inv->setQuantity(item_inv->getQuantity() - slotCount);
-                        inv->set(slotSrc, item_inv);
                     }
+                    
                 }
 
                 if (bool_inv) {
-                    Item* item_inv2 = new Item(*inv->get(allSlot[0]));
+                    Item* item_inv2 = NULL;
+                    item_inv2 = new Item(*inv->get(allSlot[0]));
                     bool destKosong = true;
-                    Item* undef_item = new Item();
                     if (item_inv2->getID() != UNDEFINED_ID) {
                         destKosong = false;
                     }
@@ -275,19 +322,26 @@ namespace Lib {
                         inv->set(slotSrc, undef_item);
                     }
                     else {
-                        int kurang = 64 - item_inv2->getQuantity();
-                        if (item_inv->getQuantity() > kurang) {
-                            item_inv2->setQuantity(64);
-                            item_inv->setQuantity(item_inv->getQuantity() - kurang);
-                            inv->set(slotSrc, item_inv);
-                            inv->set(allSlot[0], item_inv2);
+                        if (nontool) {
+                            item_inv2 = new NonTool(inv->get(allSlot[0])->getID(), inv->get(allSlot[0])->getName(), inv->get(allSlot[0])->getType(), inv->get(allSlot[0])->getBType(), inv->get(allSlot[0])->getQuantity());
+                            int kurang = 64 - item_inv2->getQuantity();
+                            if (item_inv->getQuantity() > kurang) {
+                                item_inv2->setQuantity(64);
+                                item_inv->setQuantity(item_inv->getQuantity() - kurang);
+                                inv->set(slotSrc, item_inv);
+                                inv->set(allSlot[0], item_inv2);
+                            }
+                            else {
+                                item_inv2->setQuantity(item_inv2->getQuantity() + item_inv->getQuantity());
+                                inv->set(slotSrc, undef_item);
+                                inv->set(allSlot[0], item_inv2);
+                            }
                         }
                         else {
-                            item_inv2->setQuantity(item_inv2->getQuantity() + item_inv->getQuantity());
-                            Item* undef_item = new Item();
-                            inv->set(slotSrc, undef_item);
-                            inv->set(allSlot[0], item_inv2);
+                            err = "There's a tool already here!\n";
+                            throw err;
                         }
+                        
                     }
                 }
             }
