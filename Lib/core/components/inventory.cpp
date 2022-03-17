@@ -92,8 +92,11 @@ void Inventory::addTool(Tool* item){
 }
 
     void Inventory::discard(int quant, int slot) {
-        if (this->inv_buffer[slot]->getQuantity() - quant >= 0) {
+        if (this->inv_buffer[slot]->getQuantity() - quant > 0) {
             this->inv_buffer[slot]->setQuantity(this->inv_buffer[slot]->getQuantity() - quant);
+        }
+        else if (this->inv_buffer[slot]->getQuantity() - quant == 0) {
+            set(slot, new Item());
         }
         else {
             cout << "Not enough items in slot" << endl;
