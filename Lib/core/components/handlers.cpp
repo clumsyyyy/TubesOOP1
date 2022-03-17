@@ -122,6 +122,14 @@ void MoveHandler(string source, int slotCount){
         sourceInv = true;
     };
 
+    bool tool = false, nontool = false;
+    //MENGECEK TIPE ITEM YANG AKAN DIPINDAHKAN
+    if(inv->get(slotSrc)->getType() == "TOOL"){
+        tool = true;
+    }else{
+        nontool = true;
+    }
+
     //INPUT DESTINATION SLOT
     string slotDest;
     int *allSlot = new int[slotCount];
@@ -155,7 +163,6 @@ void MoveHandler(string source, int slotCount){
         throw err;
     }
 
-    bool tool = false, nontool = false;
 
     //PROSES PEMINDAHAN BARANG DARI CRAFTING TABLE
     if(sourceCraft){        //KASUS KETIKA BARANG BERASAL DARI CRAFTING TABLE
