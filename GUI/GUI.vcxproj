@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -146,7 +146,8 @@
     <ResourceCompile Include="resources\app.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resources\Resource.h" />
+    <ClInclude Include="src\headers\Helper.h" />
+    <ClInclude Include="src\headers\Item.h" />
     <ClInclude Include="src\headers\Main.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -154,10 +155,37 @@
   <ItemGroup>
     <ClCompile Include="src\AssemblyInfo.cpp" />
     <ClCompile Include="src\Bootstrapper.cpp" />
+    <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\app.ico" />
+    <Image Include="resources\icons\BIRCH_LOG.png" />
+    <Image Include="resources\icons\BIRCH_PLANK.png" />
+    <Image Include="resources\icons\BLACKSTONE.png" />
+    <Image Include="resources\icons\COBBLESTONE.png" />
+    <Image Include="resources\icons\DIAMOND.png" />
+    <Image Include="resources\icons\DIAMOND_AXE.png" />
+    <Image Include="resources\icons\DIAMOND_PICKAXE.png" />
+    <Image Include="resources\icons\DIAMOND_SWORD.png" />
+    <Image Include="resources\icons\IRON_AXE.png" />
+    <Image Include="resources\icons\IRON_INGOT.png" />
+    <Image Include="resources\icons\IRON_NUGGET.png" />
+    <Image Include="resources\icons\IRON_PICKAXE.png" />
+    <Image Include="resources\icons\IRON_SWORD.png" />
+    <Image Include="resources\icons\OAK_LOG.png" />
+    <Image Include="resources\icons\OAK_PLANK.png" />
+    <Image Include="resources\icons\SPRUCE_LOG.png" />
+    <Image Include="resources\icons\SPRUCE_PLANK.png" />
+    <Image Include="resources\icons\STICK.png" />
+    <Image Include="resources\icons\STONE_AXE.png" />
+    <Image Include="resources\icons\STONE_PICKAXE.png" />
+    <Image Include="resources\icons\STONE_SWORD.png" />
+    <Image Include="resources\icons\WOODEN_AXE.png" />
+    <Image Include="resources\icons\WOODEN_PICKAXE.png" />
+    <Image Include="resources\icons\WOODEN_SWORD.png" />
+    <Image Include="resources\slot.png" />
+    <Image Include="slot.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -169,6 +197,11 @@
   <ItemGroup>
     <EmbeddedResource Include="src\headers\Main.resx">
       <DependentUpon>src\headers\Main.h</DependentUpon>
+      <SubType>Designer</SubType>
+      <LogicalName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">GUI.Main.resources</LogicalName>
+      <LogicalName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">GUI.Main.resources</LogicalName>
+      <LogicalName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GUI.Main.resources</LogicalName>
+      <LogicalName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GUI.Main.resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

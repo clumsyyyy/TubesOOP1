@@ -1,53 +1,54 @@
 #include "headers/inventory.hpp"
 
-Inventory::Inventory(){
-    this->inv_buffer = new Item*[INV_ROWS * INV_COLS]; 
-    for (int i = 0; i < INV_ROWS * INV_COLS; i++){
-        this->inv_buffer[i] = new Item();
+namespace Lib {
+    Inventory::Inventory() {
+        this->inv_buffer = new Item * [INV_ROWS * INV_COLS];
+        for (int i = 0; i < INV_ROWS * INV_COLS; i++) {
+            this->inv_buffer[i] = new Item();
+        }
     }
-}
 
-Inventory::~Inventory(){
-    delete[] this->inv_buffer;
-}
+    Inventory::~Inventory() {
+        delete[] this->inv_buffer;
+    }
 
 Item* Inventory::get(int pos){
     return this->inv_buffer[pos] ;
 }
 
-void Inventory::set(int pos, Item* item){
-    (this->inv_buffer[pos]) = item;
-};
+    void Inventory::set(int pos, Item* item) {
+        (this->inv_buffer[pos]) = item;
+    };
 
-void Inventory::displayMenu(){
-    for (int i = 0; i < INV_SIZE; i++){
-        cout << "[I" << i << " "
-        << (this->inv_buffer[i])->getID() << " "
-        << (this->inv_buffer[i])->getQuantity() << " "
-        << (this->inv_buffer[i])->getDurability() << "] ";
-        if ((i + 1) % INV_COLS == 0){
+    void Inventory::displayMenu() {
+        for (int i = 0; i < INV_SIZE; i++) {
+            cout << "[I" << i << " "
+                << (this->inv_buffer[i])->getID() << " "
+                << (this->inv_buffer[i])->getQuantity() << " "
+                << (this->inv_buffer[i])->getDurability() << "] ";
+            if ((i + 1) % INV_COLS == 0) {
+                cout << endl;
+            }
+
+        }
+    };
+
+    void Inventory::displayDetails() {
+        cout << "Slot" << " | "
+            << setw(NUMWIDTH) << "ID" << " | "
+            << setw(WIDTH) << "Name" << " | "
+            << setw(WIDTH) << "Type" << " | "
+            << setw(WIDTH) << "Base Type" << endl;
+        for (int i = 0; i < INV_SIZE; i++) {
+            cout << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
+            this->specify(i);
             cout << endl;
         }
-        
-    }
-};
+    };
 
-void Inventory::displayDetails(){
-    cout <<  "Slot" << " | " 
-    << setw(NUMWIDTH) << "ID" << " | " 
-    << setw(WIDTH) << "Name" << " | " 
-    << setw(WIDTH) << "Type" << " | " 
-    << setw(WIDTH) << "Base Type" << endl;
-    for (int i = 0; i < INV_SIZE; i++){
-        cout << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
-        this->specify(i);
-        cout << endl;
+    void Inventory::specify(int pos) {
+        (this->inv_buffer[pos])->displayInfo();
     }
-};
-
-void Inventory::specify(int pos){
-    (this->inv_buffer[pos])->displayInfo();
-}
 
 void Inventory::addNonTool(NonTool* item){
     for (int i = 0; i < INV_SIZE; i++){
@@ -90,10 +91,12 @@ void Inventory::addTool(Tool* item){
     }
 }
 
-void Inventory::discard(int quant, int slot){
-    if (this->inv_buffer[slot]->getQuantity() - quant >= 0){
-        this->inv_buffer[slot]->setQuantity(this->inv_buffer[slot]->getQuantity() - quant);
-    } else {
-        cout << "Not enough items in slot" << endl;
+    void Inventory::discard(int quant, int slot) {
+        if (this->inv_buffer[slot]->getQuantity() - quant >= 0) {
+            this->inv_buffer[slot]->setQuantity(this->inv_buffer[slot]->getQuantity() - quant);
+        }
+        else {
+            cout << "Not enough items in slot" << endl;
+        }
     }
 }

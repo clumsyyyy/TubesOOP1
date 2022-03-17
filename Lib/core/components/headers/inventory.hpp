@@ -4,10 +4,10 @@
 #include "vars.hpp"
 #include "item.hpp"
 #include <iostream>
-using namespace std;
 
-
-class Inventory{
+namespace Lib {
+    using namespace std;
+    class Inventory {
     private:
         Item** inv_buffer;
     public:
@@ -21,6 +21,7 @@ class Inventory{
         void addNonTool(NonTool* item);
         void addTool(Tool* item);
         void discard(int quant, int slot);
-};
+    };
+}
 
 #endif

@@ -3,6 +3,7 @@
 .vscode
 .ionide
 x64/
+RC*
 
 # Prerequisites
 *.d

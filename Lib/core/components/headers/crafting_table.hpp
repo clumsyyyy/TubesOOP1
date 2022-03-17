@@ -4,9 +4,10 @@
 #include "vars.hpp"
 #include "item.hpp"
 #include <iostream>
-using namespace std;
 
-class CraftingTable {
+namespace Lib {
+    using namespace std;
+    class CraftingTable {
     private:
         Item** crftab_buffer;
     public:
@@ -20,6 +21,7 @@ class CraftingTable {
         void addNonTool(NonTool* item);
         void addTool(Tool* item);
         void discard(int quant, int slot);
-};
+    };
+}
 
 #endif

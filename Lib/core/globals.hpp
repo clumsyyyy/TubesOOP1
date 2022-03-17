@@ -8,8 +8,10 @@
 #include "components/headers/vars.hpp"
 #include <vector>
 
-extern Inventory* inv;
-extern CraftingTable* crftab;
-extern vector <TupleItem> *itemConfig;
-extern vector <TupleRecipe> *recipeConfig;
+namespace Lib {
+	extern Inventory* inv;
+	extern CraftingTable* crftab;
+	extern vector <TupleItem>* itemConfig;
+	extern vector <TupleRecipe>* recipeConfig;
+}
 #endif

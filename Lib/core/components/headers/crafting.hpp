@@ -8,9 +8,10 @@
 #include <vector>
 #include <string>
 
-using namespace std;
+namespace Lib {
+    using namespace std;
 
-class Crafting {
+    class Crafting {
     private:
         string name;
         int sum;
@@ -28,6 +29,7 @@ class Crafting {
         void recipe();
         int tools();
         void returning();
-};
+    };
+}
 
 #endif

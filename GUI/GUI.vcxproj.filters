@@ -18,7 +18,10 @@
     <ClInclude Include="src\headers\Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resources\Resource.h">
+    <ClInclude Include="src\headers\Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\headers\Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,9 +35,90 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\app.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\BIRCH_LOG.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\BIRCH_PLANK.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\BLACKSTONE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\COBBLESTONE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\DIAMOND.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\DIAMOND_AXE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\DIAMOND_PICKAXE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\DIAMOND_SWORD.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\IRON_AXE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\IRON_INGOT.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\IRON_NUGGET.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\IRON_PICKAXE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\IRON_SWORD.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\OAK_LOG.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\OAK_PLANK.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\SPRUCE_LOG.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\SPRUCE_PLANK.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\STICK.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\STONE_AXE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\STONE_PICKAXE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\STONE_SWORD.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\WOODEN_AXE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\WOODEN_PICKAXE.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\WOODEN_SWORD.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\slot.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="slot.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

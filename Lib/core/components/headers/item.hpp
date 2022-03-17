@@ -5,9 +5,10 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-using namespace std;
+namespace Lib {
+    using namespace std;
 
-class Item{
+    class Item {
     protected:
         int ID;          // item ID (e.g. 24)
         string name;     // item name (e.g. "DIAMOND_SWORD")
@@ -26,8 +27,8 @@ class Item{
         virtual int getQuantity() const;
         virtual void setQuantity(int);
         virtual int getDurability() const;
-};
-class NonTool : public Item {
+    };
+    class NonTool : public Item {
     private:
         int quantity;
     public:
@@ -40,10 +41,10 @@ class NonTool : public Item {
         void useItem(int);
         void addItem(int);
         void displayInfo() const;
-};
+    };
 
-class Tool : public Item {
-    private: 
+    class Tool : public Item {
+    private:
         int durability; // durability of the tool
     public:
         Tool(int, string, string, string, int);
@@ -52,6 +53,7 @@ class Tool : public Item {
         int getDurability() const;
         void useItem();
         void displayInfo() const;
-};
+    };
+}
 
 #endif
