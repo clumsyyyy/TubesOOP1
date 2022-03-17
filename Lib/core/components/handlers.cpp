@@ -98,6 +98,17 @@ namespace Lib {
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 
+	bool isToolMoved(int slot, bool invSource){
+        if(invSource){
+            return inv->get(slot)->getBType() == "TOOL";
+        }else{
+            return crftab->get(slot)->getBType() == "TOOL";
+        }
+    };
+	bool isInv(char a){
+        return a == 'I';        
+    };
+
     void MoveHandler(string source, int slotCount) {
         string err = "";
 
@@ -107,8 +118,9 @@ namespace Lib {
         }
 
         char src = source[0];
-        source.erase(0, 1);
-        int slotSrc = stoi(source);
+        string source1 = source;
+        source1.erase(0, 1);
+        int slotSrc = stoi(source1);
         if (src != 'C' && src != 'I') {           //CHECKING SOURCE SLOT APAKAH VALID ATO TIDAK
             ClearBuffer();
             err = "You move an invalid slot!\n";
@@ -185,11 +197,15 @@ namespace Lib {
             throw err;
         }
 
-        MoveItemHandler(slotSrc,slotCount,allSlot,tool,sourceInv,bool_inv);
+        MoveItemHandler(source,slotCount,allSlot,bool_inv);
     };
-    void MoveItemHandler(int sourceSlot,int N, int destSlot[] , bool tool, bool sourceInv, bool destInv){
+    void MoveItemHandler(string sourceSlot,int N, int destSlot[],bool destInv){
+        char src = sourceSlot[0];
+        sourceSlot.erase(0, 1);
+        int slotSrc = stoi(sourceSlot);
+        bool sourceInv = isInv(src);
         bool sourceCraft = !sourceInv;
-        int slotSrc = sourceSlot;
+        bool tool = isToolMoved(slotSrc,sourceInv);
         bool craft = !destInv;
         string err = "";
 
