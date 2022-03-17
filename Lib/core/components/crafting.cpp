@@ -45,7 +45,7 @@ namespace Lib {
         for (int k = i, n = 0; k < this->row+i && n < this->row; k++, n++) {
             for (int l = reverse ? col+j-1 : j, m = 0; (reverse ? l >= j : l < this->col+j) && m < this->col; (reverse? l--: l++), m++) {
                 if (crftab->get(k * CRAFT_COLS + l)->getName() != get<1>(this->TupRecipe)[n*col+m] && 
-                    crftab->get(k * CRAFT_COLS + l)->getBType() != get<1>(this->TupRecipe)[n*col+m]) {
+                    crftab->get(k * CRAFT_COLS + l)->getType() != get<1>(this->TupRecipe)[n*col+m]) {
                     min = 0;
                     break;
                 }

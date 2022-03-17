@@ -37,6 +37,23 @@ namespace Lib {
         }
     }
 
+    void CraftingTable::displayDetails() {
+        cout << "Slot" << " | "
+            << setw(NUMWIDTH) << "ID" << " | "
+            << setw(WIDTH) << "Name" << " | "
+            << setw(WIDTH) << "Type" << " | "
+            << setw(WIDTH) << "Base Type" << endl;
+        for (int i = 0; i < CRAFT_SIZE; i++) {
+            cout << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
+            this->specify(i);
+            cout << endl;
+        }
+    };
+
+    void CraftingTable::specify(int pos) {
+        (this->crftab_buffer[pos])->displayInfo();
+    }
+
     void CraftingTable::addNonTool(NonTool* item) {
         for (int i = 0, n = 0; i < CRAFT_ROWS; i++) {
             for (int j = 0; j < CRAFT_COLS; j++) {

@@ -8,6 +8,7 @@ namespace Lib {
         cin >> mode;
         if (mode == "ALL") {
             inv->displayDetails();
+            crftab->displayDetails();
         }
         else if (mode == "ITEM") {
             int i;

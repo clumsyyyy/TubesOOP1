@@ -80,10 +80,10 @@ int main() {
     // cout << inv->get(0, 0).getID() << endl;
 
     // sample interaction
-    // crftab->set(0, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(0, new NonTool(4, "OAK_PLANK", "NONTOOL", "PLANK", 1));
     // crftab->set(1, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
     // crftab->set(2, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
-    // crftab->set(3, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
+    // crftab->set(3, new NonTool(4, "OAK_PLANK", "NONTOOL", "PLANK", 1));
     // crftab->set(4, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
     // crftab->set(5, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
     // crftab->set(6, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));

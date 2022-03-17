@@ -15,7 +15,7 @@ namespace Lib {
         ~CraftingTable();
         Item* get(int pos);
         void set(int pos, Item* item);
-        void specify(int i, int j);
+        void specify(int i);
         void displayMenu();
         void displayDetails();
         void addNonTool(NonTool* item);
