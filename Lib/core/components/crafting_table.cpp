@@ -93,7 +93,7 @@ namespace Lib {
             this->crftab_buffer[slot]->setQuantity(this->crftab_buffer[slot]->getQuantity() - quant);
         }
         else if (this->crftab_buffer[slot]->getQuantity() - quant == 0) {
-            this->crftab_buffer[slot] = new Item();
+            set(slot, new Item());
         }
         else {
             cout << "Not enough items in slot" << endl;
