@@ -29,7 +29,7 @@ namespace Lib {
             if (get<1>(tup) == name) {
                 if (get<3>(tup) == "NONTOOL") {
                     NonTool* NT = new NonTool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), temp);
-                    inv->addNonTool(NT);
+                    inv->addNonTool(NT, 0);
                     break;
                 }
                 else {

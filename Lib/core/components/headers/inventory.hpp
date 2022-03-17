@@ -18,7 +18,7 @@ namespace Lib {
         void specify(int pos);
         void displayMenu();
         void displayDetails();
-        void addNonTool(NonTool* item);
+        void addNonTool(NonTool* item, int start);
         void addTool(Tool* item);
         void discard(int quant, int slot);
     };

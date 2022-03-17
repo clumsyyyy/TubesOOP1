@@ -21,6 +21,7 @@ Item* Inventory::get(int pos){
     };
 
     void Inventory::displayMenu() {
+        cout << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {
             cout << "[I" << i << " "
                 << (this->inv_buffer[i])->getID() << " "
@@ -50,8 +51,8 @@ Item* Inventory::get(int pos){
         (this->inv_buffer[pos])->displayInfo();
     }
 
-void Inventory::addNonTool(NonTool* item){
-    for (int i = 0; i < INV_SIZE; i++){
+void Inventory::addNonTool(NonTool* item, int start){
+    for (int i = start; i < INV_SIZE; i++){
         // base case if no such item exists in inventory
         if (this->get(i)->getID() == UNDEFINED_ID){
             if (item->getQuantity() <= MAX_STACK){
@@ -73,7 +74,13 @@ void Inventory::addNonTool(NonTool* item){
             if (this->get(i)->getQuantity() + item->getQuantity() <= MAX_STACK){
                 this->get(i)->setQuantity(this->get(i)->getQuantity() + item->getQuantity());
                 return;
-            } 
+            }
+            else {
+                item->setQuantity(item->getQuantity() - (MAX_STACK - this->get(i)->getQuantity()));
+                cout << "Stacked item, " << item->getQuantity() << " left" << endl;
+                this->get(i)->setQuantity(MAX_STACK);
+                this->addNonTool(item, i + 1);
+            }
         return;
         } 
     }

@@ -25,7 +25,7 @@ namespace Lib {
     void Crafting::set_crafting_table(int min, int i, int j, bool reverse) {
         for (int idx = i; idx < this->row+i; idx++) {
             for (int idj = reverse? j+col : j; reverse ? idj >= this->col+j : idj < this->col+j; reverse ? idj-- : idj++ ) {
-                if (crftab->get(idx*CRAFT_COLS + idj)->getName() != "UNDIFINED") {
+                if (crftab->get(idx*CRAFT_COLS + idj)->getName() != "UNDEFINED") {
                     crftab->discard(min, idx*CRAFT_COLS + idj);
                 }
             }
@@ -118,7 +118,7 @@ namespace Lib {
                                             crftab->get(i)->getType(),
                                             crftab->get(i)->getBType(),
                                             crftab->get(i)->getQuantity());
-                    inv->addNonTool(NT);
+                    inv->addNonTool(NT, 0);
                 } else {
                     Tool *T = new Tool(crftab->get(i)->getID(),
                                             crftab->get(i)->getName(),
