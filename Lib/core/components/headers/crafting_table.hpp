@@ -21,6 +21,7 @@ namespace Lib {
         void addNonTool(int pos, NonTool* item);
         void addTool(int pos, Tool* item);
         void discard(int quant, int slot);
+        void toInv(int slotSrc,int destSlot[]);
     };
 }
 

@@ -21,6 +21,8 @@ namespace Lib {
         void addNonTool(NonTool* item, int start);
         void addTool(Tool* item, int quant);
         void discard(int quant, int slot);
+        void toCraft(int slotSrc,int destSlot[], int N);
+        void toAnotherSlot(int slotSrc,int destSlot[]);
     };
 }
 

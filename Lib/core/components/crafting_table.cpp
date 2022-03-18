@@ -1,4 +1,5 @@
 #include "headers/crafting_table.hpp"
+#include "../globals.hpp"
 
 namespace Lib {
     CraftingTable::CraftingTable() {
@@ -115,5 +116,54 @@ namespace Lib {
                 throw "Not enough items in slot\n";
             }
         } 
+    }
+    void CraftingTable::toInv(int slotSrc,int destSlot[]){
+        Item* undef_item = new Item();
+        Item* item_inv = NULL;
+        Item* item_craft = NULL;
+        Item* item_moved = NULL;
+        bool tool = crftab->get(slotSrc)->getBType() == "TOOL";
+        if (tool) {
+            item_craft = new Tool(crftab->get(slotSrc)->getID(), crftab->get(slotSrc)->getName(), crftab->get(slotSrc)->getType(), crftab->get(slotSrc)->getBType(), crftab->get(slotSrc)->getDurability());
+        }
+        else {
+            item_craft = new NonTool(crftab->get(slotSrc)->getID(), crftab->get(slotSrc)->getName(), crftab->get(slotSrc)->getType(), crftab->get(slotSrc)->getBType(), crftab->get(slotSrc)->getQuantity());
+        }
+
+        if (item_craft->getID() == UNDEFINED_ID) {
+            MoveException *err = new MoveException("VOID");
+            throw *err;
+        }
+        else {
+            item_inv = new Item(*inv->get(destSlot[0]));
+            bool destKosong = true;
+            if (item_inv->getID() != UNDEFINED_ID) {
+                destKosong = false;
+            }
+            if (!destKosong && item_inv->getID() != item_craft->getID()) {
+                MoveException *err = new MoveException("DIFFTYPE");
+                throw *err;
+            }
+            if (destKosong) {
+                inv->set(destSlot[0], item_craft);
+                crftab->set(slotSrc, undef_item);
+            }
+            else {
+                if (!tool) {
+                    item_inv = new NonTool(inv->get(destSlot[0])->getID(), inv->get(destSlot[0])->getName(), inv->get(destSlot[0])->getType(), inv->get(destSlot[0])->getBType(), inv->get(destSlot[0])->getQuantity());
+                    if (item_inv->getQuantity() + item_craft->getQuantity() > 64) {
+                        MoveException *err = new MoveException("FULL");
+                        throw *err;
+                    }
+                    item_inv->setQuantity(item_inv->getQuantity() + item_craft->getQuantity());
+                    crftab->set(slotSrc, undef_item);
+                    inv->set(destSlot[0], item_inv);
+                }
+                else {
+                    MoveException *err = new MoveException("TOOL");
+                    throw *err;
+                }
+            }
+        }
     }
 }
