@@ -154,9 +154,9 @@ namespace Lib {
         for (tuple tup : *recipeConfig) {
             int n = 0;
             TupleItem result;
-            this->TupRecipe = tup;
-            n = this->recipe();
-            result = this->get_result();
+            Crafting crf(tup);
+            n = crf.recipe();
+            result = crf.get_result();
             if (n > 0) {
                 if (get<3>(result) == "NONTOOL") {
                     NonTool* NT = new NonTool(stoi(get<0>(result)), get<1>(result), get<2>(result), get<3>(result), n);
@@ -166,15 +166,16 @@ namespace Lib {
                     inv->addTool(T,n);                           
                 }
                 cout << "crafted " << n << " " << get<1>(result) << endl;
-                this->returning();
+                crf.returning();
                 return;
             }
         }
-        int durability = this->tools();;
-        TupleItem result = this->get_result();
+        Crafting crf;
+        int durability = crf.tools();;
+        TupleItem result = crf.get_result();
         if (durability > 0) {
             for (int i = 0; i < CRAFT_SIZE; i++) {
-                if (crftab->get(i)->getName() == name) {
+                if (crftab->get(i)->getName() == get<1>(result)) {
                     crftab->discard(1,i);
                 }
             }

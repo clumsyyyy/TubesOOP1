@@ -93,8 +93,7 @@ namespace Lib {
 
     void CraftingHandler() {
         try {
-            Crafting crf;
-            crf.crafting_proses();
+            Crafting::crafting_proses();
         }
         catch (BaseException* e) {
             e->printMessage();

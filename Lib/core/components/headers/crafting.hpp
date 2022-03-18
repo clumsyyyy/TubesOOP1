@@ -28,7 +28,7 @@ namespace Lib {
         bool is_another_space_free(int i, int j, bool reverse);
         int recipe();
         int tools();
-        void crafting_proses();
+        static void crafting_proses();
         void returning();
     };
 }
