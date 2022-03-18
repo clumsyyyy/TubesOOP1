@@ -50,9 +50,10 @@ namespace Lib {
             << setw(WIDTH) << this->basetype;
     }
 
-int Item::getQuantity() const{ return 0; }
-int Item::getDurability() const { return 0; }
-void Item::setQuantity(int) {}
+    int Item::getQuantity() const{ return 0; }
+    int Item::getDurability() const { return 0; }
+    void Item::setQuantity(int) {}
+    void Item::useItem() {}
 
     // Implementasi bagian Non Tool Item
     NonTool::NonTool(int ID, string name, string type, string basetype, int quant)

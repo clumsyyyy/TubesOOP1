@@ -52,26 +52,11 @@ Item* Inventory::get(int pos){
     }
 
 void Inventory::addNonTool(NonTool* item, int start){
-    for (int i = start; i < INV_SIZE; i++){
-        // base case if no such item exists in inventory
-        if (this->get(i)->getID() == UNDEFINED_ID){
-            if (item->getQuantity() <= MAX_STACK){
-                this->set(i, item);
-                cout << "set item " << item->getID() << " to I" << i << endl;
-                return;
-            } else {
-                NonTool* temp = new NonTool(*item);
-                temp->setQuantity(MAX_STACK);
-                this->set(i, temp);
-                cout << "set item " << temp->getID() << " to I" << i << endl;
-                cout << item->getQuantity()<< " stacks left" << endl;
-                item->setQuantity(item->getQuantity() - MAX_STACK);
-                continue;
-            }
+    for (int i = start; i < INV_SIZE; i++) {
         // case 1: other item exists (stackable)
-        } else if (this->get(i)->getID() == item->getID()){
+        if (this->get(i)->getID() == item->getID()) {
             // if current slot less than max stack, increase quantity
-            if (this->get(i)->getQuantity() + item->getQuantity() <= MAX_STACK){
+            if (this->get(i)->getQuantity() + item->getQuantity() <= MAX_STACK) {
                 this->get(i)->setQuantity(this->get(i)->getQuantity() + item->getQuantity());
                 return;
             }
@@ -81,21 +66,49 @@ void Inventory::addNonTool(NonTool* item, int start){
                 this->get(i)->setQuantity(MAX_STACK);
                 this->addNonTool(item, i + 1);
             }
-        return;
-        } 
+        }
     }
+    // case 2: if not found, find from the first slot
+    for (int i = 0; i < INV_SIZE; i++){
+        if (this->get(i)->getID() == UNDEFINED_ID) {
+            if (item->getQuantity() <= MAX_STACK) {
+                this->set(i, item);
+                cout << "set item " << item->getID() << " to I" << i << endl;
+                return;
+            }
+            else {
+                NonTool* temp = new NonTool(*item);
+                temp->setQuantity(MAX_STACK);
+                this->set(i, temp);
+                cout << "set item " << temp->getID() << " to I" << i << endl;
+                cout << item->getQuantity() << " stacks left" << endl;
+                item->setQuantity(item->getQuantity() - MAX_STACK);
+                continue;
+            }
+        }
+    }
+    return;
 }
 
-void Inventory::addTool(Tool* item){
-     for (int i = 0; i < INV_SIZE; i++){
-        // base case if no such item exists in inventory
-        if (this->get(i)->getID() == UNDEFINED_ID){
-            this->set(i, item);
-            cout << "set item " << item->getID() << " to I" << i << endl;
+void Inventory::addTool(Tool* item, int quant){
+    bool added = false;
+    for (int j = 0; j < quant; j++) {
+        added = false;
+        for (int i = 0; i < INV_SIZE; i++) {
+            // base case if no such item exists in inventory
+            if (this->get(i)->getID() == UNDEFINED_ID) {
+                this->set(i, item);
+                added = true;
+                cout << "set item " << item->getID() << " to I" << i << endl;
+                break;
+            }
+        }
+        if (!added) {
+            cout << "inventory full!" << endl;
             return;
         }
-        
     }
+     
 }
 
     void Inventory::discard(int quant, int slot) {

@@ -10,6 +10,7 @@ namespace Lib {
 	void DetailsHandler();
 	void GiveHandler();
 	void DiscardHandler();
+	void UseHandler();
 	void CraftingHandler();
 	void GiveChecker(string name, int temp);
 	void MoveHandler(string source, int slotCount);

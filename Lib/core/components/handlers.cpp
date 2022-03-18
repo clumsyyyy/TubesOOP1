@@ -34,8 +34,8 @@ namespace Lib {
                     break;
                 }
                 else {
-                    Tool* T = new Tool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), temp);
-                    inv->addTool(T);
+                    Tool* T = new Tool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), 10);
+                    inv->addTool(T, temp);
                     break;
                 }
             }
@@ -55,6 +55,25 @@ namespace Lib {
         }
         else {
             inv->set(index, new Item());
+        }
+    }
+
+    void UseHandler() {
+        string slot;
+        cin >> slot;
+        int index = stoi(slot.substr(1, slot.length() - 1));
+        if (inv->get(index)->getBType() == "NONTOOL") {
+            throw "You cannot use a Non-Tool item! (Use DISCARD)";
+        }
+        else {
+            if (inv->get(index)->getDurability() == 1) {
+                inv->get(index)->useItem();
+                inv->set(index, new Item());
+            }
+            else {
+                inv->get(index)->useItem();
+            }
+
         }
     }
 

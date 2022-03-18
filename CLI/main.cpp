@@ -110,22 +110,18 @@ int main() {
             DetailsHandler();
         } else if (command == "GIVE"){
             GiveHandler();
-        } else if (command == "DISCARD"){
+        }
+        else if (command == "DISCARD") {
             DiscardHandler();
         }
-        else if (command == "EXPORT") {
-            string outputPath;
-            cin >> outputPath;
-            ofstream outputFile(outputPath);
-
-            // hardcode for first test case
-            outputFile << "21:10" << endl;
-            outputFile << "6:1" << endl;
-            for (int i = 2; i < 27; i++) {
-                outputFile << "0:0" << endl;
+        else if (command == "USE") {
+            try {
+                UseHandler();
+            }
+            catch (const char* e) {
+                cout << e;
             }
 
-            cout << "Exported" << endl;
         } else if (command == "CRAFT") {
             try {
                 CraftingHandler();
@@ -145,7 +141,22 @@ int main() {
                 cout << err;
             }
             
-        } else {
+        }
+        else if (command == "EXPORT") {
+            string outputPath;
+            cin >> outputPath;
+            ofstream outputFile(outputPath);
+
+            // hardcode for first test case
+            outputFile << "21:10" << endl;
+            outputFile << "6:1" << endl;
+            for (int i = 2; i < 27; i++) {
+                outputFile << "0:0" << endl;
+            }
+
+            cout << "Exported" << endl;
+        }
+        else {
         // todo
             cout << "Invalid command!" << endl;
         }
