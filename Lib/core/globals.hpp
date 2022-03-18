@@ -6,6 +6,7 @@
 #include "components/headers/crafting_table.hpp"
 #include "components/headers/crafting.hpp"
 #include "components/headers/vars.hpp"
+#include "components/headers/exception.hpp"
 #include <vector>
 
 namespace Lib {

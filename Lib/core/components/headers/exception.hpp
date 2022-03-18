@@ -20,8 +20,10 @@ namespace Lib {
 	};
 
 	class CraftingException : public BaseException {
+	private:
+		bool tool;
 	public:
-		CraftingException();
+		CraftingException(bool);
 		void printMessage();
 	};
 

@@ -20,10 +20,10 @@ tuple <string, string, string, string> parse(string line){
     return make_tuple(ID, nameTok, typeTok, btypeTok);
 }
 
-tuple <tuple<int,int>, vector<string>, tuple<int,string>> parse(ifstream* file) {
+tuple <tuple<int,int>, vector<string>, TupleItem, int> parse(ifstream* file) {
     int i = 0, n = 0, m = 0;
     vector<string> recipeList;
-    string name;
+    string ID, name, type, btype;
     int quantity;
     for (string line; getline(*file, line);) {
         if (i == 0) {
@@ -55,7 +55,15 @@ tuple <tuple<int,int>, vector<string>, tuple<int,string>> parse(ifstream* file) 
         }
         i++;
     }
-    return make_tuple(make_tuple(n, m),recipeList,make_tuple(quantity,name));
+    for (tuple tup : *itemConfig) {
+        if (get<1>(tup) == name) {
+            ID = get<0>(tup);
+            type = get<2>(tup);
+            btype = get<3>(tup);
+            break;
+        }
+    }
+    return make_tuple(make_tuple(n, m),recipeList,make_tuple(ID,name,type, btype),quantity);
 }
 
 int main() {

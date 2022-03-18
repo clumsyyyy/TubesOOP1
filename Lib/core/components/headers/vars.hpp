@@ -17,6 +17,6 @@
 #define WIDTH 12
 #define NUMWIDTH 4
 #define TupleItem tuple<string, string, string, string>
-#define TupleRecipe tuple<tuple<int,int>,vector<string>,tuple<int,string>>
+#define TupleRecipe tuple<tuple<int,int>,vector<string>,TupleItem,int>
 
 #endif

@@ -93,39 +93,8 @@ namespace Lib {
 
     void CraftingHandler() {
         try {
-            for (tuple tup : *recipeConfig) {
-                int sum = 0;
-                int min = 0;
-                string name;
-                Crafting crf(tup);
-                crf.recipe();
-                name = crf.getName();
-                sum = crf.getSum();
-                if (sum > 0) {
-                    GiveChecker(name, sum);
-                    cout << "crafted " << sum << " " << name << endl;
-                    crf.returning();
-                    return;
-                }
-            }
             Crafting crf;
-            int durability = crf.tools();
-            int sum = crf.getSum();
-            string name = crf.getName();
-
-            if (sum == 2) {
-                for (int i = 0; i < CRAFT_SIZE; i++) {
-                    if (crftab->get(i)->getName() == name) {
-                        crftab->get(i)->setQuantity(crftab->get(i)->getQuantity() - 1);
-                    }
-
-                }
-                GiveChecker(name, durability);
-                crf.returning();
-            }
-            else {
-                throw new CraftingException();
-            }
+            crf.crafting_proses();
         }
         catch (BaseException* e) {
             e->printMessage();
