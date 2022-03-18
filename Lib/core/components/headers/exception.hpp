@@ -35,5 +35,14 @@ namespace Lib {
 		void printMessage();
 
 	};
+
+	class MoveException : public BaseException {
+	private:
+		string name;
+	public:
+		MoveException(string);
+		void printMessage();
+
+	};
 }
 #endif

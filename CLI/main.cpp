@@ -140,8 +140,8 @@ int main() {
             try{
                 MoveHandler(slotSrc,slotQty);
                 cout << "Move succeeded\n";
-            }catch(string err){
-                cout << err;
+            }catch(MoveException err){
+                err.printMessage();
             }
             
         }
