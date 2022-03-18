@@ -1,4 +1,5 @@
 #include "headers/handlers.hpp"
+#include "headers/exception.hpp"
 #include "../globals.hpp"
 #include <limits>
 
@@ -22,12 +23,20 @@ namespace Lib {
         string name;
         int temp;
         cin >> name >> temp;
-        GiveChecker(name, temp);
+        try {
+            GiveChecker(name, temp);
+        }
+        catch (BaseException* e) {
+            e->printMessage();
+        }
+
     }
 
     void GiveChecker(string name, int temp) {
+        bool found = false;
         for (tuple tup : *itemConfig) {
             if (get<1>(tup) == name) {
+                found = true;
                 if (get<3>(tup) == "NONTOOL") {
                     NonTool* NT = new NonTool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), temp);
                     inv->addNonTool(NT, 0);
@@ -39,9 +48,9 @@ namespace Lib {
                     break;
                 }
             }
-            else {
-                //throw exception here
-            }
+        }
+        if (!found) {
+            throw new AddException(name);
         }
     }
 
@@ -59,57 +68,67 @@ namespace Lib {
     }
 
     void UseHandler() {
-        string slot;
-        cin >> slot;
-        int index = stoi(slot.substr(1, slot.length() - 1));
-        if (inv->get(index)->getBType() == "NONTOOL") {
-            throw "You cannot use a Non-Tool item! (Use DISCARD)";
-        }
-        else {
-            if (inv->get(index)->getDurability() == 1) {
-                inv->get(index)->useItem();
-                inv->set(index, new Item());
+        try {
+            string slot;
+            cin >> slot;
+            int index = stoi(slot.substr(1, slot.length() - 1));
+            if (inv->get(index)->getBType() == "NONTOOL") {
+                throw new UseException(inv->get(index)->getName());
             }
             else {
-                inv->get(index)->useItem();
-            }
+                if (inv->get(index)->getDurability() == 1) {
+                    inv->get(index)->useItem();
+                    inv->set(index, new Item());
+                }
+                else {
+                    inv->get(index)->useItem();
+                }
 
+            }
+        }
+        catch (BaseException* e) {
+            e->printMessage();
         }
     }
 
     void CraftingHandler() {
-        for (tuple tup : *recipeConfig) {
-            int sum = 0;
-            int min = 0;
-            string name;
-            Crafting crf(tup);
-            crf.recipe();
-            name = crf.getName();
-            sum = crf.getSum();
-            if (sum > 0) {
-                GiveChecker(name, sum);
-                cout << "crafted " << sum << " " << name << endl;
-                crf.returning();
-                return;
-            }
-        }
-        Crafting crf;
-        int durability = crf.tools();
-        int sum = crf.getSum();
-        string name = crf.getName();
-
-        if (sum == 2) {
-            for (int i = 0; i < CRAFT_SIZE; i++) {
-                if (crftab->get(i)->getName() == name) {
-                    crftab->get(i)->setQuantity(crftab->get(i)->getQuantity() - 1);
+        try {
+            for (tuple tup : *recipeConfig) {
+                int sum = 0;
+                int min = 0;
+                string name;
+                Crafting crf(tup);
+                crf.recipe();
+                name = crf.getName();
+                sum = crf.getSum();
+                if (sum > 0) {
+                    GiveChecker(name, sum);
+                    cout << "crafted " << sum << " " << name << endl;
+                    crf.returning();
+                    return;
                 }
-
             }
-            GiveChecker(name, durability);
-            crf.returning();
+            Crafting crf;
+            int durability = crf.tools();
+            int sum = crf.getSum();
+            string name = crf.getName();
+
+            if (sum == 2) {
+                for (int i = 0; i < CRAFT_SIZE; i++) {
+                    if (crftab->get(i)->getName() == name) {
+                        crftab->get(i)->setQuantity(crftab->get(i)->getQuantity() - 1);
+                    }
+
+                }
+                GiveChecker(name, durability);
+                crf.returning();
+            }
+            else {
+                throw new CraftingException();
+            }
         }
-        else {
-            throw "Recipe not found\n";
+        catch (BaseException* e) {
+            e->printMessage();
         }
     }
 

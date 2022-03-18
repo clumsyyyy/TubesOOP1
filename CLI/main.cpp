@@ -100,6 +100,7 @@ int main() {
     // cout << crftab->get(0)->getQuantity() << " ";
     // inv->set(0,0, new Item(3,"BIRCH_LOG", "NONTOOL", "LOG"));
     // crftab = new CraftingTable();
+
     cout << "\n\nInput command: ";
     string command;
     while (cin >> command) {
@@ -121,14 +122,8 @@ int main() {
             catch (const char* e) {
                 cout << e;
             }
-
         } else if (command == "CRAFT") {
-            try {
-                CraftingHandler();
-            }
-            catch(const char* e) {
-                cout << e;
-            }    
+            CraftingHandler();
         } else if (command == "MOVE") {
             string slotSrc;
             int slotQty;
