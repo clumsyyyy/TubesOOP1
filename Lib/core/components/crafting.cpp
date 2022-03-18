@@ -222,7 +222,7 @@ namespace Lib {
                                             crftab->get(i)->getBType(),
                                             crftab->get(i)->getType(),
                                             crftab->get(i)->getDurability());
-                    inv->addTool(T);
+                    inv->addTool(T, 1);
                 }
             } 
             crftab->discard(crftab->get(i)->getQuantity(),i);

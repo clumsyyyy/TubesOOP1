@@ -1,4 +1,5 @@
 #include "headers/handlers.hpp"
+#include "headers/exception.hpp"
 #include "../globals.hpp"
 #include <limits>
 
@@ -22,26 +23,34 @@ namespace Lib {
         string name;
         int temp;
         cin >> name >> temp;
-        GiveChecker(name, temp);
+        try {
+            GiveChecker(name, temp);
+        }
+        catch (BaseException* e) {
+            e->printMessage();
+        }
+
     }
 
     void GiveChecker(string name, int temp) {
+        bool found = false;
         for (tuple tup : *itemConfig) {
             if (get<1>(tup) == name) {
+                found = true;
                 if (get<3>(tup) == "NONTOOL") {
                     NonTool* NT = new NonTool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), temp);
                     inv->addNonTool(NT, 0);
                     break;
                 }
                 else {
-                    Tool* T = new Tool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), temp);
-                    inv->addTool(T);
+                    Tool* T = new Tool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), 10);
+                    inv->addTool(T, temp);
                     break;
                 }
             }
-            else {
-                //throw exception here
-            }
+        }
+        if (!found) {
+            throw new AddException(name);
         }
     }
 
@@ -58,45 +67,85 @@ namespace Lib {
         }
     }
 
-    void CraftingHandler() {
-        for (tuple tup : *recipeConfig) {
-            int sum = 0;
-            int min = 0;
-            string name;
-            Crafting crf(tup);
-            crf.recipe();
-            name = crf.getName();
-            sum = crf.getSum();
-            if (sum > 0) {
-                GiveChecker(name, sum);
-                cout << "crafted " << sum << " " << name << endl;
-                crf.returning();
-                return;
+    void UseHandler() {
+        try {
+            string slot;
+            cin >> slot;
+            int index = stoi(slot.substr(1, slot.length() - 1));
+            if (inv->get(index)->getBType() == "NONTOOL") {
+                throw new UseException(inv->get(index)->getName());
             }
-        }
-        Crafting crf;
-        int durability = crf.tools();
-        int sum = crf.getSum();
-        string name = crf.getName();
-
-        if (sum == 2) {
-            for (int i = 0; i < CRAFT_SIZE; i++) {
-                if (crftab->get(i)->getName() == name) {
-                    crftab->get(i)->setQuantity(crftab->get(i)->getQuantity() - 1);
+            else {
+                if (inv->get(index)->getDurability() == 1) {
+                    inv->get(index)->useItem();
+                    inv->set(index, new Item());
+                }
+                else {
+                    inv->get(index)->useItem();
                 }
 
             }
-            GiveChecker(name, durability);
-            crf.returning();
         }
-        else {
-            throw "Recipe not found\n";
+        catch (BaseException* e) {
+            e->printMessage();
+        }
+    }
+
+    void CraftingHandler() {
+        try {
+            for (tuple tup : *recipeConfig) {
+                int sum = 0;
+                int min = 0;
+                string name;
+                Crafting crf(tup);
+                crf.recipe();
+                name = crf.getName();
+                sum = crf.getSum();
+                if (sum > 0) {
+                    GiveChecker(name, sum);
+                    cout << "crafted " << sum << " " << name << endl;
+                    crf.returning();
+                    return;
+                }
+            }
+            Crafting crf;
+            int durability = crf.tools();
+            int sum = crf.getSum();
+            string name = crf.getName();
+
+            if (sum == 2) {
+                for (int i = 0; i < CRAFT_SIZE; i++) {
+                    if (crftab->get(i)->getName() == name) {
+                        crftab->get(i)->setQuantity(crftab->get(i)->getQuantity() - 1);
+                    }
+
+                }
+                GiveChecker(name, durability);
+                crf.returning();
+            }
+            else {
+                throw new CraftingException();
+            }
+        }
+        catch (BaseException* e) {
+            e->printMessage();
         }
     }
 
     void ClearBuffer() {
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
+
+	bool isToolMoved(int slot, bool invSource){
+        if(invSource){
+            return inv->get(slot)->getBType() == "TOOL";
+        }else{
+            return crftab->get(slot)->getBType() == "TOOL";
+        }
+    };
+	bool isInv(char a){
+        return a == 'I';        
+    };
 
     void MoveHandler(string source, int slotCount) {
         string err = "";
@@ -107,8 +156,9 @@ namespace Lib {
         }
 
         char src = source[0];
-        source.erase(0, 1);
-        int slotSrc = stoi(source);
+        string source1 = source;
+        source1.erase(0, 1);
+        int slotSrc = stoi(source1);
         if (src != 'C' && src != 'I') {           //CHECKING SOURCE SLOT APAKAH VALID ATO TIDAK
             ClearBuffer();
             err = "You move an invalid slot!\n";
@@ -185,11 +235,15 @@ namespace Lib {
             throw err;
         }
 
-        MoveItemHandler(slotSrc,slotCount,allSlot,tool,sourceInv,bool_inv);
+        MoveItemHandler(source,slotCount,allSlot,bool_inv);
     };
-    void MoveItemHandler(int sourceSlot,int N, int destSlot[] , bool tool, bool sourceInv, bool destInv){
+    void MoveItemHandler(string sourceSlot,int N, int destSlot[],bool destInv){
+        char src = sourceSlot[0];
+        sourceSlot.erase(0, 1);
+        int slotSrc = stoi(sourceSlot);
+        bool sourceInv = isInv(src);
         bool sourceCraft = !sourceInv;
-        int slotSrc = sourceSlot;
+        bool tool = isToolMoved(slotSrc,sourceInv);
         bool craft = !destInv;
         string err = "";
 

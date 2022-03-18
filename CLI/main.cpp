@@ -100,6 +100,7 @@ int main() {
     // cout << crftab->get(0)->getQuantity() << " ";
     // inv->set(0,0, new Item(3,"BIRCH_LOG", "NONTOOL", "LOG"));
     // crftab = new CraftingTable();
+
     cout << "\n\nInput command: ";
     string command;
     while (cin >> command) {
@@ -110,8 +111,31 @@ int main() {
             DetailsHandler();
         } else if (command == "GIVE"){
             GiveHandler();
-        } else if (command == "DISCARD"){
+        }
+        else if (command == "DISCARD") {
             DiscardHandler();
+        }
+        else if (command == "USE") {
+            try {
+                UseHandler();
+            }
+            catch (const char* e) {
+                cout << e;
+            }
+        } else if (command == "CRAFT") {
+            CraftingHandler();
+        } else if (command == "MOVE") {
+            string slotSrc;
+            int slotQty;
+            // need to handle multiple destinations
+            cin >> slotSrc >> slotQty;
+            try{
+                MoveHandler(slotSrc,slotQty);
+                cout << "Move succeeded\n";
+            }catch(string err){
+                cout << err;
+            }
+            
         }
         else if (command == "EXPORT") {
             string outputPath;
@@ -126,26 +150,8 @@ int main() {
             }
 
             cout << "Exported" << endl;
-        } else if (command == "CRAFT") {
-            try {
-                CraftingHandler();
-            }
-            catch(const char* e) {
-                cout << e;
-            }    
-        } else if (command == "MOVE") {
-            string slotSrc;
-            int slotQty;
-            // need to handle multiple destinations
-            cin >> slotSrc >> slotQty;
-            try{
-                MoveHandler(slotSrc,slotQty);
-                cout << "Move succeeded\n";
-            }catch(string err){
-                cout << err;
-            }
-            
-        } else {
+        }
+        else {
         // todo
             cout << "Invalid command!" << endl;
         }

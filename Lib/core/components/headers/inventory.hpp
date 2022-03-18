@@ -19,7 +19,7 @@ namespace Lib {
         void displayMenu();
         void displayDetails();
         void addNonTool(NonTool* item, int start);
-        void addTool(Tool* item);
+        void addTool(Tool* item, int quant);
         void discard(int quant, int slot);
     };
 }

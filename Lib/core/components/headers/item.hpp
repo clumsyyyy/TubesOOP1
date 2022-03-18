@@ -27,6 +27,7 @@ namespace Lib {
         virtual int getQuantity() const;
         virtual void setQuantity(int);
         virtual int getDurability() const;
+        virtual void useItem();
     };
     class NonTool : public Item {
     private:
