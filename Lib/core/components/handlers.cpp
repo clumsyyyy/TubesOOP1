@@ -117,11 +117,10 @@ namespace Lib {
     };
 
     void MoveHandler(string source, int slotCount) {
-        string err = "";
 
         if (slotCount < 1) {
-            err = "Invalid slot count\n";
-            throw err;
+            MoveException *err =new MoveException("INVALIDSLOT");
+            throw *err;
         }
 
         char src = source[0];
@@ -130,14 +129,14 @@ namespace Lib {
         int slotSrc = stoi(source1);
         if (src != 'C' && src != 'I') {           //CHECKING SOURCE SLOT APAKAH VALID ATO TIDAK
             ClearBuffer();
-            err = "You move an invalid slot!\n";
-            throw err;
+            MoveException *err = new MoveException("INVALID");
+            throw *err;
         }
 
         if ((src == 'C' && slotSrc >= CRAFT_SIZE) || (src == 'I' && slotSrc >= INV_SIZE)) {
             ClearBuffer();
-            err = "You move an invalid slot!\n";
-            throw err;
+            MoveException *err = new MoveException("INVALID");
+            throw *err;
         }
 
         bool sourceCraft = false, sourceInv = false;
@@ -165,8 +164,8 @@ namespace Lib {
 
         if (tool && slotCount != 1) {
             ClearBuffer();
-            err = "You can't split a tool!\n";
-            throw err;
+            MoveException *err = new MoveException("INVALIDSLOT");
+            throw *err;
         }
 
         //INPUT DESTINATION SLOT
@@ -183,28 +182,33 @@ namespace Lib {
             }
             else {
                 ClearBuffer();
-                err = "You entered an invalid slot!\n";
-                throw err;
+                MoveException *err = new MoveException("INVALIDDEST"); 
+                throw *err;
             }
             if (bool_inv && craft) {
                 ClearBuffer();
-                err = "You can only move the item to one type of slot!\n";
-                throw err;
+                MoveException *err = new MoveException("DOUBLETYPEDEST");
+                throw *err;
             }
             slotDest.erase(0, 1);
             allSlot[i] = stoi(slotDest);
             if ((craft && slotSrc >= CRAFT_SIZE) || (bool_inv && slotSrc >= INV_SIZE)) {
-                err = "You tried to move an item to invalid slot!\n";
-                throw err;
+                MoveException *err = new MoveException("INVALIDDEST");
+                throw *err;
             }
         }
 
         if (sourceInv && bool_inv && slotCount != 1) {
-            err = "You can only move this item to 1 inventory slot\n";
+            string a = "MOVETO2INV";
+            MoveException *err = new MoveException(a);
+            throw *err;
+        }
+        try {
+            MoveItemHandler(source, slotCount, allSlot, bool_inv);
+        }catch(MoveException err) {
             throw err;
         }
-
-        MoveItemHandler(source,slotCount,allSlot,bool_inv);
+        
     };
     void MoveItemHandler(string sourceSlot,int N, int destSlot[],bool destInv){
         char src = sourceSlot[0];
@@ -212,9 +216,8 @@ namespace Lib {
         int slotSrc = stoi(sourceSlot);
         bool sourceInv = isInv(src);
         bool sourceCraft = !sourceInv;
-        bool tool = isToolMoved(slotSrc,sourceInv);
+        bool tool = isToolMoved(slotSrc, sourceInv);
         bool craft = !destInv;
-        string err = "";
 
         Item* undef_item = new Item();
         Item* item_inv = NULL;
@@ -230,13 +233,13 @@ namespace Lib {
             }
 
             if (item_craft->getID() == UNDEFINED_ID) {
-                err = "You are trying to move the void...\n";
-                throw err;
+                MoveException *err = new MoveException("VOID");
+                throw *err;
             }
             else {
                 if (craft) {
-                    err = "You can't move item from crafting slot to another crafting slot.\n";
-                    throw err;
+                    MoveException *err = new MoveException("CRAFTTOCRAFT");
+                    throw *err;
                 }
                 item_inv = new Item(*inv->get(destSlot[0]));
                 bool destKosong = true;
@@ -244,11 +247,11 @@ namespace Lib {
                     destKosong = false;
                 }
                 if (!destKosong && item_inv->getID() != item_craft->getID()) {
-                    err = "The item you are trying to move to is not of the same type!\n";
-                    throw err;
+                    MoveException *err = new MoveException("DIFFTYPE");
+                    throw *err;
                 }
 
-                
+
                 if (destKosong) {
                     inv->set(destSlot[0], item_craft);
                     crftab->set(slotSrc, undef_item);
@@ -257,18 +260,18 @@ namespace Lib {
                     if (!tool) {
                         item_inv = new NonTool(inv->get(destSlot[0])->getID(), inv->get(destSlot[0])->getName(), inv->get(destSlot[0])->getType(), inv->get(destSlot[0])->getBType(), inv->get(destSlot[0])->getQuantity());
                         if (item_inv->getQuantity() + item_craft->getQuantity() > 64) {
-                            err = "The slot is full, you can't move it there!\n";
-                            throw err;
+                            MoveException *err = new MoveException("FULL");
+                            throw *err;
                         }
                         item_inv->setQuantity(item_inv->getQuantity() + item_craft->getQuantity());
                         crftab->set(slotSrc, undef_item);
                         inv->set(destSlot[0], item_inv);
                     }
                     else {
-                        err = "This slot is occupied by another tool!\n";
-                        throw err;
+                        MoveException *err = new MoveException("TOOL");
+                        throw *err;
                     }
-                    
+
 
                 }
 
@@ -282,31 +285,32 @@ namespace Lib {
                 item_inv = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
             }
             if (item_inv->getID() == UNDEFINED_ID) {
-                err = "You are trying to move the void...\n";
-                throw err;
+                MoveException *err = new MoveException("VOID");
+                throw *err;
             }
             else {
                 if (craft) {
                     if (!tool) {
                         if (N > item_inv->getQuantity()) {
-                            err = "You don't have enough item to move\n";
-                            throw err;
+                            MoveException *err = new MoveException("NOTENOUGH");
+                            throw *err;
                         }
                         else {
                             item_moved = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
                             item_moved->setQuantity(1);
-                            
+
                             for (int i = 0; i < N; i++) {
                                 item_moved = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
                                 item_moved->setQuantity(1);
                                 item_craft = new NonTool(crftab->get(destSlot[i])->getID(), crftab->get(destSlot[i])->getName(), crftab->get(destSlot[i])->getType(), crftab->get(destSlot[i])->getBType(), crftab->get(destSlot[i])->getQuantity());
                                 if (item_craft->getID() != UNDEFINED_ID && item_craft->getID() != item_moved->getID()) {
-                                    err = "The item you are trying to move to is not of the same type!\n";
-                                    throw err;
+                                    MoveException *err = new MoveException("DIFFTYPE");
+                                    throw *err;
                                 }
-                                else if(item_craft->getID() == UNDEFINED_ID){
+                                else if (item_craft->getID() == UNDEFINED_ID) {
                                     crftab->set(destSlot[i], item_moved);
-                                }else{
+                                }
+                                else {
                                     crftab->get(destSlot[i])->setQuantity(crftab->get(destSlot[i])->getQuantity() + 1);
                                 }
                             }
@@ -322,8 +326,8 @@ namespace Lib {
                     else {
                         Item* item_craft = new Item(*crftab->get(destSlot[0]));
                         if (item_craft->getID() != UNDEFINED_ID) {
-                            err = "You can't move an item to an already occupied crafting slot!\n";
-                            throw err;
+                            MoveException *err = new MoveException("TOOL");
+                            throw *err;
                         }
                         else {
                             Tool* item_moved = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
@@ -331,9 +335,9 @@ namespace Lib {
                             crftab->set(destSlot[0], item_moved);
 
                         }
-                    
+
                     }
-                    
+
                 }
 
                 if (destInv) {
@@ -344,8 +348,8 @@ namespace Lib {
                         destKosong = false;
                     }
                     if (!destKosong && item_inv2->getID() != item_inv->getID()) {
-                        err = "The items are not of the same type.\n";
-                        throw err;
+                        MoveException *err = new MoveException("DIFFTYPE");
+                        throw *err;
                     }
                     if (destKosong) {
                         inv->set(destSlot[0], item_inv);
@@ -368,10 +372,10 @@ namespace Lib {
                             }
                         }
                         else {
-                            err = "There's a tool already here!\n";
-                            throw err;
+                            MoveException *err = new MoveException("TOOL");
+                            throw *err;
                         }
-                        
+
                     }
                 }
             }
