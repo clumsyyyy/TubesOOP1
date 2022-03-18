@@ -28,8 +28,8 @@ namespace Lib {
 
     void Crafting::set_crafting_table(int min, int i, int j, bool reverse) {
         for (int idx = i; idx < this->row+i; idx++) {
-            for (int idj = reverse? j+col : j; reverse ? idj >= this->col+j : idj < this->col+j; reverse ? idj-- : idj++ ) {
-                if (crftab->get(idx*CRAFT_COLS + idj)->getName() != "UNDEFINED") {
+            for (int idj = reverse? j+col-1 : j; reverse ? idj >= j : idj < this->col+j; reverse ? idj-- : idj++ ) {
+                if (crftab->get(idx*CRAFT_COLS + idj)->getID() != UNDEFINED_ID) {
                     crftab->discard(min, idx*CRAFT_COLS + idj);
                 }
             }
@@ -101,7 +101,7 @@ namespace Lib {
                     n = get<3>(this->TupRecipe)*min;
                     set_result(get<0>(get<2>(this->TupRecipe)),get<1>(get<2>(this->TupRecipe)),
                                get<2>(get<2>(this->TupRecipe)),get<3>(get<2>(this->TupRecipe)));
-                    this->set_crafting_table(min,i,j,true); 
+                    this->set_crafting_table(min,i,j,false); 
                     return n;               
                 }
                 // Check recipe (reflection y)
@@ -113,6 +113,7 @@ namespace Lib {
                         }
                     }  
                     n = get<3>(this->TupRecipe)*min;
+                    cout << "min :" << min << endl;
                     set_result(get<0>(get<2>(this->TupRecipe)),get<1>(get<2>(this->TupRecipe)),
                                get<2>(get<2>(this->TupRecipe)),get<3>(get<2>(this->TupRecipe)));
                     this->set_crafting_table(min,i,j,true); 
@@ -176,41 +177,42 @@ namespace Lib {
                 if (crftab->get(i)->getName() == name) {
                     crftab->discard(1,i);
                 }
-
             }
             Tool* T = new Tool(stoi(get<0>(result)), get<1>(result), get<2>(result), get<3>(result), durability);
+            cout << "Crafted new " << get<1>(result) << "!!\nNow its durability is " << durability << endl;
             inv->addTool(T,1);  
-            this->returning();
+            // this->returning();
         } else if (durability == -1) {
-            this->returning();
+            // this->returning();
             throw new CraftingException(true);
         } else {
-            this->returning();
+            // this->returning();
             throw new CraftingException(false);
         }
     }
 
     void Crafting::returning() {
-        cout << "returning item :" << endl;
+        cout << "Returning item :" << endl;
         for (int i = 0; i < CRAFT_COLS*CRAFT_ROWS; i++) {
-            if (crftab->get(i)->getQuantity() > 0) {
-                if (crftab->get(i)->getType() == "NONTOOL") {
+            if (crftab->get(i)->getID() != UNDEFINED_ID) {
+                if (crftab->get(i)->getBType() == "NONTOOL") {
                     NonTool *NT = new NonTool(crftab->get(i)->getID(),
                                             crftab->get(i)->getName(),
-                                            crftab->get(i)->getBType(),
                                             crftab->get(i)->getType(),
+                                            crftab->get(i)->getBType(),
                                             crftab->get(i)->getQuantity());
                     inv->addNonTool(NT, 0);
-                } else {
+                    crftab->discard(crftab->get(i)->getQuantity(),i);
+                } else if (crftab->get(i)->getBType() == "TOOL") {
                     Tool *T = new Tool(crftab->get(i)->getID(),
                                             crftab->get(i)->getName(),
-                                            crftab->get(i)->getBType(),
                                             crftab->get(i)->getType(),
+                                            crftab->get(i)->getBType(),
                                             crftab->get(i)->getDurability());
                     inv->addTool(T, 1);
+                    crftab->discard(crftab->get(i)->getQuantity(),i);
                 }
-            } 
-            crftab->discard(crftab->get(i)->getQuantity(),i);
+            }           
         }
     }
 }

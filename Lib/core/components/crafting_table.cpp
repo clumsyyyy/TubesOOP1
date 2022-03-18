@@ -102,14 +102,18 @@ namespace Lib {
     
 
     void CraftingTable::discard(int quant, int slot) {
-        if (this->crftab_buffer[slot]->getQuantity() - quant > 0) {
-            this->crftab_buffer[slot]->setQuantity(this->crftab_buffer[slot]->getQuantity() - quant);
-        }
-        else if (this->crftab_buffer[slot]->getQuantity() - quant == 0) {
+        if (this->crftab_buffer[slot]->getBType() == "TOOL") {
             set(slot, new Item());
-        }
-        else {
-            throw "Not enough items in slot\n";
-        }
+        } else if (this->crftab_buffer[slot]->getBType() == "NONTOOL"){
+            if (this->crftab_buffer[slot]->getQuantity() - quant > 0) {
+                this->crftab_buffer[slot]->setQuantity(this->crftab_buffer[slot]->getQuantity() - quant);
+            }
+            else if (this->crftab_buffer[slot]->getQuantity() - quant == 0) {
+                set(slot, new Item());
+            }
+            else {
+                throw "Not enough items in slot\n";
+            }
+        } 
     }
 }
