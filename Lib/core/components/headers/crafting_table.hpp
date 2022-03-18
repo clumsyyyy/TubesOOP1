@@ -15,11 +15,11 @@ namespace Lib {
         ~CraftingTable();
         Item* get(int pos);
         void set(int pos, Item* item);
-        void specify(int i);
+        void specify(int pos);
         void displayMenu();
         void displayDetails();
-        void addNonTool(NonTool* item);
-        void addTool(Tool* item);
+        void addNonTool(int pos, NonTool* item);
+        void addTool(int pos, Tool* item);
         void discard(int quant, int slot);
     };
 }

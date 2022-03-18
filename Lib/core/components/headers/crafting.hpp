@@ -13,21 +13,22 @@ namespace Lib {
 
     class Crafting {
     private:
-        string name;
-        int sum;
+        string ID, name, type, btype;
         TupleRecipe TupRecipe;
         int row, col;
     public:
         Crafting();
         Crafting(TupleRecipe TupRecipe);
         ~Crafting();
-        void setBound(int row, int col);
+        void set_bound(int row, int col);
         void set_crafting_table(int min, int i, int j, bool reverse);
-        string getName() const;
-        int getSum() const;
-        int calculateResult(int i, int j, bool reverse) const;
-        void recipe();
+        void set_result(string ID, string name, string btype, string type);
+        TupleItem get_result() const;
+        int calculate_result(int i, int j, bool reverse);
+        bool is_another_space_free(int i, int j, bool reverse);
+        int recipe();
         int tools();
+        void crafting_proses();
         void returning();
     };
 }
