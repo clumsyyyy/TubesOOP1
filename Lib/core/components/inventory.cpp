@@ -13,10 +13,16 @@ namespace Lib {
     }
 
 Item* Inventory::get(int pos){
+    if (pos < 0 || pos >= INV_SIZE) {
+        throw "Not valid index\n";
+    }
     return this->inv_buffer[pos] ;
 }
 
     void Inventory::set(int pos, Item* item) {
+        if (pos < 0 || pos >= INV_SIZE) {
+            throw "Not valid index\n";
+        }
         (this->inv_buffer[pos]) = item;
     };
 
@@ -106,7 +112,7 @@ void Inventory::addTool(Tool* item){
             set(slot, new Item());
         }
         else {
-            cout << "Not enough items in slot" << endl;
+            throw "Not enough items in slot\n";
         }
     }
 }
