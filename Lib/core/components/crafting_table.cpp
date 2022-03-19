@@ -27,39 +27,41 @@ namespace Lib {
         this->crftab_buffer[pos] = item;
     }
 
-    void CraftingTable::displayMenu() {
-        cout << "Crafting Table : " << endl;
+    ostream& operator<<(ostream& os, CraftingTable* ct) {
+        os << "Crafting Table : " << endl;
         for (int i = 0; i < CRAFT_SIZE; i++) {
-            cout << "[(C" << i << ") "
-                << this->crftab_buffer[i]->getID() << " "
-                << this->crftab_buffer[i]->getName();
-            if (this->crftab_buffer[i]->getType() == "-") {
-                cout << " " << this->crftab_buffer[i]->getBType();
+            os << "[(C" << i << ") "
+                << ct->get(i)->getID() << " "
+                << ct->get(i)->getName();
+            if (ct->crftab_buffer[i]->getType() == "-") {
+                os << " " << ct->crftab_buffer[i]->getBType();
             }
-            if (this->crftab_buffer[i]->getBType() == "TOOL") {
-                cout << " " << this->crftab_buffer[i]->getDurability();
-            } else if (this->crftab_buffer[i]->getBType() == "NONTOOL") {
-                cout << " " << this->crftab_buffer[i]->getQuantity();
+            if (ct->crftab_buffer[i]->getBType() == "TOOL") {
+                os << " " << ct->crftab_buffer[i]->getDurability();
+            } else if (ct->crftab_buffer[i]->getBType() == "NONTOOL") {
+                os << " " << ct->crftab_buffer[i]->getQuantity();
             }
-            cout << "] ";
+            os << "] ";
             if ((i + 1) % CRAFT_COLS == 0) {
-                cout << endl;
+                os << endl;
             }
         }
+        return os;
     }
 
-    void CraftingTable::displayDetails() {
-        cout << "Slot" << " | "
+    ostream& operator<<(ostream& os, CraftingTable ct) {
+        os << "Slot" << " | "
             << setw(NUMWIDTH) << "ID" << " | "
             << setw(WIDTH) << "Name" << " | "
             << setw(WIDTH) << "Type" << " | "
             << setw(WIDTH) << "Base Type" << endl;
         for (int i = 0; i < CRAFT_SIZE; i++) {
-            cout << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
-            this->specify(i);
-            cout << endl;
+            os << setw(NUMWIDTH - to_string(i).length()) << "C" << i << " | ";
+            ct.specify(i);
+            os << endl;
         }
-    };
+        return os;
+    }
 
     void CraftingTable::specify(int pos) {
         if (pos < 0 || pos >= CRAFT_SIZE) {
@@ -99,8 +101,7 @@ namespace Lib {
             cout << "set item " << item->getID() << " to C" << pos << endl;
         }
             
-    }
-    
+    }    
 
     void CraftingTable::discard(int quant, int slot) {
         if (this->crftab_buffer[slot]->getBType() == "TOOL") {

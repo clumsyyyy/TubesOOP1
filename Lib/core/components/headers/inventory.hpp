@@ -16,6 +16,8 @@ namespace Lib {
         Item* get(int pos);
         void set(int pos, Item* item);
         void specify(int pos);
+        friend ostream& operator<<(ostream& os, Inventory* inven);
+        friend ostream& operator<<(ostream& os, Inventory& inven);
         void displayMenu();
         void displayDetails();
         void addNonTool(NonTool* item, int start);

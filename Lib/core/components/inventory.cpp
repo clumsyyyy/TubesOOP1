@@ -27,31 +27,33 @@ namespace Lib {
         (this->inv_buffer[pos]) = item;
     };
 
-    void Inventory::displayMenu() {
-        cout << "\nInventory: " << endl;
+    ostream& operator<<(ostream& os, Inventory* inven) {
+        os << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {
-            cout << "[I" << i << " "
-                << (this->inv_buffer[i])->getID() << " "
-                << (this->inv_buffer[i])->getQuantity() << " "
-                << (this->inv_buffer[i])->getDurability() << "] ";
+            os << "[I" << i << " "
+                << (inven->inv_buffer[i])->getID() << " "
+                << (inven->inv_buffer[i])->getQuantity() << " "
+                << (inven->inv_buffer[i])->getDurability() << "] ";
             if ((i + 1) % INV_COLS == 0) {
-                cout << endl;
+                os << endl;
             }
         }
-    };
+        return os;
+    }
 
-    void Inventory::displayDetails() {
-        cout << "Slot" << " | "
+    ostream& operator<<(ostream& os, Inventory& inven) {
+        os << "Slot" << " | "
             << setw(NUMWIDTH) << "ID" << " | "
             << setw(WIDTH) << "Name" << " | "
             << setw(WIDTH) << "Type" << " | "
             << setw(WIDTH) << "Base Type" << endl;
         for (int i = 0; i < INV_SIZE; i++) {
-            cout << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
-            this->specify(i);
-            cout << endl;
+            os << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
+            inven.specify(i);
+            os << endl;
         }
-    };
+        return os;
+    }
 
     void Inventory::specify(int pos) {
         (this->inv_buffer[pos])->displayInfo();

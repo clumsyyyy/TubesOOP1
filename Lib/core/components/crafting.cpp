@@ -3,18 +3,12 @@
 
 namespace Lib {
     Crafting::Crafting() {
-        this->ID = "-999";
-        this->name = "UNDEFINED";
-        this->type = "XXXX";
-        this->btype = "XXXX";
+        this->ID = "-999"; this->name = "UNDEFINED"; this->type = "UNDEFINED"; this->btype = "UNDEFINED";
         this->row = 0; this->col = 0;
     }
 
     Crafting::Crafting(TupleRecipe TupRecipe) {
-        this->ID = "-999";
-        this->name = "UNDEFINED";
-        this->type = "XXXX";
-        this->btype = "XXXX";
+        this->ID = "-999"; this->name = "UNDEFINED"; this->type = "UNDEFINED"; this->btype = "UNDEFINED";
         this->TupRecipe = TupRecipe;
         this->row = 0; this->col = 0;
     }
@@ -43,7 +37,7 @@ namespace Lib {
         this->btype = btype;
     }
 
-    TupleItem Crafting::get_result() const {
+    TupleItem Crafting::get_item_result() const {
         return make_tuple(this->ID,this->name,this->type,this->btype);
     }
 
@@ -113,7 +107,6 @@ namespace Lib {
                         }
                     }  
                     n = get<3>(this->TupRecipe)*min;
-                    cout << "min :" << min << endl;
                     set_result(get<0>(get<2>(this->TupRecipe)),get<1>(get<2>(this->TupRecipe)),
                                get<2>(get<2>(this->TupRecipe)),get<3>(get<2>(this->TupRecipe)));
                     this->set_crafting_table(min,i,j,true); 
@@ -153,26 +146,41 @@ namespace Lib {
     void Crafting::crafting_proses() {
         for (tuple tup : *recipeConfig) {
             int n = 0;
-            TupleItem result;
+            TupleItem result_item;
             Crafting crf(tup);
             n = crf.recipe();
-            result = crf.get_result();
+            result_item = crf.get_item_result();
             if (n > 0) {
-                if (get<3>(result) == "NONTOOL") {
-                    NonTool* NT = new NonTool(stoi(get<0>(result)), get<1>(result), get<2>(result), get<3>(result), n);
+                if (get<3>(result_item) == "NONTOOL") {
+                    NonTool* NT = new NonTool(stoi(get<0>(result_item)), get<1>(result_item), get<2>(result_item), get<3>(result_item), n);
                     inv->addNonTool(NT, 0);
-                } else if (get<3>(result) == "TOOL") {
-                    Tool* T = new Tool(stoi(get<0>(result)), get<1>(result), get<2>(result), get<3>(result), 10);
+                } else if (get<3>(result_item) == "TOOL") {
+                    int durability;
+                    string kind;
+                    istringstream iss(get<1>(result_item));
+                    getline(iss,kind,'_');
+                    if (kind == "WOODEN") {
+                        durability = 4;
+                    } else if (kind == "STONE") {
+                        durability = 6;
+                    } else if (kind == "IRON") {
+                        durability = 8;
+                    } else if (kind == "DIAMOND") {
+                        durability = 10;
+                    } else {
+                        durability = 0;
+                    }
+                    Tool* T = new Tool(stoi(get<0>(result_item)), get<1>(result_item), get<2>(result_item), get<3>(result_item), durability);
                     inv->addTool(T,n);                           
                 }
-                cout << "crafted " << n << " " << get<1>(result) << endl;
+                cout << "crafted " << n << " " << get<1>(result_item) << endl;
                 crf.returning();
                 return;
             }
         }
         Crafting crf;
         int durability = crf.tools();;
-        TupleItem result = crf.get_result();
+        TupleItem result = crf.get_item_result();
         if (durability > 0) {
             for (int i = 0; i < CRAFT_SIZE; i++) {
                 if (crftab->get(i)->getName() == get<1>(result)) {
@@ -185,10 +193,10 @@ namespace Lib {
             // this->returning();
         } else if (durability == -1) {
             // this->returning();
-            throw new CraftingException(true);
+            throw new CraftingException("TOOL");
         } else {
             // this->returning();
-            throw new CraftingException(false);
+            throw new CraftingException("RECIPE");
         }
     }
 

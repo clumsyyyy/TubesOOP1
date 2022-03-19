@@ -8,8 +8,10 @@ namespace Lib {
         string mode;
         cin >> mode;
         if (mode == "ALL") {
-            inv->displayDetails();
-            crftab->displayDetails();
+            // inv->displayDetails();
+            // crftab->displayDetails();
+            cout << *inv;
+            cout << *crftab;
         }
         else if (mode == "ITEM") {
             int i;
@@ -43,7 +45,22 @@ namespace Lib {
                     break;
                 }
                 else {
-                    Tool* T = new Tool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), 10);
+                    int durability;
+                    string kind;
+                    istringstream iss(get<1>(tup));
+                    getline(iss,kind,'_');
+                    if (kind == "WOODEN") {
+                        durability = 4;
+                    } else if (kind == "STONE") {
+                        durability = 6;
+                    } else if (kind == "IRON") {
+                        durability = 8;
+                    } else if (kind == "DIAMOND") {
+                        durability = 10;
+                    } else {
+                        durability = 0;
+                    }
+                    Tool* T = new Tool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), durability);
                     inv->addTool(T, temp);
                     break;
                 }
@@ -192,7 +209,7 @@ namespace Lib {
         }
         try {
             MoveItemHandler(source, slotCount, allSlot, bool_inv);
-        }catch(MoveException err) {
+        } catch(MoveException err) {
             throw err;
         }
     };

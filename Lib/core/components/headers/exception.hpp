@@ -23,9 +23,9 @@ namespace Lib {
 
 	class CraftingException : public BaseException {
 	private:
-		bool tool;
+		string btype;
 	public:
-		CraftingException(bool);
+		CraftingException(string);
 		void printMessage();
 	};
 

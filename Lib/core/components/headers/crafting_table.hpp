@@ -16,8 +16,8 @@ namespace Lib {
         Item* get(int pos);
         void set(int pos, Item* item);
         void specify(int pos);
-        void displayMenu();
-        void displayDetails();
+        friend ostream& operator<<(ostream& os, CraftingTable* ct);
+        friend ostream& operator<<(ostream& os, CraftingTable ct);
         void addNonTool(int pos, NonTool* item);
         void addTool(int pos, Tool* item);
         void discard(int quant, int slot);

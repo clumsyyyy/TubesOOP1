@@ -113,9 +113,11 @@ int main() {
     string command;
     while (cin >> command) {
         if (command == "SHOW"){
-            crftab->displayMenu();
-            inv->displayMenu();
-            cout << inv;
+            // crftab->displayMenu();
+            cout << crftab;
+            cout << inv;            
+            // inv->displayMenu();
+            // 
         } else if (command == "DETAILS"){
             DetailsHandler();
         } else if (command == "GIVE"){

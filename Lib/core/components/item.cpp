@@ -105,7 +105,6 @@ namespace Lib {
         Item::displayInfo();
         cout << " | QTY: " << this->quantity;
     }
-
     // Implementasi bagian Tool Item
     Tool::Tool(int ID, string name, string type, string basetype, int dur)
         : Item(ID, name, type, basetype) {

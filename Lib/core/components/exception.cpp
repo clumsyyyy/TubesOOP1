@@ -15,12 +15,12 @@ namespace Lib {
 		cout << "[ADD-EXC] Item " << name << " doesn't exist!" << endl;
 	}
 
-	CraftingException::CraftingException(bool tool) {
-		this->tool = tool;
+	CraftingException::CraftingException(string btype) {
+		this->btype = btype;
 	};
 
 	void CraftingException::printMessage() {
-		if (tool) {
+		if (btype == "TOOL") {
 			cout << "[CRF-EXC] Can't craft more than two tools!" << endl;
 		} else {
 			cout << "[CRF-EXC] Recipe not found!" << endl;
