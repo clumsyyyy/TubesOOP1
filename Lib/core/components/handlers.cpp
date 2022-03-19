@@ -4,9 +4,7 @@
 #include <limits>
 
 namespace Lib {
-    void DetailsHandler() {
-        string mode;
-        cin >> mode;
+    void DetailsHandler(string mode, int i) {
         if (mode == "ALL") {
             // inv->displayDetails();
             // crftab->displayDetails();
@@ -14,17 +12,12 @@ namespace Lib {
             cout << *crftab;
         }
         else if (mode == "ITEM") {
-            int i;
-            cin >> i;
             inv->specify(i);
             cout << endl;
         }
     }
 
-    void GiveHandler() {
-        string name;
-        int temp;
-        cin >> name >> temp;
+    void GiveHandler(string name, int temp) {
         try {
             GiveChecker(name, temp);
         }
@@ -71,10 +64,7 @@ namespace Lib {
         }
     }
 
-    void DiscardHandler() {
-        string slot;
-        int quant;
-        cin >> slot >> quant;
+    void DiscardHandler(string slot, int quant) {
         int index = stoi(slot.substr(1, slot.length() - 1));
         if (inv->get(index)->getBType() == "NONTOOL") {
             inv->discard(quant, index);
@@ -84,10 +74,8 @@ namespace Lib {
         }
     }
 
-    void UseHandler() {
+    void UseHandler(string slot) {
         try {
-            string slot;
-            cin >> slot;
             int index = stoi(slot.substr(1, slot.length() - 1));
             if (inv->get(index)->getBType() == "NONTOOL") {
                 throw new UseException(inv->get(index)->getName());
@@ -122,7 +110,7 @@ namespace Lib {
     }
 
 
-    void MoveHandler(string source, int slotCount) {
+    void MoveHandler(string source, int slotCount, vector<string> slotDestV) {
         if (slotCount < 1) {
             MoveException *err =new MoveException("INVALIDSLOT");
             throw *err;
@@ -177,7 +165,7 @@ namespace Lib {
         int* allSlot = new int[slotCount];
         bool bool_inv = false, craft = false;
         for (int i = 0; i < slotCount;i++) {
-            cin >> slotDest;
+            slotDest = slotDestV[i];
             if (slotDest[0] == 'C') {
                 craft = true;
             }

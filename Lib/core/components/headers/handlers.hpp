@@ -7,13 +7,13 @@
 #include <string>
 
 namespace Lib {
-	void DetailsHandler();
-	void GiveHandler();
-	void DiscardHandler();
-	void UseHandler();
+	void DetailsHandler(string, int);
+	void GiveHandler(string, int);
+	void DiscardHandler(string, int);
+	void UseHandler(string);
 	void CraftingHandler();
 	void GiveChecker(string name, int temp);
-	void MoveHandler(string source, int slotCount);
+	void MoveHandler(string source, int slotCount, vector<string>);
 	void MoveItemHandler(string sourceSlot,int N, int destSlot[], bool destInv);
 	void ClearBuffer();
 }

@@ -119,15 +119,32 @@ int main() {
             // inv->displayMenu();
             // 
         } else if (command == "DETAILS"){
-            DetailsHandler();
+            string mode;
+            cin >> mode;
+            if (mode == "ALL") {
+                DetailsHandler(mode, NULL);
+            }
+            else if (mode == "ITEM") {
+                int i;
+                cin >> i;
+                DetailsHandler(mode, i);
+            }
         } else if (command == "GIVE"){
-            GiveHandler();
+            string name;
+            int temp;
+            cin >> name >> temp;
+            GiveHandler(name, temp);
         }
         else if (command == "DISCARD") {
-            DiscardHandler();
+            string slot;
+            int quant;
+            cin >> slot >> quant;
+            DiscardHandler(slot, quant);
         }
         else if (command == "USE") {
-            UseHandler();
+            string slot;
+            cin >> slot;
+            UseHandler(slot);
         } else if (command == "CRAFT") {
             CraftingHandler();
         } else if (command == "MOVE") {
@@ -135,8 +152,14 @@ int main() {
             int slotQty;
             // need to handle multiple destinations
             cin >> slotSrc >> slotQty;
+            vector<string> slotDestV;
+            for (int i = 0; i < slotQty; i++) {
+                string slotDest;
+                cin >> slotDest;
+                slotDestV.push_back(slotDest);
+            }
             try{
-                MoveHandler(slotSrc,slotQty);
+                MoveHandler(slotSrc,slotQty, slotDestV);
                 cout << "Move succeeded\n";
             }catch(MoveException err){
                 err.printMessage();
