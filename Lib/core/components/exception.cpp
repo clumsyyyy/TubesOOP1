@@ -1,9 +1,15 @@
 #include "headers/exception.hpp"
 
 namespace Lib {
-	AddException::AddException(string name) {
+	BaseException::BaseException() {
+		this->name = "BASE";
+	}
+
+	BaseException::BaseException(string name) {
 		this->name = name;
 	}
+
+	AddException::AddException(string name) : BaseException(name) { }
 
 	void AddException::printMessage() {
 		cout << "[ADD-EXC] Item " << name << " doesn't exist!" << endl;
@@ -21,19 +27,17 @@ namespace Lib {
 		}
 	}
 
-	UseException::UseException(string name) {
-		this->name = name;
-	}
+	UseException::UseException(string name) : BaseException(name) {}
 
 	void UseException::printMessage() {
-		cout << "[USE-EXC] Couldn't use a Non-Tool item! )"
+		cout << "[USE-EXC] Couldn't use a Non-Tool item! ("
 			<< name << ")\nUse command 'DISCARD' to use nontool items.\n" << endl;
 	}
-		MoveException::MoveException(string name){
-		this->name = name;
-	}
+
+	MoveException::MoveException(string name) : BaseException(name) {}
+
 	void MoveException::printMessage(){
-		
+		cout << "[MOV-EXC] ";
 		if(this->name == "VOID"){
 			cout << "You are trying to move the void...\n";
 		}else if(this->name == "INVALID"){
@@ -56,6 +60,39 @@ namespace Lib {
 			cout << "You don't have enough item to move\n";
 		}else if(this->name == "INVALIDSLOT"){
 			cout << "Invalid slot count\n";
+		}
+	}
+
+	InvException::InvException(string name) : BaseException(name) {}
+
+	void InvException::printMessage() {
+		cout << "[INV-EXC] ";
+		if (this->name == "INVALID") {
+			cout << "Invalid index! Index ranges from 0-26" << endl;
+		}
+		else if (this->name == "FULL") {
+			cout << "Inventory full!" << endl;
+		}
+		else if (this->name == "EMPTY") {
+			cout << "This slot is empty; couldn't discard anything!" << endl;
+		}
+	}
+
+	TableException::TableException(string name) : BaseException(name) {}
+
+	void TableException::printMessage() {
+		cout << "[TAB-EXC] ";
+		if (this->name == "INVALID") {
+			cout << "Invalid index! Index ranges from 0-9" << endl;
+		}
+		else if (this->name == "OCCUPIED") {
+			cout << "This slot is already occupied!" << endl;
+		}
+		else if (this->name == "FULL") {
+			cout << "This slot has reached its maximum capacity!" << endl;
+		}
+		else if (this->name == "EMPTY") {
+			cout << "This slot is empty; couldn't discard anything!" << endl;
 		}
 	}
 }

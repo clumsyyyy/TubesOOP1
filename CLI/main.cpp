@@ -115,6 +115,7 @@ int main() {
         if (command == "SHOW"){
             crftab->displayMenu();
             inv->displayMenu();
+            cout << inv;
         } else if (command == "DETAILS"){
             DetailsHandler();
         } else if (command == "GIVE"){
@@ -124,12 +125,7 @@ int main() {
             DiscardHandler();
         }
         else if (command == "USE") {
-            try {
-                UseHandler();
-            }
-            catch (const char* e) {
-                cout << e;
-            }
+            UseHandler();
         } else if (command == "CRAFT") {
             CraftingHandler();
         } else if (command == "MOVE") {

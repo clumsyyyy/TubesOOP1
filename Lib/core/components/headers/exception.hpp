@@ -7,13 +7,15 @@ namespace Lib {
 	using namespace std;
 
 	class BaseException {
+	protected:
+		string name;
 	public:
+		BaseException();
+		BaseException(string);
 		virtual void printMessage() = 0;
 	};
 
 	class AddException : public BaseException {
-	private:
-		string name;
 	public:
 		AddException(string);
 		void printMessage();
@@ -28,8 +30,6 @@ namespace Lib {
 	};
 
 	class UseException : public BaseException {
-	private:
-		string name;
 	public:
 		UseException(string);
 		void printMessage();
@@ -37,12 +37,22 @@ namespace Lib {
 	};
 
 	class MoveException : public BaseException {
-	private:
-		string name;
 	public:
 		MoveException(string);
 		void printMessage();
 
+	};
+
+	class InvException : public BaseException {
+	public:
+		InvException(string);
+		void printMessage();
+	};
+
+	class TableException : public BaseException {
+	public:
+		TableException(string);
+		void printMessage();
 	};
 }
 #endif

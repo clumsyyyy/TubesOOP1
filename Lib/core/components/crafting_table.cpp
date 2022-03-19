@@ -15,14 +15,14 @@ namespace Lib {
 
     Item* CraftingTable::get(int pos) {
         if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw "Not valid index\n";
+            throw new TableException("INVALID");
         }
         return this->crftab_buffer[pos];
     }
 
     void CraftingTable::set(int pos, Item* item) {
         if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw "Not valid index\n";
+            throw new TableException("INVALID");
         } 
         this->crftab_buffer[pos] = item;
     }
@@ -63,21 +63,21 @@ namespace Lib {
 
     void CraftingTable::specify(int pos) {
         if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw "Not valid index\n";
+            throw new TableException("INVALID");
         }
         (this->crftab_buffer[pos])->displayInfo();
     }
 
     void CraftingTable::addNonTool(int pos, NonTool* item) {
         if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw "Not valid index\n";
+            throw new TableException("INVALID");
         }
     
         if (this->get(pos)->getID() != UNDEFINED_ID) {
-            throw "this position has occupation by other item\n";
+            throw new TableException("OCCUPIED");
         } else {
             if (this->get(pos)->getQuantity() + item->getQuantity() > 64) {
-                throw "can't add more\nthis position has reach max stack\n";
+                throw new TableException("FULL");
             } else {
                 NonTool *temp = new NonTool(*item);
                 temp->setQuantity(item->getQuantity()+this->get(pos)->getQuantity());
@@ -89,11 +89,11 @@ namespace Lib {
 
     void CraftingTable::addTool(int pos, Tool* item) {
         if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw "Not valid index\n";
+            throw new TableException("INVALID");
         }
 
         if (this->get(pos)->getID() != UNDEFINED_ID) {
-            throw "this position has occupation by other item\n";
+            throw new TableException("OCCUPIED");
         } else {
             set(pos, item);
             cout << "set item " << item->getID() << " to C" << pos << endl;
@@ -113,7 +113,7 @@ namespace Lib {
                 set(slot, new Item());
             }
             else {
-                throw "Not enough items in slot\n";
+                throw new TableException("EMPTY");
             }
         } 
     }
@@ -131,8 +131,7 @@ namespace Lib {
         }
 
         if (item_craft->getID() == UNDEFINED_ID) {
-            MoveException *err = new MoveException("VOID");
-            throw *err;
+            throw new MoveException("VOID");
         }
         else {
             item_inv = new Item(*inv->get(destSlot[0]));
@@ -141,8 +140,7 @@ namespace Lib {
                 destKosong = false;
             }
             if (!destKosong && item_inv->getID() != item_craft->getID()) {
-                MoveException *err = new MoveException("DIFFTYPE");
-                throw *err;
+                throw new MoveException("DIFFTYPE");
             }
             if (destKosong) {
                 inv->set(destSlot[0], item_craft);
@@ -152,16 +150,14 @@ namespace Lib {
                 if (!tool) {
                     item_inv = new NonTool(inv->get(destSlot[0])->getID(), inv->get(destSlot[0])->getName(), inv->get(destSlot[0])->getType(), inv->get(destSlot[0])->getBType(), inv->get(destSlot[0])->getQuantity());
                     if (item_inv->getQuantity() + item_craft->getQuantity() > 64) {
-                        MoveException *err = new MoveException("FULL");
-                        throw *err;
+                        throw new MoveException("FULL");
                     }
                     item_inv->setQuantity(item_inv->getQuantity() + item_craft->getQuantity());
                     crftab->set(slotSrc, undef_item);
                     inv->set(destSlot[0], item_inv);
                 }
                 else {
-                    MoveException *err = new MoveException("TOOL");
-                    throw *err;
+                    throw new MoveException("TOOL");
                 }
             }
         }

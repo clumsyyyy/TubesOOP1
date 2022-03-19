@@ -13,16 +13,16 @@ namespace Lib {
         delete[] this->inv_buffer;
     }
 
-Item* Inventory::get(int pos){
-    if (pos < 0 || pos >= INV_SIZE) {
-        throw "Not valid index\n";
+    Item* Inventory::get(int pos){
+        if (pos < 0 || pos >= INV_SIZE) {
+            throw new InvException("INVALID");
+        }
+        return this->inv_buffer[pos] ;
     }
-    return this->inv_buffer[pos] ;
-}
 
     void Inventory::set(int pos, Item* item) {
         if (pos < 0 || pos >= INV_SIZE) {
-            throw "Not valid index\n";
+            throw new InvException("INVALID");
         }
         (this->inv_buffer[pos]) = item;
     };
@@ -37,7 +37,6 @@ Item* Inventory::get(int pos){
             if ((i + 1) % INV_COLS == 0) {
                 cout << endl;
             }
-
         }
     };
 
@@ -72,22 +71,23 @@ void Inventory::addNonTool(NonTool* item, int start){
                 cout << "Stacked item, " << item->getQuantity() << " left" << endl;
                 this->get(i)->setQuantity(MAX_STACK);
                 this->addNonTool(item, i + 1);
+                return;
             }
         }
     }
     // case 2: if not found, find from the first slot
-    for (int i = 0; i < INV_SIZE; i++){
+    for (int i = start; i < INV_SIZE; i++){
         if (this->get(i)->getID() == UNDEFINED_ID) {
             if (item->getQuantity() <= MAX_STACK) {
                 this->set(i, item);
-                cout << "set item " << item->getID() << " to I" << i << endl;
+                cout << "Set item " << item->getID() << " to I" << i << endl;
                 return;
             }
             else {
                 NonTool* temp = new NonTool(*item);
                 temp->setQuantity(MAX_STACK);
                 this->set(i, temp);
-                cout << "set item " << temp->getID() << " to I" << i << endl;
+                cout << "Set item " << temp->getID() << " to I" << i << endl;
                 cout << item->getQuantity() << " stacks left" << endl;
                 item->setQuantity(item->getQuantity() - MAX_STACK);
                 continue;
@@ -111,8 +111,7 @@ void Inventory::addTool(Tool* item, int quant){
             }
         }
         if (!added) {
-            cout << "inventory full!" << endl;
-            return;
+            throw new InvException("FULL");
         }
     }
      
@@ -126,9 +125,10 @@ void Inventory::addTool(Tool* item, int quant){
             set(slot, new Item());
         }
         else {
-            throw "Not enough items in slot\n";
+            throw new InvException("EMPTY");
         }
     }
+
     void Inventory::toCraft(int slotSrc,int destSlot[], int N){
         Item* undef_item = new Item();
         Item* item_inv = NULL;
@@ -142,14 +142,12 @@ void Inventory::addTool(Tool* item, int quant){
             item_inv = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
         }
         if (item_inv->getID() == UNDEFINED_ID) {
-            MoveException *err = new MoveException("VOID");
-            throw *err;
+            throw new MoveException("VOID");;
         }
         else {
             if (!tool) {
                 if (N > item_inv->getQuantity()) {
-                    MoveException *err = new MoveException("NOTENOUGH");
-                    throw *err;
+                    throw new MoveException("NOTENOUGH");
                 }
                 else {
                     item_moved = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
@@ -182,8 +180,7 @@ void Inventory::addTool(Tool* item, int quant){
             else {
                 Item* item_craft = new Item(*crftab->get(destSlot[0]));
                 if (item_craft->getID() != UNDEFINED_ID) {
-                    MoveException *err = new MoveException("TOOL");
-                    throw *err;
+                    throw new MoveException("TOOL");
                 }
                 else {
                     Tool* item_moved = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
@@ -210,15 +207,13 @@ void Inventory::addTool(Tool* item, int quant){
             item_inv = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
         }
         if (item_inv->getID() == UNDEFINED_ID) {
-            MoveException *err = new MoveException("VOID");
-            throw *err;
+            throw new MoveException("VOID");
         }
         if (item_inv2->getID() != UNDEFINED_ID) {
             destKosong = false;
         }
         if (!destKosong && item_inv2->getID() != item_inv->getID()) {
-            MoveException *err = new MoveException("DIFFTYPE");
-            throw *err;
+            throw new MoveException("DIFFTYPE");
         }
         if (destKosong) {
             inv->set(destSlot[0], item_inv);
@@ -241,8 +236,7 @@ void Inventory::addTool(Tool* item, int quant){
                 }
             }
             else {
-                MoveException *err = new MoveException("TOOL");
-                throw *err;
+                throw new MoveException("TOOL");
             }
 
         }
