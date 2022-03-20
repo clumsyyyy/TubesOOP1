@@ -1,6 +1,5 @@
 #include "components/headers/handlers.hpp"
 #include "components/headers/inventory.hpp"
 #include "components/headers/crafting_table.hpp"
-#include "components/headers/item.hpp"
 #include "components/headers/vars.hpp"
 #include "globals.hpp"

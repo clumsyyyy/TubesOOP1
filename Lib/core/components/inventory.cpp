@@ -13,12 +13,19 @@ namespace Lib {
         delete[] this->inv_buffer;
     }
 
-    Item* Inventory::get(int pos){
+    Item* Inventory::get(int pos) {
         if (pos < 0 || pos >= INV_SIZE) {
             throw new InvException("INVALID");
         }
-        return this->inv_buffer[pos] ;
+        return this->inv_buffer[pos];
     }
+
+    //Item* Inventory::operator[](int pos) {
+    //    if (pos < 0 || pos >= INV_SIZE) {
+    //        throw new InvException("INVALID");
+    //    }
+    //    return this->inv_buffer[pos];
+    //}
 
     void Inventory::set(int pos, Item* item) {
         if (pos < 0 || pos >= INV_SIZE) {
@@ -59,65 +66,65 @@ namespace Lib {
         (this->inv_buffer[pos])->displayInfo();
     }
 
-void Inventory::addNonTool(NonTool* item, int start){
-    for (int i = start; i < INV_SIZE; i++) {
-        // case 1: other item exists (stackable)
-        if (this->get(i)->getID() == item->getID()) {
-            // if current slot less than max stack, increase quantity
-            if (this->get(i)->getQuantity() + item->getQuantity() <= MAX_STACK) {
-                this->get(i)->setQuantity(this->get(i)->getQuantity() + item->getQuantity());
-                return;
-            }
-            else {
-                item->setQuantity(item->getQuantity() - (MAX_STACK - this->get(i)->getQuantity()));
-                cout << "Stacked item, " << item->getQuantity() << " left" << endl;
-                this->get(i)->setQuantity(MAX_STACK);
-                this->addNonTool(item, i + 1);
-                return;
-            }
-        }
-    }
-    // case 2: if not found, find from the first slot
-    for (int i = start; i < INV_SIZE; i++){
-        if (this->get(i)->getID() == UNDEFINED_ID) {
-            if (item->getQuantity() <= MAX_STACK) {
-                this->set(i, item);
-                cout << "Set item " << item->getID() << " to I" << i << endl;
-                return;
-            }
-            else {
-                NonTool* temp = new NonTool(*item);
-                temp->setQuantity(MAX_STACK);
-                this->set(i, temp);
-                cout << "Set item " << temp->getID() << " to I" << i << endl;
-                cout << item->getQuantity() << " stacks left" << endl;
-                item->setQuantity(item->getQuantity() - MAX_STACK);
-                continue;
+    void Inventory::addNonTool(NonTool* item, int start){
+        for (int i = start; i < INV_SIZE; i++) {
+            // case 1: other item exists (stackable)
+            if (this->get(i)->getID() == item->getID()) {
+                // if current slot less than max stack, increase quantity
+                if (this->get(i)->getQuantity() + item->getQuantity() <= MAX_STACK) {
+                    this->get(i)->setQuantity(this->get(i)->getQuantity() + item->getQuantity());
+                    return;
+                }
+                else {
+                    item->setQuantity(item->getQuantity() - (MAX_STACK - this->get(i)->getQuantity()));
+                    cout << "Stacked item, " << item->getQuantity() << " left" << endl;
+                    this->get(i)->setQuantity(MAX_STACK);
+                    this->addNonTool(item, i + 1);
+                    return;
+                }
             }
         }
-    }
-    return;
-}
-
-void Inventory::addTool(Tool* item, int quant){
-    bool added = false;
-    for (int j = 0; j < quant; j++) {
-        added = false;
-        for (int i = 0; i < INV_SIZE; i++) {
-            // base case if no such item exists in inventory
+        // case 2: if not found, find from the first slot
+        for (int i = start; i < INV_SIZE; i++){
             if (this->get(i)->getID() == UNDEFINED_ID) {
-                this->set(i, item);
-                added = true;
-                cout << "set item " << item->getID() << " to I" << i << endl;
-                break;
+                if (item->getQuantity() <= MAX_STACK) {
+                    this->set(i, item);
+                    cout << "Set item " << item->getID() << " to I" << i << endl;
+                    return;
+                }
+                else {
+                    NonTool* temp = new NonTool(*item);
+                    temp->setQuantity(MAX_STACK);
+                    this->set(i, temp);
+                    cout << "Set item " << temp->getID() << " to I" << i << endl;
+                    cout << item->getQuantity() << " stacks left" << endl;
+                    item->setQuantity(item->getQuantity() - MAX_STACK);
+                    continue;
+                }
             }
         }
-        if (!added) {
-            throw new InvException("FULL");
-        }
+        return;
     }
+
+    void Inventory::addTool(Tool* item, int quant){
+        bool added = false;
+        for (int j = 0; j < quant; j++) {
+            added = false;
+            for (int i = 0; i < INV_SIZE; i++) {
+                // base case if no such item exists in inventory
+                if (this->get(i)->getID() == UNDEFINED_ID) {
+                    this->set(i, item);
+                    added = true;
+                    cout << "set item " << item->getID() << " to I" << i << endl;
+                    break;
+                }
+            }
+            if (!added) {
+                throw new InvException("FULL");
+            }
+        }
      
-}
+    }
 
     void Inventory::discard(int quant, int slot) {
         if (this->inv_buffer[slot]->getQuantity() - quant > 0) {
@@ -144,7 +151,7 @@ void Inventory::addTool(Tool* item, int quant){
             item_inv = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
         }
         if (item_inv->getID() == UNDEFINED_ID) {
-            throw new MoveException("VOID");;
+            throw new MoveException("VOID");
         }
         else {
             if (!tool) {
@@ -160,8 +167,7 @@ void Inventory::addTool(Tool* item, int quant){
                         item_moved->setQuantity(1);
                         item_craft = new NonTool(crftab->get(destSlot[i])->getID(), crftab->get(destSlot[i])->getName(), crftab->get(destSlot[i])->getType(), crftab->get(destSlot[i])->getBType(), crftab->get(destSlot[i])->getQuantity());
                         if (item_craft->getID() != UNDEFINED_ID && item_craft->getID() != item_moved->getID()) {
-                            MoveException *err = new MoveException("DIFFTYPE");
-                            throw *err;
+                            throw new MoveException("DIFFTYPE");
                         }
                         else if (item_craft->getID() == UNDEFINED_ID) {
                             crftab->set(destSlot[i], item_moved);

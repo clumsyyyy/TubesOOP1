@@ -14,6 +14,7 @@ namespace Lib {
         Inventory();
         ~Inventory();
         Item* get(int pos);
+        //Item* operator[](int pos);
         void set(int pos, Item* item);
         void specify(int pos);
         friend ostream& operator<<(ostream& os, Inventory* inven);
@@ -25,20 +26,6 @@ namespace Lib {
         void discard(int quant, int slot);
         void toCraft(int slotSrc,int destSlot[], int N);
         void toAnotherSlot(int slotSrc,int destSlot[]);
-        //friend ostream& operator << (ostream& out, const Inventory& inv) {
-        //    out << "Inventory: ";
-        //    for (int i = 0; i < INV_SIZE; i++) {
-        //        out << "[I" << i << " "
-        //            << (inv.inv_buffer[i])->getID() << " "
-        //            << (inv.inv_buffer[i])->getQuantity() << " "
-        //            << (inv.inv_buffer[i])->getDurability() << "] ";
-        //        if ((i + 1) % INV_COLS == 0) {
-        //            out << endl;
-        //        }
-
-        //    }
-        //    return out;
-        //}
     };
 }
 

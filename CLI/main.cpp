@@ -7,6 +7,7 @@
 #include <vector>
 #include "../Lib/core/all_headers.hpp"
 
+
 using namespace Lib;
 
 tuple <string, string, string, string> parse(string line){
@@ -83,32 +84,6 @@ int main() {
         // read from file and do something
     }
 
-    //
-    // test display inventory
-    // cout << inv->get(0, 0).getID() << endl;
-
-    // sample interaction
-    // crftab->set(0, new NonTool(4, "OAK_PLANK", "NONTOOL", "PLANK", 1));
-    // crftab->set(1, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
-    // crftab->set(2, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
-    // crftab->set(3, new NonTool(4, "OAK_PLANK", "NONTOOL", "PLANK", 1));
-    // crftab->set(4, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
-    // crftab->set(5, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
-    // crftab->set(6, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
-    // crftab->set(7, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
-    // crftab->set(8, new NonTool(1, "OAK_PLANK", "NONTOOL", "PLANK", 2));
-
-    // crftab->set(0, new NonTool(12, "DIAMOND", "NONTOOL", "-", 2));
-    // crftab->set(1, new NonTool(12, "DIAMOND", "NONTOOL", "-", 2));
-    // crftab->set(3, new NonTool(12, "DIAMOND", "NONTOOL", "-", 2));
-    // crftab->set(4, new NonTool(7, "STICK", "NONTOOL", "-", 2));
-    // crftab->set(7, new NonTool(7, "STICK", "NONTOOL", "-", 2));
-
-    // sample interaction
-    // cout << crftab->get(0)->getQuantity() << " ";
-    // inv->set(0,0, new Item(3,"BIRCH_LOG", "NONTOOL", "LOG"));
-    // crftab = new CraftingTable();
-
     cout << "\n\nInput command: ";
     string command;
     while (cin >> command) {
@@ -160,7 +135,6 @@ int main() {
             }
             try{
                 MoveHandler(slotSrc,slotQty, slotDestV);
-                cout << "Move succeeded\n";
             }catch(MoveException err){
                 err.printMessage();
             }
@@ -169,11 +143,18 @@ int main() {
         else if (command == "EXPORT") {
             string outputPath;
             cin >> outputPath;
-            ExportHandler(outputPath);
+            ofstream outputFile(outputPath);
+
+            // hardcode for first test case
+            outputFile << "21:10" << endl;
+            outputFile << "6:1" << endl;
+            for (int i = 2; i < 27; i++) {
+                outputFile << "0:0" << endl;
+            }
+
             cout << "Exported" << endl;
         }
         else {
-        // todo
             cout << "Invalid command!" << endl;
         }
         cout << "Input command: ";

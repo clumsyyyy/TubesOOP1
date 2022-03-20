@@ -43,6 +43,18 @@ namespace Lib {
         return this->basetype;
     }
 
+    bool Item::isTool() {
+        return this->basetype == "TOOL";
+    }
+
+    bool Item::isNonTool() {
+        return this->basetype == "NONTOOL";
+    }
+
+    bool Item::isUndef() {
+        return this->basetype == "UNDEFINED";
+    }
+
     void Item::displayInfo() const {
         cout << setw(NUMWIDTH) << this->ID << " | "
             << setw(WIDTH) << this->name << " | "
@@ -61,7 +73,7 @@ namespace Lib {
         this->quantity = quant;
     }
 
-    NonTool::NonTool(const NonTool& nt) : Item(nt) {
+    NonTool::NonTool(const NonTool& nt) : Item(nt.ID, nt.name, nt.type, nt.basetype) {
         this->quantity = nt.quantity;
     }
 
@@ -109,6 +121,10 @@ namespace Lib {
     Tool::Tool(int ID, string name, string type, string basetype, int dur)
         : Item(ID, name, type, basetype) {
         this->durability = dur;
+    }
+
+    Tool::Tool(const Tool& t) : Item(t.ID, t.name, t.type, t.basetype) {
+        this->durability = t.durability;
     }
 
     Tool::~Tool() {

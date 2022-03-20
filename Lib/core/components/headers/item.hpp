@@ -23,6 +23,9 @@ namespace Lib {
         string getName() const;
         string getType() const;
         string getBType() const;
+        bool isTool();
+        bool isNonTool();
+        bool isUndef();
         virtual void displayInfo() const;
         virtual int getQuantity() const;
         virtual void setQuantity(int);
@@ -49,6 +52,7 @@ namespace Lib {
         int durability; // durability of the tool
     public:
         Tool(int, string, string, string, int);
+        Tool(const Tool& t);
         ~Tool();
         Tool& operator=(const Tool& other);
         int getDurability() const;

@@ -11,7 +11,7 @@ all: compile test check
 
 # Compile all cpp files except check.cpp
 compile:
-	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS) main.cpp
+	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS) ../CLI/main.cpp
 	./$(EXECUTABLE_FILENAME)
 # Test
 test: $(TC_FOLDER)/*.$(EXT_IN) $(EXECUTABLE_FILENAME)

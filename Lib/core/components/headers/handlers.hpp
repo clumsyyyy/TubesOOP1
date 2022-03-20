@@ -17,6 +17,7 @@ namespace Lib {
 	void MoveItemHandler(string sourceSlot,int N, int destSlot[], bool destInv);
 	void ExportHandler(string outputPath);
 	void ClearBuffer();
+	void ExportHandler(string path);
 }
 
 #endif

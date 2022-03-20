@@ -114,8 +114,7 @@ namespace Lib {
 
     void MoveHandler(string source, int slotCount, vector<string> slotDestV) {
         if (slotCount < 1) {
-            MoveException *err =new MoveException("INVALIDSLOT");
-            throw *err;
+            throw new MoveException("INVALIDSLOT");
         }
         char src = source[0];
         string source1 = source;
@@ -123,14 +122,12 @@ namespace Lib {
         int slotSrc = stoi(source1);
         if (src != 'C' && src != 'I') {           //CHECKING SOURCE SLOT APAKAH VALID ATO TIDAK
             ClearBuffer();
-            MoveException *err = new MoveException("INVALID");
-            throw *err;
+            throw new MoveException("INVALID");
         }
 
         if ((src == 'C' && slotSrc >= CRAFT_SIZE) || (src == 'I' && slotSrc >= INV_SIZE)) {
             ClearBuffer();
-            MoveException *err = new MoveException("INVALID");
-            throw *err;
+            throw new MoveException("INVALID");
         }
 
         bool sourceCraft = false, sourceInv = false;
@@ -158,8 +155,7 @@ namespace Lib {
 
         if (tool && slotCount != 1) {
             ClearBuffer();
-            MoveException *err = new MoveException("INVALIDSLOT");
-            throw *err;
+            throw new MoveException("INVALIDSLOT");
         }
 
         //INPUT DESTINATION SLOT
@@ -176,31 +172,26 @@ namespace Lib {
             }
             else {
                 ClearBuffer();
-                MoveException *err = new MoveException("INVALIDDEST"); 
-                throw *err;
+                throw new MoveException("INVALIDDEST");
             }
             if (bool_inv && craft) {
                 ClearBuffer();
-                MoveException *err = new MoveException("DOUBLETYPEDEST");
-                throw *err;
+                throw new MoveException("DOUBLETYPEDEST");
             }
             slotDest.erase(0, 1);
             allSlot[i] = stoi(slotDest);
             if ((craft && slotSrc >= CRAFT_SIZE) || (bool_inv && slotSrc >= INV_SIZE)) {
-                MoveException *err = new MoveException("INVALIDDEST");
-                throw *err;
+                throw new MoveException("INVALIDDEST");
             }
         }
 
         if (sourceInv && bool_inv && slotCount != 1) {
-            string a = "MOVETO2INV";
-            MoveException *err = new MoveException(a);
-            throw *err;
+            throw new MoveException("MOVETO2INV");
         }
         try {
             MoveItemHandler(source, slotCount, allSlot, bool_inv);
-        } catch(MoveException err) {
-            throw err;
+        } catch(MoveException* err) {
+            err->printMessage();
         }
     };
 
@@ -214,47 +205,61 @@ namespace Lib {
         //PROSES PEMINDAHAN BARANG DARI CRAFTING TABLE
         if (sourceCraft) {        //KASUS KETIKA BARANG BERASAL DARI CRAFTING TABLE
             if (craft) {
-                MoveException *err = new MoveException("CRAFTTOCRAFT");
-                throw *err;
+                throw new MoveException("CRAFTTOCRAFT");
             }else{
-                try{
-                    crftab->toInv(slotSrc,destSlot);
-                }catch (MoveException err){
-                    throw err;
-                }
+                crftab->toInv(slotSrc,destSlot);
             }
         }
         if (sourceInv) {      //KASUS KETIKA BARANG BERASAL DARI INVENTORY
             if (craft) {
                 try{
                     inv->toCraft(slotSrc,destSlot,N);
-                }catch(MoveException err){
-                    throw err;
+                }catch(MoveException* err){
+                    err->printMessage();
                 }
             }
             if (destInv) {
                 try{
                     inv->toAnotherSlot(slotSrc,destSlot);
-                }catch(MoveException err){
-                    throw err;
+                }catch(MoveException* err){
+                    err->printMessage();
                 }
             }
         }
         
     }
-    void ExportHandler(string outputPath)
-    {
-        // todo : tentukan path untuk tests
-        ofstream outputFile;
-        outputFile.open(outputPath);
+    //void ExportHandler(string outputPath)
+    //{
+    //    // todo : tentukan path untuk tests
+    //    ofstream outputFile;
+    //    outputFile.open(outputPath);
+    //    for (int i = 0; i < 27; i++) {
+    //        outputFile
+    //    	<< (inv->get(i)->getID() == -999 ? 
+    //            0 : inv->get(i)->getID())
+    //    	<< ":"
+    //    	<< (inv->get(i)->getType() == "TOOL" ? // todo : perbaiki bug untuk getDurability
+    //    		inv->get(i)->getDurability() : inv->get(i)->getQuantity()) << endl;
+    //    }
+    //    outputFile.close();
+    //};
+
+    void ExportHandler(string path) {
+        ofstream outputFile(path);
         for (int i = 0; i < 27; i++) {
-            outputFile
-        	<< (inv->get(i)->getID() == -999 ? 
-                0 : inv->get(i)->getID())
-        	<< ":"
-        	<< (inv->get(i)->getType() == "TOOL" ? // todo : perbaiki bug untuk getDurability
-        		inv->get(i)->getDurability() : inv->get(i)->getQuantity()) << endl;
+            string type = inv->get(i)->getBType();
+            if (type == "NONTOOL") {
+                outputFile << inv->get(i)->getID() << ":" << inv->get(i)->getQuantity() << endl;
+            }
+            else if (type == "TOOL") {
+                outputFile << inv->get(i)->getID() << ":" << inv->get(i)->getDurability() << endl;
+            }
+            else if (type == "UNDEFINED") {
+                outputFile << "0:0" << endl;
+            }
         }
+        cout << "Exported" << endl;
         outputFile.close();
-    };
+        return;
+    }
 }
