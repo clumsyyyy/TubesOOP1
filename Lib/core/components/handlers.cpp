@@ -9,10 +9,8 @@
 namespace Lib {
     void DetailsHandler(string mode, int i) {
         if (mode == "ALL") {
-             //inv->displayDetails();
-             //crftab->displayDetails();
-            cout << gm.inv;
-            cout << gm.crftab;
+            cout << &(gm.inv);
+            cout << &(gm.crftab);
         }
         else if (mode == "ITEM") {
             gm.inv.specify(i);

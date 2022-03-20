@@ -30,17 +30,18 @@ namespace Lib {
         if (pos < 0 || pos >= INV_SIZE) {
             throw new InvException("INVALID");
         }
+        delete this->inv_buffer[pos];
         (this->inv_buffer[pos]) = item;
     };
 
-    ostream& operator<<(ostream& os, Inventory* inven) {
+    ostream& operator<<(ostream& os, Inventory& inven) {
         os << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {
             os << "[(I" << i << ") "
-                << (inven->inv_buffer[i])->getID() << " "
-                << (inven->inv_buffer[i]->isTool() ?
-                    inven->inv_buffer[i]->getDurability() :
-                    inven->inv_buffer[i]->getQuantity()) << "] ";
+                << (inven.inv_buffer[i])->getID() << " "
+                << (inven.inv_buffer[i]->isTool() ?
+                    inven.inv_buffer[i]->getDurability() :
+                    inven.inv_buffer[i]->getQuantity()) << "] ";
             if ((i + 1) % INV_COLS == 0) {
                 os << endl;
             }
@@ -48,7 +49,7 @@ namespace Lib {
         return os;
     }
 
-    ostream& operator<<(ostream& os, Inventory& inven) {
+    ostream& operator<<(ostream& os, Inventory* inven) {
         int undef_count = INV_SIZE;
         os << "\n\n[INVENTORY DETAILS]" << endl;
         os << "Slot" << " | "
@@ -57,10 +58,10 @@ namespace Lib {
             << setw(WIDTH) << "Type" << " | "
             << setw(WIDTH) << "Base Type" << endl;
         for (int i = 0; i < INV_SIZE; i++) {
-            if (inven.inv_buffer[i]->getID() != UNDEFINED_ID) {
+            if (inven->inv_buffer[i]->getID() != UNDEFINED_ID) {
                 undef_count--;
                 os << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
-                inven.specify(i);
+                inven->specify(i);
                 os << endl;
             }
         }
@@ -78,18 +79,19 @@ namespace Lib {
     }
 
     void Inventory::addNonTool(NonTool* item, int start){
+        Item* currItem = nullptr;
         for (int i = start; i < INV_SIZE; i++) {
+            currItem = this->get(i);
             // case 1: other item exists (stackable)
-            if (this->get(i)->getID() == item->getID()) {
+            if (currItem->getID() == item->getID()) {
                 // if current slot less than max stack, increase quantity
-                if (this->get(i)->getQuantity() + item->getQuantity() <= MAX_STACK) {
+                if (currItem->getID() + item->getQuantity() <= MAX_STACK) {
                     this->get(i)->setQuantity(this->get(i)->getQuantity() + item->getQuantity());
                     return;
                 }
                 else {
                     item->setQuantity(item->getQuantity() - (MAX_STACK - this->get(i)->getQuantity()));
-                    cout << "Stacked item, " << item->getQuantity() << " left" << endl;
-                    this->get(i)->setQuantity(MAX_STACK);
+                    currItem->setQuantity(MAX_STACK);
                     this->addNonTool(item, i + 1);
                     return;
                 }
@@ -97,18 +99,16 @@ namespace Lib {
         }
         // case 2: if not found, find from the first slot
         for (int i = start; i < INV_SIZE; i++){
-            if (this->get(i)->getID() == UNDEFINED_ID) {
+            currItem = this->get(i);
+            if (currItem->getID() == UNDEFINED_ID) {
                 if (item->getQuantity() <= MAX_STACK) {
                     this->set(i, item);
-                    cout << "Set item " << item->getID() << " to I" << i << endl;
                     return;
                 }
                 else {
                     NonTool* temp = new NonTool(*item);
                     temp->setQuantity(MAX_STACK);
                     this->set(i, temp);
-                    cout << "Set item " << temp->getID() << " to I" << i << endl;
-                    cout << item->getQuantity() << " stacks left" << endl;
                     item->setQuantity(item->getQuantity() - MAX_STACK);
                     continue;
                 }
@@ -126,7 +126,6 @@ namespace Lib {
                 if (this->get(i)->getID() == UNDEFINED_ID) {
                     this->set(i, item);
                     added = true;
-                    cout << "set item " << item->getID() << " to I" << i << endl;
                     break;
                 }
             }
@@ -151,10 +150,11 @@ namespace Lib {
 
     void Inventory::toCraft(int slotSrc,int destSlot[], int N){
         Item* undef_item = new Item();
-        Item* item_inv = NULL;
-        Item* item_craft = NULL;
-        Item* item_moved = NULL;
+        Item* item_inv = nullptr;
+        Item* item_craft = nullptr;
+        Item* item_moved = nullptr;
         Item* itInv = gm.inv[slotSrc];
+
         bool tool = itInv->isTool();
         if (tool) {
             item_inv = new Tool(*((Tool*)itInv));
@@ -162,6 +162,7 @@ namespace Lib {
         else {
             item_inv = new NonTool(*((NonTool*)itInv));
         }
+
         if (item_inv->getID() == UNDEFINED_ID) {
             throw new MoveException("VOID");
         }
@@ -214,10 +215,10 @@ namespace Lib {
 
     void Inventory::toAnotherSlot(int slotSrc,int destSlot[]){
         Item* undef_item = new Item();
-        Item* item_inv = NULL;
-        Item* item_craft = NULL;
-        Item* item_moved = NULL;
-        Item* item_inv2 = NULL;
+        Item* item_inv = nullptr;
+        Item* item_craft = nullptr;
+        Item* item_moved = nullptr;
+        Item* item_inv2 = nullptr;
         item_inv2 = new Item(*gm.inv[destSlot[0]]);
         bool destKosong = true;
         Item* itInv = gm.inv[slotSrc];

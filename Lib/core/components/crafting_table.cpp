@@ -31,11 +31,11 @@ namespace Lib {
         this->crftab_buffer[pos] = item;
     }
 
-    ostream& operator<<(ostream& os, CraftingTable* ct) {
+    ostream& operator<<(ostream& os, CraftingTable& ct) {
         os << "Crafting Table : " << endl;
         for (int i = 0; i < CRAFT_SIZE; i++) {
-            Item* item = ct->get(i);
-            Item* itemCrf = ct->crftab_buffer[i];
+            Item* item = ct.get(i);
+            Item* itemCrf = ct.crftab_buffer[i];
             os << "[(C" << i << ") "
                 << item->getID() << " "
                 << item->getName();
@@ -55,7 +55,7 @@ namespace Lib {
         return os;
     }
 
-    ostream& operator<<(ostream& os, CraftingTable& ct) {
+    ostream& operator<<(ostream& os, CraftingTable* ct) {
         int undef_count = CRAFT_SIZE;
         os << "\n[CRAFTING TABLE DETAILS]" << endl;
         os << "Slot" << " | "
@@ -67,7 +67,7 @@ namespace Lib {
             undef_count--;
             if (gm.crftab[i]->getID() != UNDEFINED_ID){
                 os << setw(NUMWIDTH - to_string(i).length()) << "C" << i << " | ";
-                ct.specify(i);
+                ct->specify(i);
                 os << endl;
             }
         }
