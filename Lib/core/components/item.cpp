@@ -1,6 +1,7 @@
 #include "headers/item.hpp"
 
 namespace Lib {
+    /* IMPLEMENTATION FIELD FOR PARENT CLASS: Item */
     Item::Item() {
         this->ID = UNDEFINED_ID;
         this->name = "UNDEFINED";
@@ -67,7 +68,8 @@ namespace Lib {
     void Item::setQuantity(int) {}
     void Item::useItem() {}
 
-    // Implementasi bagian Non Tool Item
+    /* IMPLEMENTATION FIELD FOR CHILD CLASS: NonTool */
+
     NonTool::NonTool(int ID, string name, string type, string basetype, int quant)
         : Item(ID, name, type, basetype) {
         this->quantity = quant;
@@ -125,13 +127,25 @@ namespace Lib {
         Item::displayInfo();
         cout << " | QTY: " << this->quantity;
     }
-    // Implementasi bagian Tool Item
+
+    /* IMPLEMENTATION FIELD FOR CHILD CLASS : Tool */
+
+    /**
+     * @brief Construct a new Tool:: Tool object
+     * 
+     * @param ID ID of the tool
+     * @param name name of the tool
+     * @param type type of the tool 
+     * @param basetype basetype of the tool
+     * @param dur durability of the tool
+     */
     Tool::Tool(int ID, string name, string type, string basetype, int dur)
         : Item(ID, name, type, basetype) {
-        this->durability = dur;
+        this->durability = 10; // Default durability = 10
     }
 
-    Tool::Tool(const TupleItem& item, int dur) : Tool(
+    Tool::Tool(const TupleItem& item, int dur) : 
+    Tool(
         stoi(get<0>(item)),
         get<1>(item),
         get<2>(item),
@@ -160,10 +174,13 @@ namespace Lib {
         return this->durability;
     }
 
+    /**
+     * @brief Decrease durability of the tool
+     * 
+     */
     void Tool::useItem() {
         this->durability--;
         if (this->durability == 0) {
-            //quite unsure about this part yet
             cout << "Your " << this->name << " broke." << endl;
             delete this;
         }

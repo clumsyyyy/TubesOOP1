@@ -4,17 +4,35 @@
 
 namespace Lib {
 
+    /**
+     * @brief Default Constructor for Class Inventory
+     *  Initializes the inventory with a default size of INV ROWS x INV COLS slots
+     *  Each slot (buffer) is initialized with a default Item Constructor
+     * 
+     * @param 
+     * 
+     */
     Inventory::Inventory() {
-        this->inv_buffer = new Item * [INV_ROWS * INV_COLS];
+        this->inv_buffer = new Item * [INV_ROWS * INV_COLS]; // Size = 3x9 = 27 slots
         for (int i = 0; i < INV_ROWS * INV_COLS; i++) {
-            this->inv_buffer[i] = new Item();
+            this->inv_buffer[i] = new Item(); // Each slot initialized with a default Item Constructor
         }
     }
 
+    /**
+     * @brief Destroy the Inventory:: Inventory object
+     *   Buffer is dynamicly allocated on memory (heap) and should be freed
+     */
     Inventory::~Inventory() {
         delete[] this->inv_buffer;
     }
 
+    /**
+     * @brief Get the Inventory Buffer at a specific slot
+     * 
+     * @param pos Index of the slot
+     * @return Item* Pointer to the Item object
+     */
     Item* Inventory::get(int pos) {
         if (pos < 0 || pos >= INV_SIZE) {
             throw new InvException("INVALID");
@@ -22,10 +40,22 @@ namespace Lib {
         return this->inv_buffer[pos];
     }
 
+    /**
+     * @brief Overload the [] operator to get the Inventory Buffer at a specific slot
+     * 
+     * @param pos Index of the slot
+     * @return Item* Pointer to the Item object
+     */
     Item* Inventory::operator[](int pos) {
         return get(pos);
     }
 
+    /**
+     * @brief set the Item at the specified position
+     * 
+     * @param pos  Index of the slot
+     * @param item Item to be set in the slot
+     */
     void Inventory::set(int pos, Item* item) {
         if (pos < 0 || pos >= INV_SIZE) {
             throw new InvException("INVALID");
@@ -34,6 +64,13 @@ namespace Lib {
         (this->inv_buffer[pos]) = item;
     };
 
+    /**
+     * @brief Overload the << operator to display the Inventory
+     * 
+     * @param os Output Stream
+     * @param inven inventory to be displayed
+     * @return ostream& reference to the output stream
+     */
     ostream& operator<<(ostream& os, Inventory& inven) {
         os << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {
@@ -49,6 +86,13 @@ namespace Lib {
         return os;
     }
 
+    /**
+     * @brief Overload the << operator to display inventory details
+     * 
+     * @param os Output Stream
+     * @param inven inventory to be displayed details
+     * @return ostream& reference to the output stream
+     */
     ostream& operator<<(ostream& os, Inventory* inven) {
         int undef_count = INV_SIZE;
         os << "\n\n[INVENTORY DETAILS]" << endl;
@@ -71,6 +115,11 @@ namespace Lib {
         return os;
     }
 
+    /**
+     * @brief Display info of specific slot in inventory
+     * 
+     * @param pos 
+     */
     void Inventory::specify(int pos) {
         if (pos < 0 || pos >= CRAFT_SIZE) {
             throw new TableException("INVALID");
@@ -136,13 +185,13 @@ namespace Lib {
      
     }
 
-    void Inventory::discard(int quant, int slot) {
-        Item* target = this->inv_buffer[slot];
-        if (target->getQuantity() - quant > 0) {
-            target->setQuantity(target->getQuantity() - quant);
+    void Inventory::discard(int index, int qty) {
+        Item* target = this->inv_buffer[index];
+        if (target->getQuantity() - qty > 0) {
+            target->setQuantity(target->getQuantity() - qty);
         }
-        else if (target->getQuantity() - quant == 0) {
-            set(slot, new Item());
+        else if (target->getQuantity() - qty == 0) {
+            set(index, new Item());
         }
         else {
             throw new InvException("EMPTY");

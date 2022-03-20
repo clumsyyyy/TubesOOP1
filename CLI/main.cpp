@@ -15,13 +15,15 @@ int main() {
     cout << "Input command: ";
     string command;
     while (cin >> command) {
-        if (command == "SHOW"){
-            // crftab->displayMenu();
-            cout << gm.crftab;
-            cout << gm.inv;            
-            // inv->displayMenu();
-            // 
-        } else if (command == "DETAILS"){
+        if (command == "SHOW")
+        {
+            cout << gm.crftab; // Display Crafting Table
+            cout << gm.inv;    // Display Inventory
+        } 
+        else if (command == "DETAILS")
+        {
+            // USAGE: DETAILS ALL
+            // USAGE: DETAILS ITEM <SLOT_ID>
             string mode;
             cin >> mode;
             if (mode == "ALL") {
@@ -32,28 +34,49 @@ int main() {
                 cin >> i;
                 DetailsHandler(mode, i);
             }
-        } else if (command == "GIVE"){
+        } 
+        else if (command == "GIVE")
+        {
+            // USAGE: GIVE <ITEM_NAME> <ITEM_QTY>
             string name;
-            int temp;
-            cin >> name >> temp;
-            GiveHandler(name, temp);
+            int qty;
+            cin >> name >> qty;
+            GiveHandler(name, qty);
         }
-        else if (command == "DISCARD") {
+        else if (command == "DISCARD") 
+        {
+            // USAGE: DISCARD <INVENTORY_SLOT_ID> <ITEM_QTY>
             string slot;
-            int quant;
-            cin >> slot >> quant;
-            DiscardHandler(slot, quant);
+            int qty;
+            cin >> slot >> qty;
+            DiscardHandler(slot, qty);
         }
-        else if (command == "USE") {
+        else if (command == "USE") 
+        {
+            // USAGE: USE <INVENTORY_SLOT_ID> 
+            // For Tool item only
             string slot;
             cin >> slot;
             UseHandler(slot);
-        } else if (command == "CRAFT") {
+        } 
+        else if (command == "CRAFT") 
+        {
+            // USAGE: CRAFT 
+            // Can be used if the crafting table is valid
             CraftingHandler();
-        } else if (command == "MOVE") {
+        } 
+        else if (command == "MOVE") 
+        {   
+            // 1. Moving item from inventory to crafting table 
+            // Item with quantity > 1 can be moved to several slots
+            // USAGE: MOVE <INVENTORY_SLOT_ID> N <CRAFTING_SLOT_ID_1> <CRAFTING_SLOT_ID_2> ...
+            // 2. Stacking item (for NonTool item)
+            // USAGE: MOVE <INVENTORY_SLOT_ID_SRC> 1 <INVENTORY_SLOT_ID_DEST>
+            // 3. Returning item from crafting table to inventory
+            // USAGE: MOVE <CRAFTING_SLOT_ID> 1 <INVENTORY_SLOT_ID>
             string slotSrc;
             int slotQty;
-            // need to handle multiple destinations
+            
             cin >> slotSrc >> slotQty;
             vector<string> slotDestV;
             for (int i = 0; i < slotQty; i++) {
@@ -61,28 +84,19 @@ int main() {
                 cin >> slotDest;
                 slotDestV.push_back(slotDest);
             }
-            try{
                 MoveHandler(slotSrc,slotQty, slotDestV);
-            }catch(MoveException err){
-                err.printMessage();
-            }
             
         }
-        else if (command == "EXPORT") {
+        else if (command == "EXPORT") 
+        {
+            // USAGE: EXPORT <FILE_NAME>
             string outputPath;
             cin >> outputPath;
-            ofstream outputFile(outputPath);
-
-            // hardcode for first test case
-            outputFile << "21:10" << endl;
-            outputFile << "6:1" << endl;
-            for (int i = 2; i < 27; i++) {
-                outputFile << "0:0" << endl;
-            }
-
+            ExportHandler(outputPath);
             cout << "Exported" << endl;
         }
-        else {
+        else 
+        {
             cout << "Invalid command!" << endl;
         }
         cout << "Input command: ";
