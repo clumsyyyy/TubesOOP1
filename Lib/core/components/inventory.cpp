@@ -85,7 +85,7 @@ namespace Lib {
             // case 1: other item exists (stackable)
             if (currItem->getID() == item->getID()) {
                 // if current slot less than max stack, increase quantity
-                if (currItem->getID() + item->getQuantity() <= MAX_STACK) {
+                if (currItem->getQuantity() + item->getQuantity() <= MAX_STACK) {
                     this->get(i)->setQuantity(this->get(i)->getQuantity() + item->getQuantity());
                     return;
                 }
@@ -106,9 +106,9 @@ namespace Lib {
                     return;
                 }
                 else {
-                    NonTool* temp = new NonTool(*item);
-                    temp->setQuantity(MAX_STACK);
-                    this->set(i, temp);
+                    NonTool* NT = new NonTool(*item);
+                    NT->setQuantity(MAX_STACK);
+                    this->set(i, NT);
                     item->setQuantity(item->getQuantity() - MAX_STACK);
                     continue;
                 }
@@ -119,12 +119,12 @@ namespace Lib {
 
     void Inventory::addTool(Tool* item, int quant){
         bool added = false;
-        for (int j = 0; j < quant; j++) {
+        for (int i = 0; i < quant; i++) {
             added = false;
-            for (int i = 0; i < INV_SIZE; i++) {
+            for (int j = 0; j < INV_SIZE; j++) {
                 // base case if no such item exists in inventory
-                if (this->get(i)->getID() == UNDEFINED_ID) {
-                    this->set(i, item);
+                if (this->get(j)->getID() == UNDEFINED_ID) {
+                    this->set(j, item);
                     added = true;
                     break;
                 }
@@ -137,10 +137,11 @@ namespace Lib {
     }
 
     void Inventory::discard(int quant, int slot) {
-        if (this->inv_buffer[slot]->getQuantity() - quant > 0) {
-            this->inv_buffer[slot]->setQuantity(this->inv_buffer[slot]->getQuantity() - quant);
+        Item* target = this->inv_buffer[slot];
+        if (target->getQuantity() - quant > 0) {
+            target->setQuantity(target->getQuantity() - quant);
         }
-        else if (this->inv_buffer[slot]->getQuantity() - quant == 0) {
+        else if (target->getQuantity() - quant == 0) {
             set(slot, new Item());
         }
         else {
@@ -248,7 +249,7 @@ namespace Lib {
                 item_inv2 = new NonTool(*((NonTool*)itInv2));
                 int kurang = 64 - item_inv2->getQuantity();
                 if (item_inv->getQuantity() > kurang) {
-                    item_inv2->setQuantity(64);
+                    item_inv2->setQuantity(MAX_STACK);
                     item_inv->setQuantity(item_inv->getQuantity() - kurang);
                     gm.inv.set(slotSrc, item_inv);
                     gm.inv.set(destSlot[0], item_inv2);
