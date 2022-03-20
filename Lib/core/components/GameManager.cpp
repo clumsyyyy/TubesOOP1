@@ -77,6 +77,7 @@ namespace Lib {
             filesystem::directory_iterator(configPath + "/recipe")) {
             ifstream* recipeConfigFile = new ifstream(entry.path());
             recipeConfig.push_back(parseRecipe(recipeConfigFile));
+            delete recipeConfigFile;
             // read from file and do something
         }
     }
