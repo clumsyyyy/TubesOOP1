@@ -15,6 +15,7 @@ namespace Lib {
 	void GiveChecker(string name, int temp);
 	void MoveHandler(string source, int slotCount, vector<string>);
 	void MoveItemHandler(string sourceSlot,int N, int destSlot[], bool destInv);
+	void ExportHandler(string outputPath);
 	void ClearBuffer();
 }
 

@@ -169,15 +169,7 @@ int main() {
         else if (command == "EXPORT") {
             string outputPath;
             cin >> outputPath;
-            ofstream outputFile(outputPath);
-
-            // hardcode for first test case
-            outputFile << "21:10" << endl;
-            outputFile << "6:1" << endl;
-            for (int i = 2; i < 27; i++) {
-                outputFile << "0:0" << endl;
-            }
-
+            ExportHandler(outputPath);
             cout << "Exported" << endl;
         }
         else {

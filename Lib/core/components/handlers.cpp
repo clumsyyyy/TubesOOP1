@@ -2,6 +2,8 @@
 #include "headers/exception.hpp"
 #include "../globals.hpp"
 #include <limits>
+#include <fstream>
+#include <iostream>
 
 namespace Lib {
     void DetailsHandler(string mode, int i) {
@@ -238,5 +240,21 @@ namespace Lib {
                 }
             }
         }
+        
+    }
+    void ExportHandler(string outputPath)
+    {
+        // todo : tentukan path untuk tests
+        ofstream outputFile;
+        outputFile.open(outputPath);
+        for (int i = 0; i < 27; i++) {
+            outputFile
+        	<< (inv->get(i)->getID() == -999 ? 
+                0 : inv->get(i)->getID())
+        	<< ":"
+        	<< (inv->get(i)->getType() == "TOOL" ? // todo : perbaiki bug untuk getDurability
+        		inv->get(i)->getDurability() : inv->get(i)->getQuantity()) << endl;
+        }
+        outputFile.close();
     };
 }
