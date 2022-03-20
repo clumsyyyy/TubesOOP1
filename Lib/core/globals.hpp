@@ -12,7 +12,7 @@
 namespace Lib {
 	extern Inventory* inv;
 	extern CraftingTable* crftab;
-	extern vector <TupleItem>* itemConfig;
-	extern vector <TupleRecipe>* recipeConfig;
+	//extern vector <TupleItem>* itemConfig;
+	//extern vector <TupleRecipe>* recipeConfig;
 }
 #endif

@@ -22,6 +22,7 @@
     <ClCompile Include="core\components\crafting.cpp" />
     <ClCompile Include="core\components\crafting_table.cpp" />
     <ClCompile Include="core\components\exception.cpp" />
+    <ClCompile Include="core\components\GameManager.cpp" />
     <ClCompile Include="core\components\handlers.cpp" />
     <ClCompile Include="core\components\inventory.cpp" />
     <ClCompile Include="core\components\item.cpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="core\components\headers\crafting.hpp" />
     <ClInclude Include="core\components\headers\crafting_table.hpp" />
     <ClInclude Include="core\components\headers\exception.hpp" />
+    <ClInclude Include="core\components\headers\GameManager.hpp" />
     <ClInclude Include="core\components\headers\handlers.hpp" />
     <ClInclude Include="core\components\headers\inventory.hpp" />
     <ClInclude Include="core\components\headers\item.hpp" />
@@ -171,7 +173,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>

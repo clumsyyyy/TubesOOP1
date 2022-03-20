@@ -1,5 +1,6 @@
 #include "headers/handlers.hpp"
 #include "headers/exception.hpp"
+#include "headers/GameManager.hpp"
 #include "../globals.hpp"
 #include <limits>
 #include <fstream>
@@ -31,7 +32,7 @@ namespace Lib {
 
     void GiveChecker(string name, int temp) {
         bool found = false;
-        for (tuple tup : *itemConfig) {
+        for (tuple tup : GameManager::getInstance().itemConfig) {
             if (get<1>(tup) == name) {
                 found = true;
                 if (get<3>(tup) == "NONTOOL") {

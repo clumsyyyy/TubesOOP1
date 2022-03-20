@@ -1,4 +1,5 @@
 #include "headers/crafting.hpp"
+#include "headers/GameManager.hpp"
 #include "../globals.hpp"
 
 namespace Lib {
@@ -144,7 +145,7 @@ namespace Lib {
     }
 
     void Crafting::crafting_proses() {
-        for (tuple tup : *recipeConfig) {
+        for (tuple tup : GameManager::getInstance().recipeConfig) {
             int n = 0;
             TupleItem result_item;
             Crafting crf(tup);

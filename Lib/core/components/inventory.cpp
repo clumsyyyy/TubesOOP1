@@ -1,7 +1,9 @@
 #include "headers/inventory.hpp"
+#include "headers/GameManager.hpp"
 #include "../globals.hpp"
 
 namespace Lib {
+
     Inventory::Inventory() {
         this->inv_buffer = new Item * [INV_ROWS * INV_COLS];
         for (int i = 0; i < INV_ROWS * INV_COLS; i++) {
