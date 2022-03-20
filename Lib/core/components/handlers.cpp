@@ -8,8 +8,8 @@
 namespace Lib {
     void DetailsHandler(string mode, int i) {
         if (mode == "ALL") {
-            // inv->displayDetails();
-            // crftab->displayDetails();
+             //inv->displayDetails();
+             //crftab->displayDetails();
             cout << *inv;
             cout << *crftab;
         }
@@ -68,7 +68,7 @@ namespace Lib {
 
     void DiscardHandler(string slot, int quant) {
         int index = stoi(slot.substr(1, slot.length() - 1));
-        if (inv->get(index)->getBType() == "NONTOOL") {
+        if (inv->get(index)->isNonTool()) {
             inv->discard(quant, index);
         }
         else {
@@ -79,7 +79,7 @@ namespace Lib {
     void UseHandler(string slot) {
         try {
             int index = stoi(slot.substr(1, slot.length() - 1));
-            if (inv->get(index)->getBType() == "NONTOOL") {
+            if (inv->get(index)->isNonTool()) {
                 throw new UseException(inv->get(index)->getName());
             }
             else {
@@ -140,13 +140,13 @@ namespace Lib {
 
         bool tool = false, nontool = false;
         //MENGECEK TIPE ITEM YANG AKAN DIPINDAHKAN
-        if (sourceInv && inv->get(slotSrc)->getBType() == "TOOL") {
+        if (sourceInv && inv->get(slotSrc)->isTool()) {
             tool = true;
         }
         else if(sourceInv) {
             nontool = true;
         }
-        if (sourceCraft && crftab->get(slotSrc)->getBType() == "TOOL") {
+        if (sourceCraft && crftab->get(slotSrc)->isTool()) {
             tool = true;
         }
         else if(sourceCraft) {

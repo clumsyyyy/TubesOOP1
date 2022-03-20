@@ -36,9 +36,9 @@ namespace Lib {
             if (ct->crftab_buffer[i]->getType() == "-") {
                 os << " " << ct->crftab_buffer[i]->getBType();
             }
-            if (ct->crftab_buffer[i]->getBType() == "TOOL") {
+            if (ct->crftab_buffer[i]->isTool()) {
                 os << " " << ct->crftab_buffer[i]->getDurability();
-            } else if (ct->crftab_buffer[i]->getBType() == "NONTOOL") {
+            } else if (ct->crftab_buffer[i]->isNonTool()) {
                 os << " " << ct->crftab_buffer[i]->getQuantity();
             }
             os << "] ";
@@ -49,16 +49,25 @@ namespace Lib {
         return os;
     }
 
-    ostream& operator<<(ostream& os, CraftingTable ct) {
+    ostream& operator<<(ostream& os, CraftingTable& ct) {
+        int undef_count = CRAFT_SIZE;
+        os << "\n[CRAFTING TABLE DETAILS]" << endl;
         os << "Slot" << " | "
             << setw(NUMWIDTH) << "ID" << " | "
             << setw(WIDTH) << "Name" << " | "
             << setw(WIDTH) << "Type" << " | "
             << setw(WIDTH) << "Base Type" << endl;
         for (int i = 0; i < CRAFT_SIZE; i++) {
-            os << setw(NUMWIDTH - to_string(i).length()) << "C" << i << " | ";
-            ct.specify(i);
-            os << endl;
+            undef_count--;
+            if (crftab->get(i)->getID() != UNDEFINED_ID){
+                os << setw(NUMWIDTH - to_string(i).length()) << "C" << i << " | ";
+                ct.specify(i);
+                os << endl;
+            }
+
+        }
+        if (undef_count == CRAFT_SIZE){
+            cout << "No items in crafting table :(" << endl;
         }
         return os;
     }
@@ -104,9 +113,9 @@ namespace Lib {
     }    
 
     void CraftingTable::discard(int quant, int slot) {
-        if (this->crftab_buffer[slot]->getBType() == "TOOL") {
+        if (this->crftab_buffer[slot]->isTool()) {
             set(slot, new Item());
-        } else if (this->crftab_buffer[slot]->getBType() == "NONTOOL"){
+        } else if (this->crftab_buffer[slot]->isNonTool()){
             if (this->crftab_buffer[slot]->getQuantity() - quant > 0) {
                 this->crftab_buffer[slot]->setQuantity(this->crftab_buffer[slot]->getQuantity() - quant);
             }
@@ -118,12 +127,13 @@ namespace Lib {
             }
         } 
     }
+
     void CraftingTable::toInv(int slotSrc,int destSlot[]){
         Item* undef_item = new Item();
         Item* item_inv = NULL;
         Item* item_craft = NULL;
         Item* item_moved = NULL;
-        bool tool = crftab->get(slotSrc)->getBType() == "TOOL";
+        bool tool = crftab->get(slotSrc)->isTool();
         if (tool) {
             item_craft = new Tool(crftab->get(slotSrc)->getID(), crftab->get(slotSrc)->getName(), crftab->get(slotSrc)->getType(), crftab->get(slotSrc)->getBType(), crftab->get(slotSrc)->getDurability());
         }

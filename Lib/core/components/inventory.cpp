@@ -20,12 +20,12 @@ namespace Lib {
         return this->inv_buffer[pos];
     }
 
-    //Item* Inventory::operator[](int pos) {
-    //    if (pos < 0 || pos >= INV_SIZE) {
-    //        throw new InvException("INVALID");
-    //    }
-    //    return this->inv_buffer[pos];
-    //}
+    Item* Inventory::operator[](int pos) {
+        if (pos < 0 || pos >= INV_SIZE) {
+            throw new InvException("INVALID");
+        }
+        return this->inv_buffer[pos];
+    }
 
     void Inventory::set(int pos, Item* item) {
         if (pos < 0 || pos >= INV_SIZE) {
@@ -37,10 +37,11 @@ namespace Lib {
     ostream& operator<<(ostream& os, Inventory* inven) {
         os << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {
-            os << "[I" << i << " "
+            os << "[(I" << i << ") "
                 << (inven->inv_buffer[i])->getID() << " "
-                << (inven->inv_buffer[i])->getQuantity() << " "
-                << (inven->inv_buffer[i])->getDurability() << "] ";
+                << (inven->inv_buffer[i]->isTool() ?
+                    inven->inv_buffer[i]->getDurability() :
+                    inven->inv_buffer[i]->getQuantity()) << "] ";
             if ((i + 1) % INV_COLS == 0) {
                 os << endl;
             }
@@ -49,20 +50,31 @@ namespace Lib {
     }
 
     ostream& operator<<(ostream& os, Inventory& inven) {
+        int undef_count = INV_SIZE;
+        os << "\n\n[INVENTORY DETAILS]" << endl;
         os << "Slot" << " | "
             << setw(NUMWIDTH) << "ID" << " | "
             << setw(WIDTH) << "Name" << " | "
             << setw(WIDTH) << "Type" << " | "
             << setw(WIDTH) << "Base Type" << endl;
         for (int i = 0; i < INV_SIZE; i++) {
-            os << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
-            inven.specify(i);
-            os << endl;
+            if (inven.inv_buffer[i]->getID() != UNDEFINED_ID) {
+                undef_count--;
+                os << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
+                inven.specify(i);
+                os << endl;
+            }
+        }
+        if (undef_count == INV_SIZE){
+            os << "\nNo items in inventory :(" << endl;
         }
         return os;
     }
 
     void Inventory::specify(int pos) {
+        if (pos < 0 || pos >= CRAFT_SIZE) {
+            throw new TableException("INVALID");
+        }
         (this->inv_buffer[pos])->displayInfo();
     }
 
@@ -143,7 +155,7 @@ namespace Lib {
         Item* item_inv = NULL;
         Item* item_craft = NULL;
         Item* item_moved = NULL;
-        bool tool = inv->get(slotSrc)->getBType() == "TOOL";
+        bool tool = inv->get(slotSrc)->isTool();
         if (tool) {
             item_inv = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
         }
@@ -207,7 +219,7 @@ namespace Lib {
         Item* item_inv2 = NULL;
         item_inv2 = new Item(*inv->get(destSlot[0]));
         bool destKosong = true;
-        bool tool = inv->get(slotSrc)->getBType() == "TOOL";
+        bool tool = inv->get(slotSrc)->isTool();
         if (tool) {
             item_inv = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
         }

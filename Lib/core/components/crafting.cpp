@@ -122,9 +122,9 @@ namespace Lib {
         int sum = 0;
         string temp;
         for (int i = 0; i < CRAFT_SIZE; i++) {
-            if (crftab->get(i)->getBType() == "NONTOOL") {
+            if (crftab->get(i)->isNonTool()) {
                 break;
-            } else if (crftab->get(i)->getBType() == "TOOL") {
+            } else if (crftab->get(i)->isTool()) {
                 if (sum > 0 && temp != crftab->get(i)->getName()) {
                     break;
                 }
@@ -204,7 +204,7 @@ namespace Lib {
         cout << "Returning item :" << endl;
         for (int i = 0; i < CRAFT_COLS*CRAFT_ROWS; i++) {
             if (crftab->get(i)->getID() != UNDEFINED_ID) {
-                if (crftab->get(i)->getBType() == "NONTOOL") {
+                if (crftab->get(i)->isNonTool()) {
                     NonTool *NT = new NonTool(crftab->get(i)->getID(),
                                             crftab->get(i)->getName(),
                                             crftab->get(i)->getType(),
@@ -212,7 +212,7 @@ namespace Lib {
                                             crftab->get(i)->getQuantity());
                     inv->addNonTool(NT, 0);
                     crftab->discard(crftab->get(i)->getQuantity(),i);
-                } else if (crftab->get(i)->getBType() == "TOOL") {
+                } else if (crftab->get(i)->isTool()) {
                     Tool *T = new Tool(crftab->get(i)->getID(),
                                             crftab->get(i)->getName(),
                                             crftab->get(i)->getType(),
