@@ -165,22 +165,7 @@ namespace Lib {
                     NonTool* NT = new NonTool(result_item, n);
                     gm.inv.addNonTool(NT, 0);
                 } else if (get<3>(result_item) == "TOOL") {
-                    int durability;
-                    string kind;
-                    istringstream iss(get<1>(result_item));
-                    getline(iss,kind,'_');
-                    if (kind == "WOODEN") {
-                        durability = 4;
-                    } else if (kind == "STONE") {
-                        durability = 6;
-                    } else if (kind == "IRON") {
-                        durability = 8;
-                    } else if (kind == "DIAMOND") {
-                        durability = 10;
-                    } else {
-                        durability = 0;
-                    }
-                    Tool* T = new Tool(result_item, durability);
+                    Tool* T = new Tool(result_item, 10);
                     gm.inv.addTool(T,n);                           
                 }
                 cout << "crafted " << n << " " << get<1>(result_item) << endl;

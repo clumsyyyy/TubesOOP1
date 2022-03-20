@@ -13,8 +13,11 @@ namespace Lib {
         delete[] this->crftab_buffer;
     }
 
+    bool CraftingTable::valid_index(int pos) {
+        return (0 <= pos && pos < CRAFT_SIZE);
+    }
     Item* CraftingTable::get(int pos) {
-        if (pos < 0 || pos >= CRAFT_SIZE) {
+        if (!valid_index(pos)) {
             throw new TableException("INVALID");
         }
         return this->crftab_buffer[pos];
@@ -25,7 +28,7 @@ namespace Lib {
     }
 
     void CraftingTable::set(int pos, Item* item) {
-        if (pos < 0 || pos >= CRAFT_SIZE) {
+        if (!valid_index(pos)) {
             throw new TableException("INVALID");
         } 
         this->crftab_buffer[pos] = item;
@@ -82,32 +85,7 @@ namespace Lib {
             throw new TableException("INVALID");
         }
         crftab_buffer[pos]->displayInfo();
-    }
-
-    void CraftingTable::addNonTool(int pos, NonTool* item) {
-        Item* it = this->get(pos);
-        if (it->getID() != UNDEFINED_ID) {
-            throw new TableException("OCCUPIED");
-        } else {
-            if (it->getQuantity() + item->getQuantity() > 64) {
-                throw new TableException("FULL");
-            } else {
-                it->setQuantity(item->getQuantity() + it->getQuantity());
-                cout << "set item " << it->getID() << " to C" << pos << endl;
-            }
-        }
-    }
-
-    void CraftingTable::addTool(int pos, Tool* item) {
-        Item* it = this->get(pos);
-        if (it->getID() != UNDEFINED_ID) {
-            throw new TableException("OCCUPIED");
-        } else {
-            set(pos, item);
-            cout << "set item " << item->getID() << " to C" << pos << endl;
-        }
-            
-    }    
+    }   
 
     void CraftingTable::discard(int quant, int slot) {
         Item* it = this->crftab_buffer[slot];

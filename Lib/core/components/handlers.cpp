@@ -36,22 +36,7 @@ namespace Lib {
                     gm.inv.addNonTool(NT, 0);
                 }
                 else {
-                    int durability;
-                    string kind;
-                    istringstream iss(get<1>(tup));
-                    getline(iss,kind,'_');
-                    if (kind == "WOODEN") {
-                        durability = 4;
-                    } else if (kind == "STONE") {
-                        durability = 6;
-                    } else if (kind == "IRON") {
-                        durability = 8;
-                    } else if (kind == "DIAMOND") {
-                        durability = 10;
-                    } else {
-                        durability = 0;
-                    }
-                    Tool* T = new Tool(tup, durability);
+                    Tool* T = new Tool(tup, 10);
                     gm.inv.addTool(T, temp);
                 }
                 return;
