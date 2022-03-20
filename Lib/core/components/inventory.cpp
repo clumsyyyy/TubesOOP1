@@ -23,10 +23,7 @@ namespace Lib {
     }
 
     Item* Inventory::operator[](int pos) {
-        if (pos < 0 || pos >= INV_SIZE) {
-            throw new InvException("INVALID");
-        }
-        return this->inv_buffer[pos];
+        return get(pos);
     }
 
     void Inventory::set(int pos, Item* item) {
@@ -157,12 +154,13 @@ namespace Lib {
         Item* item_inv = NULL;
         Item* item_craft = NULL;
         Item* item_moved = NULL;
-        bool tool = inv->get(slotSrc)->isTool();
+        Item* itInv = gm.inv[slotSrc];
+        bool tool = itInv->isTool();
         if (tool) {
-            item_inv = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
+            item_inv = new Tool(*((Tool*)itInv));
         }
         else {
-            item_inv = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
+            item_inv = new NonTool(*((NonTool*)itInv));
         }
         if (item_inv->getID() == UNDEFINED_ID) {
             throw new MoveException("VOID");
@@ -173,41 +171,42 @@ namespace Lib {
                     throw new MoveException("NOTENOUGH");
                 }
                 else {
-                    item_moved = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
+                    item_moved = new NonTool(*((NonTool*)itInv));
                     item_moved->setQuantity(1);
 
                     for (int i = 0; i < N; i++) {
-                        item_moved = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
+                        Item* itCrf = gm.crftab[destSlot[i]];
+                        item_moved = new NonTool(*((NonTool*)itInv));
                         item_moved->setQuantity(1);
-                        item_craft = new NonTool(crftab->get(destSlot[i])->getID(), crftab->get(destSlot[i])->getName(), crftab->get(destSlot[i])->getType(), crftab->get(destSlot[i])->getBType(), crftab->get(destSlot[i])->getQuantity());
+                        item_craft = new NonTool(*((NonTool*)itCrf));
                         if (item_craft->getID() != UNDEFINED_ID && item_craft->getID() != item_moved->getID()) {
                             throw new MoveException("DIFFTYPE");
                         }
                         else if (item_craft->getID() == UNDEFINED_ID) {
-                            crftab->set(destSlot[i], item_moved);
+                            gm.crftab.set(destSlot[i], item_moved);
                         }
                         else {
-                            crftab->get(destSlot[i])->setQuantity(crftab->get(destSlot[i])->getQuantity() + 1);
+                            itCrf->setQuantity(itCrf->getQuantity() + 1);
                         }
                     }
                     if (item_inv->getQuantity() - N == 0) {
-                        inv->set(slotSrc, undef_item);
+                        gm.inv.set(slotSrc, undef_item);
                     }
                     else {
                         item_inv->setQuantity(item_inv->getQuantity() - N);
-                        inv->set(slotSrc, item_inv);
+                        gm.inv.set(slotSrc, item_inv);
                     }
                 }
             }
             else {
-                Item* item_craft = new Item(*crftab->get(destSlot[0]));
+                Item* item_craft = new Item(*gm.crftab[destSlot[0]]);
                 if (item_craft->getID() != UNDEFINED_ID) {
                     throw new MoveException("TOOL");
                 }
                 else {
-                    Tool* item_moved = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
-                    inv->set(slotSrc, undef_item);
-                    crftab->set(destSlot[0], item_moved);
+                    Tool* item_moved = new Tool(*((Tool*)gm.inv[slotSrc]));
+                    gm.inv.set(slotSrc, undef_item);
+                    gm.crftab.set(destSlot[0], item_moved);
                 }
             }
         }
@@ -219,14 +218,15 @@ namespace Lib {
         Item* item_craft = NULL;
         Item* item_moved = NULL;
         Item* item_inv2 = NULL;
-        item_inv2 = new Item(*inv->get(destSlot[0]));
+        item_inv2 = new Item(*gm.inv[destSlot[0]]);
         bool destKosong = true;
-        bool tool = inv->get(slotSrc)->isTool();
+        Item* itInv = gm.inv[slotSrc];
+        bool tool = gm.inv[slotSrc]->isTool();
         if (tool) {
-            item_inv = new Tool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getDurability());
+            item_inv = new Tool(*((Tool*)itInv));
         }
         else {
-            item_inv = new NonTool(inv->get(slotSrc)->getID(), inv->get(slotSrc)->getName(), inv->get(slotSrc)->getType(), inv->get(slotSrc)->getBType(), inv->get(slotSrc)->getQuantity());
+            item_inv = new NonTool(*((NonTool*)itInv));
         }
         if (item_inv->getID() == UNDEFINED_ID) {
             throw new MoveException("VOID");
@@ -238,23 +238,24 @@ namespace Lib {
             throw new MoveException("DIFFTYPE");
         }
         if (destKosong) {
-            inv->set(destSlot[0], item_inv);
-            inv->set(slotSrc, undef_item);
+            gm.inv.set(destSlot[0], item_inv);
+            gm.inv.set(slotSrc, undef_item);
         }
         else {
             if (!tool) {
-                item_inv2 = new NonTool(inv->get(destSlot[0])->getID(), inv->get(destSlot[0])->getName(), inv->get(destSlot[0])->getType(), inv->get(destSlot[0])->getBType(), inv->get(destSlot[0])->getQuantity());
+                Item* itInv2 = gm.inv[destSlot[0]];
+                item_inv2 = new NonTool(*((NonTool*)itInv2));
                 int kurang = 64 - item_inv2->getQuantity();
                 if (item_inv->getQuantity() > kurang) {
                     item_inv2->setQuantity(64);
                     item_inv->setQuantity(item_inv->getQuantity() - kurang);
-                    inv->set(slotSrc, item_inv);
-                    inv->set(destSlot[0], item_inv2);
+                    gm.inv.set(slotSrc, item_inv);
+                    gm.inv.set(destSlot[0], item_inv2);
                 }
                 else {
                     item_inv2->setQuantity(item_inv2->getQuantity() + item_inv->getQuantity());
-                    inv->set(slotSrc, undef_item);
-                    inv->set(destSlot[0], item_inv2);
+                    gm.inv.set(slotSrc, undef_item);
+                    gm.inv.set(destSlot[0], item_inv2);
                 }
             }
             else {

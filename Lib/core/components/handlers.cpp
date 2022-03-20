@@ -11,11 +11,11 @@ namespace Lib {
         if (mode == "ALL") {
              //inv->displayDetails();
              //crftab->displayDetails();
-            cout << *inv;
-            cout << *crftab;
+            cout << gm.inv;
+            cout << gm.crftab;
         }
         else if (mode == "ITEM") {
-            inv->specify(i);
+            gm.inv.specify(i);
             cout << endl;
         }
     }
@@ -31,14 +31,11 @@ namespace Lib {
     }
 
     void GiveChecker(string name, int temp) {
-        bool found = false;
-        for (tuple tup : GameManager::getInstance().itemConfig) {
+        for (tuple tup : gm.itemConfig) {
             if (get<1>(tup) == name) {
-                found = true;
                 if (get<3>(tup) == "NONTOOL") {
-                    NonTool* NT = new NonTool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), temp);
-                    inv->addNonTool(NT, 0);
-                    break;
+                    NonTool* NT = new NonTool(tup, temp);
+                    gm.inv.addNonTool(NT, 0);
                 }
                 else {
                     int durability;
@@ -56,40 +53,39 @@ namespace Lib {
                     } else {
                         durability = 0;
                     }
-                    Tool* T = new Tool(stoi(get<0>(tup)), get<1>(tup), get<2>(tup), get<3>(tup), durability);
-                    inv->addTool(T, temp);
-                    break;
+                    Tool* T = new Tool(tup, durability);
+                    gm.inv.addTool(T, temp);
                 }
+                return;
             }
         }
-        if (!found) {
-            throw new AddException(name);
-        }
+        throw new AddException(name);
     }
 
     void DiscardHandler(string slot, int quant) {
         int index = stoi(slot.substr(1, slot.length() - 1));
-        if (inv->get(index)->isNonTool()) {
-            inv->discard(quant, index);
+        if (gm.inv[index]->isNonTool()) {
+            gm.inv.discard(quant, index);
         }
         else {
-            inv->set(index, new Item());
+            gm.inv.set(index, new Item());
         }
     }
 
     void UseHandler(string slot) {
         try {
             int index = stoi(slot.substr(1, slot.length() - 1));
-            if (inv->get(index)->isNonTool()) {
-                throw new UseException(inv->get(index)->getName());
+            Item* it = gm.inv[index];
+            if (it->isNonTool()) {
+                throw new UseException(it->getName());
             }
             else {
-                if (inv->get(index)->getDurability() == 1) {
-                    inv->get(index)->useItem();
-                    inv->set(index, new Item());
+                if (it->getDurability() == 1) {
+                    it->useItem();
+                    gm.inv.set(index, new Item());
                 }
                 else {
-                    inv->get(index)->useItem();
+                    it->useItem();
                 }
 
             }
@@ -140,19 +136,17 @@ namespace Lib {
         };
 
         bool tool = false, nontool = false;
+
         //MENGECEK TIPE ITEM YANG AKAN DIPINDAHKAN
-        if (sourceInv && inv->get(slotSrc)->isTool()) {
+        if (sourceInv && gm.inv[slotSrc]->isTool())
             tool = true;
-        }
-        else if(sourceInv) {
+        else if(sourceInv)
             nontool = true;
-        }
-        if (sourceCraft && crftab->get(slotSrc)->isTool()) {
+
+        if (sourceCraft && gm.crftab[slotSrc]->isTool())
             tool = true;
-        }
-        else if(sourceCraft) {
+        else if(sourceCraft)
             nontool = true;
-        }
 
         if (tool && slotCount != 1) {
             ClearBuffer();
@@ -208,20 +202,20 @@ namespace Lib {
             if (craft) {
                 throw new MoveException("CRAFTTOCRAFT");
             }else{
-                crftab->toInv(slotSrc,destSlot);
+                gm.crftab.toInv(slotSrc,destSlot);
             }
         }
         if (sourceInv) {      //KASUS KETIKA BARANG BERASAL DARI INVENTORY
             if (craft) {
                 try{
-                    inv->toCraft(slotSrc,destSlot,N);
+                    gm.inv.toCraft(slotSrc,destSlot,N);
                 }catch(MoveException* err){
                     err->printMessage();
                 }
             }
             if (destInv) {
                 try{
-                    inv->toAnotherSlot(slotSrc,destSlot);
+                    gm.inv.toAnotherSlot(slotSrc,destSlot);
                 }catch(MoveException* err){
                     err->printMessage();
                 }
@@ -248,12 +242,13 @@ namespace Lib {
     void ExportHandler(string path) {
         ofstream outputFile(path);
         for (int i = 0; i < 27; i++) {
-            string type = inv->get(i)->getBType();
+            Item* it = gm.inv[i];
+            string type = it->getBType();
             if (type == "NONTOOL") {
-                outputFile << inv->get(i)->getID() << ":" << inv->get(i)->getQuantity() << endl;
+                outputFile << it->getID() << ":" << it->getQuantity() << endl;
             }
             else if (type == "TOOL") {
-                outputFile << inv->get(i)->getID() << ":" << inv->get(i)->getDurability() << endl;
+                outputFile << it->getID() << ":" << it->getDurability() << endl;
             }
             else if (type == "UNDEFINED") {
                 outputFile << "0:0" << endl;

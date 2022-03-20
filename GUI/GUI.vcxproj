@@ -143,9 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ResourceCompile Include="resources\app.rc" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="src\headers\AddItemForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="src\headers\Helper.h" />
     <ClInclude Include="src\headers\Item.h" />
     <ClInclude Include="src\headers\Main.h">
@@ -155,11 +155,11 @@
   <ItemGroup>
     <ClCompile Include="src\AssemblyInfo.cpp" />
     <ClCompile Include="src\Bootstrapper.cpp" />
+    <ClCompile Include="src\headers\AddItemForm.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\app.ico" />
     <Image Include="resources\icons\BIRCH_LOG.png" />
     <Image Include="resources\icons\BIRCH_PLANK.png" />
     <Image Include="resources\icons\BLACKSTONE.png" />
@@ -185,7 +185,6 @@
     <Image Include="resources\icons\WOODEN_PICKAXE.png" />
     <Image Include="resources\icons\WOODEN_SWORD.png" />
     <Image Include="resources\slot.png" />
-    <Image Include="slot.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -195,6 +194,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="src\headers\AddItemForm.resx">
+      <DependentUpon>src\headers\AddItemForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\headers\Main.resx">
       <DependentUpon>src\headers\Main.h</DependentUpon>
       <SubType>Designer</SubType>

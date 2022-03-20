@@ -5,14 +5,11 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "../Lib/core/all_headers.hpp"
-
+#include "core/all_headers.hpp"
 
 using namespace Lib;
 
-
 int main() {
-    GameManager gm = GameManager::getInstance();
     gm.Load();
 
     cout << "Input command: ";
@@ -20,8 +17,8 @@ int main() {
     while (cin >> command) {
         if (command == "SHOW"){
             // crftab->displayMenu();
-            cout << crftab;
-            cout << inv;            
+            cout << gm.crftab;
+            cout << gm.inv;            
             // inv->displayMenu();
             // 
         } else if (command == "DETAILS"){

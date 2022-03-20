@@ -3,7 +3,7 @@
 namespace GUI {
 	void ItemSlot::BeginDrag(Object^ sender, MouseEventArgs^ e) {
 		if (e->Button == MouseButtons::Left)
-			safe_cast<Control^>(sender)->DoDragDrop(this, DragDropEffects::Move);
+			to<Control^>(sender)->DoDragDrop(this, DragDropEffects::Move);
 	}
 
 	void ItemSlot::DragEnter(Object^ sender, DragEventArgs^ e) {
@@ -18,7 +18,7 @@ namespace GUI {
 	}
 
 	ItemSlot^ ItemSlot::getItemData(DragEventArgs^ e) {
-		return static_cast<ItemSlot^>(e->Data->GetData("GUI.ItemSlot"));
+		return to<ItemSlot^>(e->Data->GetData("GUI.ItemSlot"));
 	}
 	
 	ItemSlot::ItemSlot(Control::ControlCollection^ controls, ContextMenuStrip^ contextItemMenu, SlotType type) {
@@ -97,10 +97,9 @@ namespace GUI {
 	}
 
 	void ItemSlot::update() {
-		this->itemQuantity->Text = to_cs_str<int>(item->getQuantity());
+		this->itemQuantity->Text = to_str(item->getQuantity());
 		this->itemQuantity->Visible = item->getQuantity() > 1;
 		this->damageBar->Value = item->getDurability();
 		this->damageBar->Visible = item->getDurability() < 10;
 	}
-
 }

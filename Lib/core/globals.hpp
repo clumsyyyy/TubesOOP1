@@ -7,12 +7,10 @@
 #include "components/headers/crafting.hpp"
 #include "components/headers/vars.hpp"
 #include "components/headers/exception.hpp"
+#include "components/headers/GameManager.hpp"
 #include <vector>
 
 namespace Lib {
-	extern Inventory* inv;
-	extern CraftingTable* crftab;
-	//extern vector <TupleItem>* itemConfig;
-	//extern vector <TupleRecipe>* recipeConfig;
+	extern GameManager gm;
 }
 #endif

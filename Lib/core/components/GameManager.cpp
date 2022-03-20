@@ -1,13 +1,9 @@
 #include "headers/GameManager.hpp"
 
 namespace Lib {
+    GameManager gm;
+
     GameManager::GameManager() {};
-    vector <TupleItem> GameManager::itemConfig;
-    vector <TupleRecipe> GameManager::recipeConfig;
-    GameManager& GameManager::getInstance() {
-        static GameManager gm;
-        return gm;
-    }
     tuple <string, string, string, string> GameManager::parseItem(string line) {
         istringstream iss(line);
         string ID;
@@ -74,13 +70,13 @@ namespace Lib {
         // read item from config file
         ifstream itemConfigFile(itemConfigPath);
         for (string line; getline(itemConfigFile, line);) {
-            itemConfig.push_back(this->parseItem(line));
+            itemConfig.push_back(parseItem(line));
         }
         // read recipes
         for (const auto& entry :
             filesystem::directory_iterator(configPath + "/recipe")) {
             ifstream* recipeConfigFile = new ifstream(entry.path());
-            recipeConfig.push_back(this->parseRecipe(recipeConfigFile));
+            recipeConfig.push_back(parseRecipe(recipeConfigFile));
             // read from file and do something
         }
     }

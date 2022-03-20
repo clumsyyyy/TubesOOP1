@@ -5,7 +5,7 @@ namespace Lib {
     CraftingTable::CraftingTable() {
         this->crftab_buffer = new Item * [CRAFT_COLS * CRAFT_ROWS];
         for (int i = 0; i < CRAFT_COLS * CRAFT_ROWS; i++) {
-            this->crftab_buffer[i] = new Item();
+            this->crftab_buffer[i] = nullptr;
         }
     }
 
@@ -20,6 +20,10 @@ namespace Lib {
         return this->crftab_buffer[pos];
     }
 
+    Item* CraftingTable::operator[](int pos) {
+        return get(pos);
+    }
+
     void CraftingTable::set(int pos, Item* item) {
         if (pos < 0 || pos >= CRAFT_SIZE) {
             throw new TableException("INVALID");
@@ -30,16 +34,18 @@ namespace Lib {
     ostream& operator<<(ostream& os, CraftingTable* ct) {
         os << "Crafting Table : " << endl;
         for (int i = 0; i < CRAFT_SIZE; i++) {
+            Item* item = ct->get(i);
+            Item* itemCrf = ct->crftab_buffer[i];
             os << "[(C" << i << ") "
-                << ct->get(i)->getID() << " "
-                << ct->get(i)->getName();
-            if (ct->crftab_buffer[i]->getType() == "-") {
-                os << " " << ct->crftab_buffer[i]->getBType();
+                << item->getID() << " "
+                << item->getName();
+            if (itemCrf->getType() == "-") {
+                os << " " << itemCrf->getBType();
             }
-            if (ct->crftab_buffer[i]->isTool()) {
-                os << " " << ct->crftab_buffer[i]->getDurability();
-            } else if (ct->crftab_buffer[i]->isNonTool()) {
-                os << " " << ct->crftab_buffer[i]->getQuantity();
+            if (itemCrf->isTool()) {
+                os << " " << itemCrf->getDurability();
+            } else if (itemCrf->isNonTool()) {
+                os << " " << itemCrf->getQuantity();
             }
             os << "] ";
             if ((i + 1) % CRAFT_COLS == 0) {
@@ -59,12 +65,11 @@ namespace Lib {
             << setw(WIDTH) << "Base Type" << endl;
         for (int i = 0; i < CRAFT_SIZE; i++) {
             undef_count--;
-            if (crftab->get(i)->getID() != UNDEFINED_ID){
+            if (gm.crftab[i]->getID() != UNDEFINED_ID){
                 os << setw(NUMWIDTH - to_string(i).length()) << "C" << i << " | ";
                 ct.specify(i);
                 os << endl;
             }
-
         }
         if (undef_count == CRAFT_SIZE){
             cout << "No items in crafting table :(" << endl;
@@ -76,34 +81,26 @@ namespace Lib {
         if (pos < 0 || pos >= CRAFT_SIZE) {
             throw new TableException("INVALID");
         }
-        (this->crftab_buffer[pos])->displayInfo();
+        crftab_buffer[pos]->displayInfo();
     }
 
     void CraftingTable::addNonTool(int pos, NonTool* item) {
-        if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw new TableException("INVALID");
-        }
-    
-        if (this->get(pos)->getID() != UNDEFINED_ID) {
+        Item* it = this->get(pos);
+        if (it->getID() != UNDEFINED_ID) {
             throw new TableException("OCCUPIED");
         } else {
-            if (this->get(pos)->getQuantity() + item->getQuantity() > 64) {
+            if (it->getQuantity() + item->getQuantity() > 64) {
                 throw new TableException("FULL");
             } else {
-                NonTool *temp = new NonTool(*item);
-                temp->setQuantity(item->getQuantity()+this->get(pos)->getQuantity());
-                set(pos, temp);
-                cout << "set item " << item->getID() << " to C" << pos << endl;
+                it->setQuantity(item->getQuantity() + it->getQuantity());
+                cout << "set item " << it->getID() << " to C" << pos << endl;
             }
         }
     }
 
     void CraftingTable::addTool(int pos, Tool* item) {
-        if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw new TableException("INVALID");
-        }
-
-        if (this->get(pos)->getID() != UNDEFINED_ID) {
+        Item* it = this->get(pos);
+        if (it->getID() != UNDEFINED_ID) {
             throw new TableException("OCCUPIED");
         } else {
             set(pos, item);
@@ -113,13 +110,14 @@ namespace Lib {
     }    
 
     void CraftingTable::discard(int quant, int slot) {
-        if (this->crftab_buffer[slot]->isTool()) {
+        Item* it = this->crftab_buffer[slot];
+        if (it->isTool()) {
             set(slot, new Item());
-        } else if (this->crftab_buffer[slot]->isNonTool()){
-            if (this->crftab_buffer[slot]->getQuantity() - quant > 0) {
-                this->crftab_buffer[slot]->setQuantity(this->crftab_buffer[slot]->getQuantity() - quant);
+        } else if (it->isNonTool()){
+            if (it->getQuantity() - quant > 0) {
+                it->setQuantity(it->getQuantity() - quant);
             }
-            else if (this->crftab_buffer[slot]->getQuantity() - quant == 0) {
+            else if (it->getQuantity() - quant == 0) {
                 set(slot, new Item());
             }
             else {
@@ -133,19 +131,20 @@ namespace Lib {
         Item* item_inv = NULL;
         Item* item_craft = NULL;
         Item* item_moved = NULL;
-        bool tool = crftab->get(slotSrc)->isTool();
+        Item* crfItem = gm.crftab[slotSrc];
+        bool tool = crfItem->isTool();
         if (tool) {
-            item_craft = new Tool(crftab->get(slotSrc)->getID(), crftab->get(slotSrc)->getName(), crftab->get(slotSrc)->getType(), crftab->get(slotSrc)->getBType(), crftab->get(slotSrc)->getDurability());
+            item_craft = new Tool(*((Tool*)crfItem));
         }
         else {
-            item_craft = new NonTool(crftab->get(slotSrc)->getID(), crftab->get(slotSrc)->getName(), crftab->get(slotSrc)->getType(), crftab->get(slotSrc)->getBType(), crftab->get(slotSrc)->getQuantity());
+            item_craft = new NonTool(*((NonTool*)crfItem));
         }
 
         if (item_craft->getID() == UNDEFINED_ID) {
             throw new MoveException("VOID");
         }
         else {
-            item_inv = new Item(*inv->get(destSlot[0]));
+            item_inv = new Item(*gm.inv[destSlot[0]]);
             bool destKosong = true;
             if (item_inv->getID() != UNDEFINED_ID) {
                 destKosong = false;
@@ -154,18 +153,18 @@ namespace Lib {
                 throw new MoveException("DIFFTYPE");
             }
             if (destKosong) {
-                inv->set(destSlot[0], item_craft);
-                crftab->set(slotSrc, undef_item);
+                gm.inv.set(destSlot[0], item_craft);
+                gm.crftab.set(slotSrc, undef_item);
             }
             else {
                 if (!tool) {
-                    item_inv = new NonTool(inv->get(destSlot[0])->getID(), inv->get(destSlot[0])->getName(), inv->get(destSlot[0])->getType(), inv->get(destSlot[0])->getBType(), inv->get(destSlot[0])->getQuantity());
+                    item_inv = new NonTool(*((NonTool*)gm.inv[destSlot[0]]));
                     if (item_inv->getQuantity() + item_craft->getQuantity() > 64) {
                         throw new MoveException("FULL");
                     }
                     item_inv->setQuantity(item_inv->getQuantity() + item_craft->getQuantity());
-                    crftab->set(slotSrc, undef_item);
-                    inv->set(destSlot[0], item_inv);
+                    gm.crftab.set(slotSrc, undef_item);
+                    gm.inv.set(destSlot[0], item_inv);
                 }
                 else {
                     throw new MoveException("TOOL");

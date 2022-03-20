@@ -24,6 +24,9 @@
     <ClInclude Include="src\headers\Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\headers\AddItemForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssemblyInfo.cpp">
@@ -38,11 +41,11 @@
     <ClCompile Include="src\Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\headers\AddItemForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\app.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="resources\icons\BIRCH_LOG.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -118,13 +121,5 @@
     <Image Include="resources\slot.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="slot.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="resources\app.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

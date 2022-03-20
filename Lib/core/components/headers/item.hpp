@@ -37,6 +37,7 @@ namespace Lib {
         int quantity;
     public:
         NonTool(int, string, string, string, int);
+        NonTool(const TupleItem&, int);
         NonTool(const NonTool& nt);
         ~NonTool();
         NonTool& operator=(const NonTool& other);
@@ -52,6 +53,7 @@ namespace Lib {
         int durability; // durability of the tool
     public:
         Tool(int, string, string, string, int);
+        Tool(const TupleItem&, int);
         Tool(const Tool& t);
         ~Tool();
         Tool& operator=(const Tool& other);

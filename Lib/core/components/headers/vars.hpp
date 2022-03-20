@@ -5,17 +5,21 @@
 #include <string>
 #include <tuple>
 
-#define INV_COLS 9
-#define INV_ROWS 3
+constexpr auto INV_COLS = 9;
+constexpr auto INV_ROWS = 3;
 #define INV_SIZE INV_COLS * INV_ROWS
-#define CRAFT_COLS 3
-#define CRAFT_ROWS 3
+#define INV_IDX(i,j) (i * INV_COLS + j)
+#define GET_INV(i,j) gm.inv[INV_IDX(i,j)]
+constexpr auto CRAFT_COLS = 3;
+constexpr auto CRAFT_ROWS = 3;
 #define CRAFT_SIZE CRAFT_COLS * CRAFT_ROWS
-#define MAX_STACK 64
-#define UNDEFINED_ID -999
-#define UNDEFINED_QUANTITY 999
-#define WIDTH 12
-#define NUMWIDTH 4
+#define CRAFT_IDX(i,j) (i * CRAFT_COLS + j)
+#define GET_CRAFT(i,j) gm.crftab[CRAFT_IDX(i,j)]
+constexpr auto MAX_STACK = 64;
+constexpr auto UNDEFINED_ID = -999;
+constexpr auto UNDEFINED_QUANTITY = 999;
+constexpr auto WIDTH = 12;
+constexpr auto NUMWIDTH = 4;
 #define TupleItem tuple<string, string, string, string>
 #define TupleRecipe tuple<tuple<int,int>,vector<string>,TupleItem,int>
 

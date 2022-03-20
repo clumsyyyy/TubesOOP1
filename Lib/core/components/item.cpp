@@ -73,6 +73,14 @@ namespace Lib {
         this->quantity = quant;
     }
 
+    NonTool::NonTool(const TupleItem& item, int quant) : NonTool(
+        stoi(get<0>(item)),
+        get<1>(item),
+        get<2>(item),
+        get<3>(item),
+        quant
+    ) {}
+
     NonTool::NonTool(const NonTool& nt) : Item(nt.ID, nt.name, nt.type, nt.basetype) {
         this->quantity = nt.quantity;
     }
@@ -122,6 +130,14 @@ namespace Lib {
         : Item(ID, name, type, basetype) {
         this->durability = dur;
     }
+
+    Tool::Tool(const TupleItem& item, int dur) : Tool(
+        stoi(get<0>(item)),
+        get<1>(item),
+        get<2>(item),
+        get<3>(item),
+        dur
+    ) {}
 
     Tool::Tool(const Tool& t) : Item(t.ID, t.name, t.type, t.basetype) {
         this->durability = t.durability;

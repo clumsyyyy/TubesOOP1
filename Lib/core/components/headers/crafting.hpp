@@ -23,7 +23,8 @@ namespace Lib {
         ~Crafting();
         void set_bound(int row, int col);
         void set_crafting_table(int min, int i, int j, bool reverse);
-        void set_result(string ID, string name, string btype, string type);
+        void set_result(const TupleItem& item);
+        void set_result(const Item& item);
         TupleItem get_item_result() const;
         int calculate_result(int i, int j, bool reverse);
         bool is_another_space_free(int i, int j, bool reverse);
