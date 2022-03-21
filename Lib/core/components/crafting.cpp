@@ -5,7 +5,7 @@
 namespace Lib {
     Crafting::Crafting() {
         // this->ID = "-999"; this->name = "UNDEFINED"; this->type = "UNDEFINED"; this->btype = "UNDEFINED";
-        this->count = 0;
+        this->count = 0; this->sum = 0;
         this->i_sub = 0; this->j_sub = 0;
         this->row = 0; this->col = 0;
     }
@@ -30,13 +30,13 @@ namespace Lib {
         int i = this->i_sub, j = this->j_sub;
         for (int idx = i; idx < this->row+i; idx++) {
             for (int idj = j; idj < this->col+j; idj++ ) {
-                if (GET_CRAFT(idx, idj)->getID() != UNDEFINED_ID) {
+                if (!GET_CRAFT(idx, idj)->isUndef()) {
                     gm.crftab.discard(min, CRAFT_IDX(idx, idj));
                 }
             }
         }
     }
-
+    // Monumen
     // void Crafting::set_result(const TupleItem& item) {//string ID, string name, string type, string btype) {
     //     this->ID = get<0>(item);
     //     this->name = get<1>(item);
@@ -93,7 +93,7 @@ namespace Lib {
     }
 
     bool Crafting::is_another_space_free() {
-        int i = i_sub, j = j_sub;
+        int i = this->i_sub, j = this->j_sub;
         for (int k = 0; k < CRAFT_ROWS; k++) {
             for (int l = 0; l < CRAFT_COLS; l++) {              
                 if (!(i <= k && k < this->row+i && j <= l && l < this->col+j)) {
@@ -140,33 +140,33 @@ namespace Lib {
 
     Item* Crafting::tools() {
         int durability = 0;
-        int sum = 0;
-        Tool* tool = nullptr;
+        int sum_tool = 0;
+        Tool* tool = (Tool*)new Item();
         for (int i = 0; i < CRAFT_SIZE; i++) {
             Item* item = gm.crftab[i];
             if (item->isNonTool()) {
-                return nullptr;
+                return new Item();
             } else if (item->isTool()) {
-                if (sum > 0 && tool->getName() != item->getName()) {
-                    return nullptr;
+                if (sum_tool > 0 && tool->getName() != item->getName()) {
+                    this->count;
+                    return new Item();
                 }
                 tool = (Tool*)item;
-                sum++;
+                sum_tool++;
                 durability = min(durability + item->getDurability(), 10);
-                if (sum > 2) {
+                if (sum_tool > 2) {
                     return new Item();
                 }
             }
         }
-        tool->setDurablity(durability);
+        tool->setDurability(durability);
         return tool;
     }
 
     Item* Crafting::crafting_preview() {
         for (tuple tup : gm.recipeConfig) {
-            Item* result_item = nullptr;
             this->TupRecipe = tup;
-            result_item = this->recipe();
+            Item* result_item = this->recipe();
             if (!result_item->isUndef()) {
                 if (result_item->isNonTool()) {
                     return result_item;
@@ -181,10 +181,9 @@ namespace Lib {
             this->count = 1;
             this->sum = 1;
             return result_item; 
-        } else if (result_item->isUndef()) {
-            return new Item(); 
-        } 
-        return nullptr;
+        }
+        this->count = -1;
+        return new Item();
     }
 
     void Crafting::crafting_proses() {
@@ -200,10 +199,10 @@ namespace Lib {
             cout << "crafted " << sum << " " << item->getName() << " with durability " << item->getDurability() << endl;
             gm.inv.addTool((Tool*)item,sum);
             crf.set_crafting_table(count);
+        } else if (count == -1) {
+            throw new CraftingException("RECIPE");
         } else if (item->isUndef()) {
             throw new CraftingException("TOOL");
-        } else if (item == nullptr) {
-            throw new CraftingException("RECIPE");
         }
     }
 
