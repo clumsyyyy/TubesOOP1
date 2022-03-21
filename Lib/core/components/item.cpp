@@ -45,15 +45,15 @@ namespace Lib {
     }
 
     bool Item::isTool() {
-        return this->basetype == "TOOL";
+        return this->type == "TOOL";
     }
 
     bool Item::isNonTool() {
-        return this->basetype == "NONTOOL";
+        return this->type == "NONTOOL";
     }
 
     bool Item::isUndef() {
-        return this->basetype == "UNDEFINED";
+        return this->type == "UNDEFINED";
     }
 
     void Item::displayInfo() const {

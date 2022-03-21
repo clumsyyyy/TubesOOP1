@@ -142,9 +142,10 @@ namespace Lib {
         Item* item_craft = nullptr;
         Item* item_moved = nullptr;
         Item* itInv = gm.inv[slotSrc];
-
         bool tool = itInv->isTool();
+
         if (tool) {
+            cout << "MEMEK" << endl;
             item_inv = new Tool(*((Tool*)itInv));
         }
         else {

@@ -33,7 +33,12 @@ namespace Lib {
      * @param qty Item Quantity
      */
     void GiveHandler(string name, int qty) {
-        GiveChecker(name, qty);
+        try {
+            GiveChecker(name, qty);
+        }
+        catch (BaseException* exc) {
+            exc->printMessage();
+        }
     }
 
     /**
@@ -45,20 +50,31 @@ namespace Lib {
      * @param qty Item quantity
      */
     void GiveChecker(string name, int qty) {
-        for (tuple tup : gm.itemConfig) {
-            // tup = (ID, name, base_type, type)
-            if (get<1>(tup) == name) { // Checking if the item name is valid
-                if (get<3>(tup) == "NONTOOL") { // Checking if the item is a non-tool
-                    NonTool* NT = new NonTool(tup, qty);
-                    gm.inv.addNonTool(NT, 0);
+        try {
+            bool found = false;
+            for (tuple tup : gm.itemConfig) {
+                // tup = (ID, name, base_type, type)
+                if (get<1>(tup) == name) { // Checking if the item name is valid
+                    found = true;
+                    if (get<3>(tup) == "NONTOOL") { // Checking if the item is a non-tool
+                        NonTool* NT = new NonTool(tup, qty);
+                        gm.inv.addNonTool(NT, 0);
+                    }
+                    else { // Checking if the item is a tool
+                        Tool* T = new Tool(tup, 10);
+                        gm.inv.addTool(T, qty);
+                    }
+                    return;
                 }
-                else { // Checking if the item is a tool
-                    Tool* T = new Tool(tup, 10);
-                    gm.inv.addTool(T, qty);
-                }
-                return;
+            }
+            if (!found) {
+                throw new AddException(name);
             }
         }
+        catch (BaseException* exc) {
+            exc->printMessage();
+        }
+
     }
 
     /**
@@ -67,13 +83,21 @@ namespace Lib {
      * @param slot Inventory slot ID to be discarded
      * @param qty Quantity of the item to be discarded
      */
-    void DiscardHandler(string slot, int qty) {
-        int index = stoi(slot.substr(1, slot.length() - 1)); // Getting the index of the slot
-        if (gm.inv[index]->isNonTool()) { // Checking if the item is NonTool 
-            gm.inv.discard(index, qty); // If the item is NonTool, discard by quantity
+    void DiscardHandler(string slot, int qty, int index) {
+        try {
+            if (gm.inv[index]->isNonTool()) { // Checking if the item is NonTool 
+                gm.inv.discard(index, qty); // If the item is NonTool, discard by quantity
+            }
+            else if (gm.inv[index]->isTool()) {
+                delete gm.inv[index];
+                gm.inv.set(index, new Item()); // If the item is Tool, discard by setting the slot to empty
+            }
+            else if (gm.inv[index]->isUndef()) {
+                throw new InvException("INVALID");
+            }
         }
-        else {
-            gm.inv.set(index, new Item()); // If the item is Tool, discard by setting the slot to empty
+        catch (BaseException* exc) {
+            exc->printMessage();
         }
     }
 
@@ -83,21 +107,26 @@ namespace Lib {
      * @param slot Inventory slot ID to be used (Must be a tool item)
      */
     void UseHandler(string slot) {
-        int index = stoi(slot.substr(1, slot.length() - 1));
-        Item* used_item = gm.inv[index];
-        if (used_item->isNonTool()) { // Item can't be used unless it's a tool
-            throw new UseException(used_item->getName());
-        }
-        else {
-            if (used_item->getDurability() == 1) { // If the tool durability is 1, after being used, discard the item
-                used_item->useItem();
-                gm.inv.set(index, new Item());
+        try {
+            int index = stoi(slot.substr(1, slot.length() - 1));
+            Item* used_item = gm.inv[index];
+            if (used_item->isNonTool()) { // Item can't be used unless it's a tool
+                throw new UseException(used_item->getName());
             }
             else {
-                used_item->useItem();
+                if (used_item->getDurability() == 1) { // If the tool durability is 1, after being used, discard the item
+                    used_item->useItem();
+                    gm.inv.set(index, new Item());
+                }
+                else {
+                    used_item->useItem();
+                }
             }
-
         }
+        catch (BaseException* exc) {
+            exc->printMessage();
+        }
+
     }
 
     /**

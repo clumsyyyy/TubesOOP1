@@ -8,7 +8,7 @@
 namespace Lib {
 	void DetailsHandler(string, int);
 	void GiveHandler(string, int);
-	void DiscardHandler(string, int);
+	void DiscardHandler(string, int, int);
 	void UseHandler(string);
 	void CraftingHandler();
 	void GiveChecker(string name, int temp);

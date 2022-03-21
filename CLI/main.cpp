@@ -41,9 +41,19 @@ int main() {
         {
             // USAGE: DISCARD <INVENTORY_SLOT_ID> <ITEM_QTY>
             string slot;
-            int qty;
-            cin >> slot >> qty;
-            DiscardHandler(slot, qty);
+            cin >> slot;
+            int index = stoi(slot.substr(1, slot.length() - 1)); // Getting the index of the slot
+            if (gm.inv[index]->isNonTool()) {
+                int qty;
+                cin >> qty;
+                DiscardHandler(slot, qty, index);
+            }
+            else {
+                if (gm.inv[index]->isTool()) {
+                    DiscardHandler(slot, 1, index);
+                }
+            }
+
         }
         else if (command == "USE") 
         {
