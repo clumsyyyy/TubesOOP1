@@ -73,7 +73,18 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -155,7 +166,7 @@
   <ItemGroup>
     <ClCompile Include="src\AssemblyInfo.cpp" />
     <ClCompile Include="src\Bootstrapper.cpp" />
-    <ClCompile Include="src\headers\AddItemForm.cpp" />
+    <ClCompile Include="src\AddItemForm.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
@@ -184,7 +195,7 @@
     <Image Include="resources\icons\WOODEN_AXE.png" />
     <Image Include="resources\icons\WOODEN_PICKAXE.png" />
     <Image Include="resources\icons\WOODEN_SWORD.png" />
-    <Image Include="resources\slot.png" />
+    <Image Include="resources\icons\slot.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

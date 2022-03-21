@@ -30,7 +30,9 @@ namespace Lib {
     void CraftingTable::set(int pos, Item* item) {
         if (!valid_index(pos)) {
             throw new TableException("INVALID");
-        } 
+        }
+        if (crftab_buffer[pos] != nullptr)
+            delete crftab_buffer[pos];
         this->crftab_buffer[pos] = item;
     }
 

@@ -1,8 +1,4 @@
 // sample main file, replace this with your own code
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <sstream>
 #include <string>
 #include <vector>
 #include "core/all_headers.hpp"
@@ -10,8 +6,6 @@
 using namespace Lib;
 
 int main() {
-    gm.Load();
-
     cout << "Input command: ";
     string command;
     while (cin >> command) {

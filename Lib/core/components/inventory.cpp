@@ -60,8 +60,9 @@ namespace Lib {
         if (pos < 0 || pos >= INV_SIZE) {
             throw new InvException("INVALID");
         }
-        delete this->inv_buffer[pos];
-        (this->inv_buffer[pos]) = item;
+        if (inv_buffer[pos] != nullptr)
+            delete inv_buffer[pos];
+        this->inv_buffer[pos] = item;
     };
 
     /**
@@ -255,7 +256,7 @@ namespace Lib {
                     throw new MoveException("TOOL");
                 }
                 else {
-                    Tool* item_moved = new Tool(*((Tool*)gm.inv[slotSrc]));
+                    Tool* item_moved = new Tool(*((Tool*)gm.inv.get(slotSrc)));
                     gm.inv.set(slotSrc, undef_item);
                     gm.crftab.set(destSlot[0], item_moved);
                 }

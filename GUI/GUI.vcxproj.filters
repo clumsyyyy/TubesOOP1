@@ -41,7 +41,7 @@
     <ClCompile Include="src\Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\headers\AddItemForm.cpp">
+    <ClCompile Include="src\AddItemForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -118,7 +118,7 @@
     <Image Include="resources\icons\WOODEN_SWORD.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="resources\slot.png">
+    <Image Include="resources\icons\slot.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

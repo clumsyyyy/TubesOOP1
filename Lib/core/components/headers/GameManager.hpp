@@ -6,7 +6,6 @@
 #include <tuple>
 #include <string>
 #include <fstream>
-#include <filesystem>
 #include "crafting_table.hpp"
 #include "inventory.hpp"
 using namespace std;
@@ -18,11 +17,11 @@ namespace Lib {
 		tuple <string, string, string, string> parseItem(string line);
 	public:
 		GameManager();
+		static GameManager getInstance();
 		vector <TupleItem> itemConfig;
 		vector <TupleRecipe> recipeConfig;
 		Inventory inv;
 		CraftingTable crftab;
-		void Load();
 	};
 }
 

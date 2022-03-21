@@ -27,6 +27,11 @@ namespace GUI {
 		return msclr::interop::marshal_as<std::string>(str);
 	}
 
+	template<>
+	inline std::string to(Object^ str) {
+		return to<std::string>((String^)str);
+	}
+
 	template <>
 	inline int to(Decimal dec) {
 		return Decimal::ToInt32(dec);
