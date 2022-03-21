@@ -15,32 +15,21 @@ namespace GUI {
 	public ref class AddItemForm : public System::Windows::Forms::Form
 	{
 	public:
-		AddItemForm(void)
-		{
-			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
-		}
+		AddItemForm();
 
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		~AddItemForm()
-		{
-			if (components)
-			{
-				delete components;
-			}
-		}
+		~AddItemForm();
 	private: System::Windows::Forms::Label^ label1;
 	public: System::Windows::Forms::ComboBox^ itemSelection;
 	private:
 	protected:
 
 	private: System::Windows::Forms::PictureBox^ pictBox;
-	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::Button^ okButton;
+
 	private: System::Windows::Forms::Label^ label2;
 	public: System::Windows::Forms::NumericUpDown^ itemQty;
 	private:
@@ -63,7 +52,7 @@ namespace GUI {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->itemSelection = (gcnew System::Windows::Forms::ComboBox());
 			this->pictBox = (gcnew System::Windows::Forms::PictureBox());
-			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->okButton = (gcnew System::Windows::Forms::Button());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->itemQty = (gcnew System::Windows::Forms::NumericUpDown());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictBox))->BeginInit();
@@ -103,15 +92,15 @@ namespace GUI {
 			this->pictBox->TabIndex = 3;
 			this->pictBox->TabStop = false;
 			// 
-			// button1
+			// okButton
 			// 
-			this->button1->DialogResult = System::Windows::Forms::DialogResult::OK;
-			this->button1->Location = System::Drawing::Point(223, 64);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(75, 23);
-			this->button1->TabIndex = 4;
-			this->button1->Text = L"OK";
-			this->button1->UseVisualStyleBackColor = true;
+			this->okButton->DialogResult = System::Windows::Forms::DialogResult::OK;
+			this->okButton->Location = System::Drawing::Point(223, 64);
+			this->okButton->Name = L"okButton";
+			this->okButton->Size = System::Drawing::Size(75, 23);
+			this->okButton->TabIndex = 4;
+			this->okButton->Text = L"OK";
+			this->okButton->UseVisualStyleBackColor = true;
 			// 
 			// label2
 			// 
@@ -133,17 +122,24 @@ namespace GUI {
 			// 
 			// AddItemForm
 			// 
+			this->AcceptButton = this->okButton;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(317, 99);
 			this->Controls->Add(this->itemQty);
 			this->Controls->Add(this->label2);
-			this->Controls->Add(this->button1);
+			this->Controls->Add(this->okButton);
 			this->Controls->Add(this->pictBox);
 			this->Controls->Add(this->itemSelection);
 			this->Controls->Add(this->label1);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
+			this->MaximizeBox = false;
+			this->MinimizeBox = false;
 			this->Name = L"AddItemForm";
-			this->Text = L"AddItemForm";
+			this->ShowInTaskbar = false;
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
+			this->Text = L"Add Item";
+			this->TopMost = true;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictBox))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->itemQty))->EndInit();
 			this->ResumeLayout(false);

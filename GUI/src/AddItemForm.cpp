@@ -2,7 +2,18 @@
 #include "headers/Item.h"
 
 namespace GUI {
+	AddItemForm::AddItemForm()
+	{
+		InitializeComponent();
+	}
+
+	AddItemForm::~AddItemForm()
+	{
+		if (components)
+			delete components;
+	}
+
 	void AddItemForm::itemSelection_SelectionChangeCommitted(Object^ sender, EventArgs^ e) {
-		pictBox->Image = ItemSlot::images[(String^)itemSelection->SelectedItem];
+		pictBox->Image = ItemSlot::GetImage((String^)itemSelection->SelectedItem);
 	}
 }

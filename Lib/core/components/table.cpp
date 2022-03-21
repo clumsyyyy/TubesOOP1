@@ -74,7 +74,8 @@ namespace Lib
         if (!isIndexValid(pos)) {
             throw new InvException("INVALID");
         }
-        delete this->slot[pos];
+        if (this->slot[pos] != nullptr)
+            delete this->slot[pos];
         (this->slot[pos]) = item;
     }
 

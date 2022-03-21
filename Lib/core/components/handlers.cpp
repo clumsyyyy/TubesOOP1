@@ -99,7 +99,6 @@ namespace Lib {
                 gm.inv.discard(index, qty); // If the item is NonTool, discard by quantity
             }
             else if (gm.inv[index]->isTool()) {
-                delete gm.inv[index];
                 gm.inv.set(index, new Item()); // If the item is Tool, discard by setting the slot to empty
             }
             else if (gm.inv[index]->isUndef()) {
@@ -124,13 +123,9 @@ namespace Lib {
                 throw new UseException(used_item->getName());
             }
             else {
-                if (used_item->getDurability() == 1) { // If the tool durability is 1, after being used, discard the item
-                    used_item->useItem();
+                used_item->useItem();
+                if (used_item->getDurability() == 1) // If the tool durability is 1, after being used, discard the item
                     gm.inv.set(index, new Item());
-                }
-                else {
-                    used_item->useItem();
-                }
             }
         }
         catch (BaseException* exc) {

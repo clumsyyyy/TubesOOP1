@@ -173,7 +173,7 @@ namespace GUI {
 			// systemExport
 			// 
 			this->systemExport->Name = L"systemExport";
-			this->systemExport->Size = System::Drawing::Size(180, 22);
+			this->systemExport->Size = System::Drawing::Size(108, 22);
 			this->systemExport->Text = L"Export";
 			// 
 			// itemMenu
@@ -181,18 +181,20 @@ namespace GUI {
 			this->itemMenu->ImageScalingSize = System::Drawing::Size(20, 20);
 			this->itemMenu->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) { this->itemUse, this->itemDiscard });
 			this->itemMenu->Name = L"contextMenuStrip1";
-			this->itemMenu->Size = System::Drawing::Size(114, 48);
+			this->itemMenu->Size = System::Drawing::Size(181, 70);
+			this->itemMenu->Opening += gcnew System::ComponentModel::CancelEventHandler(this, &Main::itemMenu_Opening);
 			// 
 			// itemUse
 			// 
 			this->itemUse->Name = L"itemUse";
-			this->itemUse->Size = System::Drawing::Size(113, 22);
+			this->itemUse->Size = System::Drawing::Size(180, 22);
 			this->itemUse->Text = L"Use";
+			this->itemUse->Click += gcnew System::EventHandler(this, &Main::itemUse_Click);
 			// 
 			// itemDiscard
 			// 
 			this->itemDiscard->Name = L"itemDiscard";
-			this->itemDiscard->Size = System::Drawing::Size(113, 22);
+			this->itemDiscard->Size = System::Drawing::Size(180, 22);
 			this->itemDiscard->Text = L"Discard";
 			this->itemDiscard->Click += gcnew System::EventHandler(this, &Main::itemDiscard_Click);
 			// 
@@ -227,6 +229,8 @@ namespace GUI {
 	private: 
 		void itemAdd_Click(Object^ sender, EventArgs^ e);
 		void itemDiscard_Click(Object^ sender, EventArgs^ e);
+		void itemUse_Click(Object^ sender, EventArgs^ e);
+		void itemMenu_Opening(Object^ sender, CancelEventArgs^ e);
 };
 }
 

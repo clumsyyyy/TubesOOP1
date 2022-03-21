@@ -14,36 +14,47 @@ namespace GUI {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	public ref class ItemSlot {
-	private:
-		Panel^ container;
-		PictureBox^ pictBox;
-		ProgressBar^ damageBar;
-		Label^ itemQuantity;
-		Lib::Item* item = nullptr;
-		int idx;
-		static Image^ bgSlot = LOAD_IMG("slot.png");
-		static List<ItemSlot^>^ itemsIns = gcnew List<ItemSlot^>();
-
-		void BeginDrag(Object^ sender, MouseEventArgs^ e);
-		void DragEnter(Object^ sender, DragEventArgs^ e);
-		void DragDrop(Object^ sender, DragEventArgs^ e);
-		static PictureBox^ getItemData(DragEventArgs^ e);
 	public:
 		enum class SlotType {
 			INVENTORY,
 			CRAFTING,
 			RESULT
 		};
+	private:
 		SlotType slotType;
+		String^ ID;
+		Panel^ container;
+		PictureBox^ pictBox;
+		ProgressBar^ damageBar;
+		Label^ itemQuantity;
+		Lib::Item* item = nullptr;
+		int idx;
+
+		static List<ItemSlot^>^ itemsIns = gcnew List<ItemSlot^>();
+		static ItemSlot^ itemRes;
+		static Image^ bgSlot = LOAD_IMG("slot.png");
+		static Dictionary<String^, Image^>^ images = gcnew Dictionary<String^, Image^>();
+
+		void Craft(Object^ sender, MouseEventArgs^ e);
+		void BeginDrag(Object^ sender, MouseEventArgs^ e);
+		void DragEnter(Object^ sender, DragEventArgs^ e);
+		void DragDrop(Object^ sender, DragEventArgs^ e);
+		static ItemSlot^ FromDragEvent(DragEventArgs^ e);
+	public:
 		ItemSlot(Control::ControlCollection^ controls, SlotType type);
 		ItemSlot(int idx, Control::ControlCollection^ controls, SlotType type);
 		ItemSlot(int idx, Control::ControlCollection^ controls, ContextMenuStrip^ contextItemMenu, SlotType type);
-		Lib::Item* get_item();
-		void set_item(Lib::Item* item);
-		void update();
-		static void init_images();
+		Lib::Item* GetItem();
+		String^ GetID();
+		int GetIndex();
+		SlotType GetSlotType();
+		void Update();
+		static void InitImages();
 		static void UpdateAll();
-		static Dictionary<String^, Image^>^ images = gcnew Dictionary<String^, Image^>();
+		static Image^ GetImage(String^ key);
+		static ItemSlot^ FromGenericPictureBox(Object^ o);
+		static ItemSlot^ FromGenericContextMenuItem(Object^ o);
+		static ItemSlot^ FromGenericContextMenu(Object^ o);
 	};
 }
 

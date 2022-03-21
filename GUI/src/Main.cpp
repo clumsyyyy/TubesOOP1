@@ -1,6 +1,7 @@
 #include "headers/Main.h"
 #include "headers/Item.h"
 #include "headers/AddItemForm.h"
+#include "headers/DiscardItemForm.h"
 #include "headers/Helper.h"
 #include "core/all_headers.hpp"
 
@@ -10,7 +11,7 @@ namespace GUI {
 	Main::Main() {
 		InitializeComponent();
 		//Lib::gm.Load();
-		ItemSlot::init_images();
+		ItemSlot::InitImages();
 		this->inventoryPanel->SuspendLayout();
 		this->craftingPanel->SuspendLayout();
 		this->craftingResult->SuspendLayout();
@@ -42,7 +43,48 @@ namespace GUI {
 		delete form;
 	}
 
+	void Main::itemMenu_Opening(Object^ sender, CancelEventArgs^ e) {
+		ItemSlot^ it = ItemSlot::FromGenericContextMenu(sender);
+		if (it == nullptr)
+			e->Cancel = true;
+		else {
+			Lib::Item* item = it->GetItem();
+			if (item != nullptr && !item->isUndef()) {
+				itemMenu->Items[0]->Visible = item->isTool();
+			} else
+				e->Cancel = true;
+		}
+	}
+
 	void Main::itemDiscard_Click(Object^ sender, EventArgs^ e) {
-		
+		ItemSlot^ it = ItemSlot::FromGenericContextMenuItem(sender);
+		if (it != nullptr) {
+			Lib::Item* item = it->GetItem();
+			if (item != nullptr && !item->isUndef()) {
+				int qty = 1;
+				if (item->isNonTool()) {
+					DiscardItemForm^ form = gcnew DiscardItemForm(it);
+					if (form->ShowDialog(this) == System::Windows::Forms::DialogResult::OK)
+						qty = to<int>(form->itemQty->Value);
+					else
+						return;
+				}
+				Lib::DiscardHandler(it->GetIndex(), qty);
+				ItemSlot::UpdateAll();
+			}
+		}
+	}
+
+	void Main::itemUse_Click(Object^ sender, EventArgs^ e) {
+		ItemSlot^ it = ItemSlot::FromGenericContextMenuItem(sender);
+		if (it != nullptr) {
+			try {
+				Lib::UseHandler(to<std::string>(it->GetID()));
+				ItemSlot::UpdateAll();
+			}
+			catch (UseException* e) {
+				MessageBox::Show(to<String^>(e->getException()));
+			}
+		}
 	}
 }

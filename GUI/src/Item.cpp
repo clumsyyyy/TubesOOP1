@@ -1,39 +1,65 @@
 #include "headers/Item.h"
 #include "core/all_headers.hpp"
+#include "core/components/headers/crafting.hpp"
 
 using namespace Lib;
 namespace GUI {
+	void ItemSlot::Craft(Object^ sender, MouseEventArgs^ e) {
+		try {
+			Lib::CraftingHandler();
+			ItemSlot::UpdateAll();
+		} catch (CraftingException* e) {
+			MessageBox::Show(to<String^>(e->getException()));
+		}
+	}
+
 	void ItemSlot::BeginDrag(Object^ sender, MouseEventArgs^ e) {
 		if (e->Button == MouseButtons::Left)
-			to<Control^>(sender)->DoDragDrop(pictBox, DragDropEffects::Move);
+			to<Control^>(sender)->DoDragDrop(this, DragDropEffects::Move);
 	}
 
 	void ItemSlot::DragEnter(Object^ sender, DragEventArgs^ e) {
-		PictureBox^ FromObj = getItemData(e);
-		PictureBox^ ToObj = (PictureBox^)sender;
-		if (FromObj != nullptr && ToObj != nullptr && FromObj->Tag != ToObj->Tag)
+		ItemSlot^ FromObj = FromDragEvent(e);
+		ItemSlot^ ToObj = FromGenericPictureBox(sender);
+		if (FromObj != nullptr && ToObj != nullptr && FromObj != ToObj)
 			e->Effect = DragDropEffects::Move;
 		else
 			e->Effect = DragDropEffects::None;
 	}
 
 	void ItemSlot::DragDrop(Object^ sender, DragEventArgs^ e) {
-		PictureBox^ FromObj = getItemData(e);
-		PictureBox^ ToObj = (PictureBox^)sender;
+		ItemSlot^ FromObj = FromDragEvent(e);
+		ItemSlot^ ToObj = FromGenericPictureBox(sender);
 		try {
 			Lib::MoveHandler(
-				to<std::string>(FromObj->Tag),
+				to<std::string>(FromObj->ID),
 				1,
-				std::vector<std::string>{to<std::string>(ToObj->Tag)}
+				std::vector<std::string>{to<std::string>(ToObj->ID)}
 			);
-		} catch (...) {
-			MessageBox::Show("Error when handling move.");
+		} catch (MoveException* e) {
+			MessageBox::Show(to<String^>(e->getException()));
 		}
 		UpdateAll();
 	}
 
-	PictureBox^ ItemSlot::getItemData(DragEventArgs^ e) {
-		return to<PictureBox^>(e->Data->GetData("System.Windows.Forms.PictureBox"));
+	ItemSlot^ ItemSlot::FromDragEvent(DragEventArgs^ e) {
+		return to<ItemSlot^>(e->Data->GetData("GUI.ItemSlot"));
+	}
+
+	ItemSlot^ ItemSlot::FromGenericPictureBox(Object^ sender) {
+		return to<ItemSlot^>(to<PictureBox^>(sender)->Tag);
+	}
+
+	ItemSlot^ ItemSlot::FromGenericContextMenu(Object^ sender) {
+		System::Windows::Forms::ContextMenuStrip^
+			c = to<System::Windows::Forms::ContextMenuStrip^>(sender);
+		PictureBox^ p = to<PictureBox^>(c->SourceControl);
+		return to<ItemSlot^>(p->Tag);
+	}
+
+	ItemSlot^ ItemSlot::FromGenericContextMenuItem(Object^ sender) {
+		ToolStripMenuItem^ t = to<ToolStripMenuItem^>(sender);
+		return FromGenericContextMenu(t->GetCurrentParent());
 	}
 
 	ItemSlot::ItemSlot(Control::ControlCollection^ controls, SlotType type) :
@@ -52,6 +78,7 @@ namespace GUI {
 		this->itemQuantity = (gcnew System::Windows::Forms::Label());
 		this->container = (gcnew System::Windows::Forms::Panel());
 		this->slotType = type;
+		this->ID = (type == SlotType::INVENTORY ? "I" : (type == SlotType::CRAFTING ? "C" : "")) + to_str(idx);
 		// 
 		// container
 		// 
@@ -77,9 +104,13 @@ namespace GUI {
 		this->pictBox->TabIndex = 6;
 		this->pictBox->TabStop = false;
 		this->pictBox->AllowDrop = true;
-		this->pictBox->MouseDown += gcnew MouseEventHandler(this, &ItemSlot::BeginDrag);
-		this->pictBox->DragEnter += gcnew DragEventHandler(this, &ItemSlot::DragEnter);
-		this->pictBox->DragDrop += gcnew DragEventHandler(this, &ItemSlot::DragDrop);
+		if (type == SlotType::RESULT)
+			this->pictBox->MouseDown += gcnew MouseEventHandler(this, &ItemSlot::Craft);
+		else {
+			this->pictBox->MouseDown += gcnew MouseEventHandler(this, &ItemSlot::BeginDrag);
+			this->pictBox->DragEnter += gcnew DragEventHandler(this, &ItemSlot::DragEnter);
+			this->pictBox->DragDrop += gcnew DragEventHandler(this, &ItemSlot::DragDrop);
+		}
 		// 
 		// itemDamage
 		// 
@@ -106,21 +137,33 @@ namespace GUI {
 		this->itemQuantity->Size = Size(21, 14);
 		this->itemQuantity->Text = L"64";
 		this->itemQuantity->Visible = false;
-		this->pictBox->Tag = (slotType == SlotType::INVENTORY ? "I" : (slotType == SlotType::CRAFTING ? "C" : "")) + to_str(idx);
+
+		// Tag this object to pictBox
+		this->pictBox->Tag = this;
 		controls->Add(this->container);
-		itemsIns->Add(this);
+		if (type != SlotType::RESULT)
+			itemsIns->Add(this);
+		else
+			itemRes = this;
 	}
 
-	Lib::Item* ItemSlot::get_item() {
+	Lib::Item* ItemSlot::GetItem() {
 		return item;
 	}
 
-	void ItemSlot::set_item(Lib::Item* item) {
-		this->item = item;
-		update();
+	String^ ItemSlot::GetID() {
+		return ID;
 	}
 
-	void ItemSlot::update() {
+	int ItemSlot::GetIndex() {
+		return idx;
+	}
+
+	ItemSlot::SlotType ItemSlot::GetSlotType() {
+		return slotType;
+	}
+
+	void ItemSlot::Update() {
 		switch (slotType) {
 		case SlotType::CRAFTING:
 			item = gm.crftab[idx];
@@ -145,11 +188,18 @@ namespace GUI {
 
 	void ItemSlot::UpdateAll() {
 		for each(ItemSlot ^ s in itemsIns) {
-			s->update();
+			s->Update();
 		}
+		Crafting craft;
+		itemRes->item = craft.crafting_preview();
+		itemRes->Update();
 	}
 
-	void ItemSlot::init_images() {
+	Image^ ItemSlot::GetImage(String^ key) {
+		return images[key];
+	}
+
+	void ItemSlot::InitImages() {
 		cli::array<String^>^ listImg = {
 			"OAK_LOG",
 			"SPRUCE_LOG",

@@ -157,6 +157,9 @@
     <ClInclude Include="src\headers\AddItemForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="src\headers\DiscardItemForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="src\headers\Helper.h" />
     <ClInclude Include="src\headers\Item.h" />
     <ClInclude Include="src\headers\Main.h">
@@ -167,6 +170,7 @@
     <ClCompile Include="src\AssemblyInfo.cpp" />
     <ClCompile Include="src\Bootstrapper.cpp" />
     <ClCompile Include="src\AddItemForm.cpp" />
+    <ClCompile Include="src\DiscardItemForm.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
@@ -207,6 +211,9 @@
   <ItemGroup>
     <EmbeddedResource Include="src\headers\AddItemForm.resx">
       <DependentUpon>src\headers\AddItemForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\headers\DiscardItemForm.resx">
+      <DependentUpon>src\headers\DiscardItemForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\headers\Main.resx">
       <DependentUpon>src\headers\Main.h</DependentUpon>
