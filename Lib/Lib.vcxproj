@@ -26,17 +26,17 @@
     <ClCompile Include="core\components\handlers.cpp" />
     <ClCompile Include="core\components\inventory.cpp" />
     <ClCompile Include="core\components\item.cpp" />
+    <ClCompile Include="core\components\table.cpp" />
     <ClCompile Include="core\globals.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\all_headers.hpp" />
     <ClInclude Include="core\components\headers\crafting.hpp" />
-    <ClInclude Include="core\components\headers\crafting_table.hpp" />
     <ClInclude Include="core\components\headers\exception.hpp" />
     <ClInclude Include="core\components\headers\GameManager.hpp" />
     <ClInclude Include="core\components\headers\handlers.hpp" />
-    <ClInclude Include="core\components\headers\inventory.hpp" />
     <ClInclude Include="core\components\headers\item.hpp" />
+    <ClInclude Include="core\components\headers\table.hpp" />
     <ClInclude Include="core\components\headers\vars.hpp" />
     <ClInclude Include="core\globals.hpp" />
   </ItemGroup>

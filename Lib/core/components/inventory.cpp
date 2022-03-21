@@ -1,47 +1,33 @@
-#include "headers/inventory.hpp"
-#include "headers/GameManager.hpp"
+#include "headers/table.hpp"
 #include "../globals.hpp"
 
 namespace Lib {
 
-    Inventory::Inventory() {
-        this->inv_buffer = new Item * [INV_ROWS * INV_COLS];
-        for (int i = 0; i < INV_ROWS * INV_COLS; i++) {
-            this->inv_buffer[i] = new Item();
-        }
-    }
+    // IMPLEMENTATION FIELD FOR CHILD CLASS: Inventory
+    /**
+     * @brief Default Constructor for Class Inventory
+     *  Initializes the inventory with a default size of INV ROWS x INV COLS slots
+     *  Each slot (buffer) is initialized with a default Item Constructor
+     *
+     *
+     */
+    Inventory::Inventory() : Table(INV_ROWS, INV_COLS){}
 
-    Inventory::~Inventory() {
-        delete[] this->inv_buffer;
-    }
-
-    Item* Inventory::get(int pos) {
-        if (pos < 0 || pos >= INV_SIZE) {
-            throw new InvException("INVALID");
-        }
-        return this->inv_buffer[pos];
-    }
-
-    Item* Inventory::operator[](int pos) {
-        return get(pos);
-    }
-
-    void Inventory::set(int pos, Item* item) {
-        if (pos < 0 || pos >= INV_SIZE) {
-            throw new InvException("INVALID");
-        }
-        delete this->inv_buffer[pos];
-        (this->inv_buffer[pos]) = item;
-    };
-
+    /**
+     * @brief Overload the << operator to display the Inventory
+     * 
+     * @param os Output Stream
+     * @param inven inventory to be displayed
+     * @return ostream& reference to the output stream
+     */
     ostream& operator<<(ostream& os, Inventory& inven) {
         os << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {
             os << "[(I" << i << ") "
-                << (inven.inv_buffer[i])->getID() << " "
-                << (inven.inv_buffer[i]->isTool() ?
-                    inven.inv_buffer[i]->getDurability() :
-                    inven.inv_buffer[i]->getQuantity()) << "] ";
+                << (inven.slot[i])->getID() << " "
+                << (inven.slot[i]->isTool() ?
+                    inven.slot[i]->getDurability() :
+                    inven.slot[i]->getQuantity()) << "] ";
             if ((i + 1) % INV_COLS == 0) {
                 os << endl;
             }
@@ -49,6 +35,13 @@ namespace Lib {
         return os;
     }
 
+    /**
+     * @brief Overload the << operator to display inventory details
+     * 
+     * @param os Output Stream
+     * @param inven inventory to be displayed details
+     * @return ostream& reference to the output stream
+     */
     ostream& operator<<(ostream& os, Inventory* inven) {
         int undef_count = INV_SIZE;
         os << "\n\n[INVENTORY DETAILS]" << endl;
@@ -58,7 +51,7 @@ namespace Lib {
             << setw(WIDTH) << "Type" << " | "
             << setw(WIDTH) << "Base Type" << endl;
         for (int i = 0; i < INV_SIZE; i++) {
-            if (inven->inv_buffer[i]->getID() != UNDEFINED_ID) {
+            if (inven->slot[i]->getID() != UNDEFINED_ID) {
                 undef_count--;
                 os << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
                 inven->specify(i);
@@ -71,12 +64,6 @@ namespace Lib {
         return os;
     }
 
-    void Inventory::specify(int pos) {
-        if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw new TableException("INVALID");
-        }
-        (this->inv_buffer[pos])->displayInfo();
-    }
 
     void Inventory::addNonTool(NonTool* item, int start){
         Item* currItem = nullptr;
@@ -136,13 +123,13 @@ namespace Lib {
      
     }
 
-    void Inventory::discard(int quant, int slot) {
-        Item* target = this->inv_buffer[slot];
-        if (target->getQuantity() - quant > 0) {
-            target->setQuantity(target->getQuantity() - quant);
+    void Inventory::discard(int index, int qty) {
+        Item* target = this->slot[index];
+        if (target->getQuantity() - qty > 0) {
+            target->setQuantity(target->getQuantity() - qty);
         }
-        else if (target->getQuantity() - quant == 0) {
-            set(slot, new Item());
+        else if (target->getQuantity() - qty == 0) {
+            set(index, new Item());
         }
         else {
             throw new InvException("EMPTY");
@@ -155,9 +142,10 @@ namespace Lib {
         Item* item_craft = nullptr;
         Item* item_moved = nullptr;
         Item* itInv = gm.inv[slotSrc];
-
         bool tool = itInv->isTool();
+
         if (tool) {
+            cout << "MEMEK" << endl;
             item_inv = new Tool(*((Tool*)itInv));
         }
         else {
@@ -206,7 +194,7 @@ namespace Lib {
                     throw new MoveException("TOOL");
                 }
                 else {
-                    Tool* item_moved = new Tool(*((Tool*)gm.inv[slotSrc]));
+                    Tool* item_moved = new Tool(*((Tool*)gm.inv.get(slotSrc)));
                     gm.inv.set(slotSrc, undef_item);
                     gm.crftab.set(destSlot[0], item_moved);
                 }

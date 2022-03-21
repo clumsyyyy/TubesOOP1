@@ -92,12 +92,14 @@ namespace GUI {
 			this->itemSelection->Name = L"itemSelection";
 			this->itemSelection->Size = System::Drawing::Size(197, 21);
 			this->itemSelection->TabIndex = 2;
+			this->itemSelection->SelectionChangeCommitted += gcnew System::EventHandler(this, &AddItemForm::itemSelection_SelectionChangeCommitted);
 			// 
 			// pictBox
 			// 
 			this->pictBox->Location = System::Drawing::Point(12, 12);
 			this->pictBox->Name = L"pictBox";
 			this->pictBox->Size = System::Drawing::Size(70, 70);
+			this->pictBox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->pictBox->TabIndex = 3;
 			this->pictBox->TabStop = false;
 			// 
@@ -123,9 +125,11 @@ namespace GUI {
 			// itemQty
 			// 
 			this->itemQty->Location = System::Drawing::Point(130, 65);
+			this->itemQty->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
 			this->itemQty->Name = L"itemQty";
 			this->itemQty->Size = System::Drawing::Size(87, 20);
 			this->itemQty->TabIndex = 6;
+			this->itemQty->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
 			// 
 			// AddItemForm
 			// 
@@ -147,5 +151,6 @@ namespace GUI {
 
 		}
 #pragma endregion
-	};
+	private: void itemSelection_SelectionChangeCommitted(Object^ sender, EventArgs^ e);
+};
 }

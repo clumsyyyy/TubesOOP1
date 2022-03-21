@@ -1,44 +1,20 @@
-#include "headers/crafting_table.hpp"
+#include "headers/table.hpp"
 #include "../globals.hpp"
 
 namespace Lib {
-    CraftingTable::CraftingTable() {
-        this->crftab_buffer = new Item * [CRAFT_COLS * CRAFT_ROWS];
-        for (int i = 0; i < CRAFT_COLS * CRAFT_ROWS; i++) {
-            this->crftab_buffer[i] = new Item();
-        }
-    }
 
-    CraftingTable::~CraftingTable() {
-        delete[] this->crftab_buffer;
-    }
-
-    bool CraftingTable::valid_index(int pos) {
-        return (0 <= pos && pos < CRAFT_SIZE);
-    }
-    Item* CraftingTable::get(int pos) {
-        if (!valid_index(pos)) {
-            throw new TableException("INVALID");
-        }
-        return this->crftab_buffer[pos];
-    }
-
-    Item* CraftingTable::operator[](int pos) {
-        return get(pos);
-    }
-
-    void CraftingTable::set(int pos, Item* item) {
-        if (!valid_index(pos)) {
-            throw new TableException("INVALID");
-        } 
-        this->crftab_buffer[pos] = item;
-    }
+    // IMPLEMENTATION FIELD FOR CHILD CLASS: CraftingTable
+    /**
+     * @brief Construct a new Crafting Table:: Crafting Table object    
+     * 
+     */
+    CraftingTable::CraftingTable() : Table(CRAFT_ROWS, CRAFT_COLS){}
 
     ostream& operator<<(ostream& os, CraftingTable& ct) {
         os << "Crafting Table : " << endl;
         for (int i = 0; i < CRAFT_SIZE; i++) {
             Item* item = ct.get(i);
-            Item* itemCrf = ct.crftab_buffer[i];
+            Item* itemCrf = ct.slot[i];
             os << "[(C" << i << ") "
                 << item->getID() << " "
                 << item->getName();
@@ -80,23 +56,16 @@ namespace Lib {
         return os;
     }
 
-    void CraftingTable::specify(int pos) {
-        if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw new TableException("INVALID");
-        }
-        crftab_buffer[pos]->displayInfo();
-    }   
-
-    void CraftingTable::discard(int quant, int slot) {
-        Item* it = this->crftab_buffer[slot];
+    void CraftingTable::discard(int qty, int pos) {
+        Item* it = this->slot[pos];
         if (it->isTool()) {
-            set(slot, new Item());
+            set(pos, new Item());
         } else if (it->isNonTool()){
-            if (it->getQuantity() - quant > 0) {
-                it->setQuantity(it->getQuantity() - quant);
+            if (it->getQuantity() - qty > 0) {
+                it->setQuantity(it->getQuantity() - qty);
             }
-            else if (it->getQuantity() - quant == 0) {
-                set(slot, new Item());
+            else if (it->getQuantity() - qty == 0) {
+                set(pos, new Item());
             }
             else {
                 throw new TableException("EMPTY");

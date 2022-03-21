@@ -209,7 +209,7 @@ namespace Lib {
 
     void Crafting::returning() {
         cout << "Returning item :" << endl;
-        for (int i = 0; i < CRAFT_COLS*CRAFT_ROWS; i++) {
+        for (int i = 0; i < CRAFT_SIZE; i++) {
             Item* item = gm.crftab[i];
             if (item->getID() != UNDEFINED_ID) {
                 if (item->isNonTool()) {

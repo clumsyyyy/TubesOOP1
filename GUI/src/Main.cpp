@@ -4,19 +4,22 @@
 #include "headers/Helper.h"
 #include "core/all_headers.hpp"
 
+using namespace Lib;
+
 namespace GUI {
 	Main::Main() {
 		InitializeComponent();
-		Lib::gm.Load();
+		//Lib::gm.Load();
+		ItemSlot::init_images();
 		this->inventoryPanel->SuspendLayout();
 		this->craftingPanel->SuspendLayout();
 		this->craftingResult->SuspendLayout();
 		
 		for (int i = 0; i < 27; i++)
-			gcnew ItemSlot(this->inventoryPanel->Controls, this->itemMenu, ItemSlot::SlotType::INVENTORY);
+			gcnew ItemSlot(i, this->inventoryPanel->Controls, this->itemMenu, ItemSlot::SlotType::INVENTORY);
 		for (int i = 0; i < 9; i++)
-			gcnew ItemSlot(this->craftingPanel->Controls, nullptr, ItemSlot::SlotType::CRAFTING);
-		gcnew ItemSlot(this->craftingResult->Controls, nullptr, ItemSlot::SlotType::RESULT);
+			gcnew ItemSlot(i, this->craftingPanel->Controls, ItemSlot::SlotType::CRAFTING);
+		gcnew ItemSlot(this->craftingResult->Controls, ItemSlot::SlotType::RESULT);
 		this->inventoryPanel->ResumeLayout();
 		this->craftingPanel->ResumeLayout();
 		this->craftingResult->ResumeLayout();
@@ -33,7 +36,8 @@ namespace GUI {
 			&& form->itemSelection->SelectedItem != nullptr
 		) {
 			std::string item = to<std::string>((String^)(form->itemSelection->SelectedItem));
-			//Lib::GiveHandler(item, to<int>(form->itemQty->Value));
+			Lib::GiveHandler(item, to<int>(form->itemQty->Value));
+			ItemSlot::UpdateAll();
 		}
 		delete form;
 	}

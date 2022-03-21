@@ -1,6 +1,7 @@
 #include "headers/item.hpp"
 
 namespace Lib {
+    /* IMPLEMENTATION FIELD FOR PARENT CLASS: Item */
     Item::Item() {
         this->ID = UNDEFINED_ID;
         this->name = "UNDEFINED";
@@ -44,15 +45,15 @@ namespace Lib {
     }
 
     bool Item::isTool() {
-        return this->basetype == "TOOL";
+        return this->type == "TOOL";
     }
 
     bool Item::isNonTool() {
-        return this->basetype == "NONTOOL";
+        return this->type == "NONTOOL";
     }
 
     bool Item::isUndef() {
-        return this->basetype == "UNDEFINED";
+        return this->type == "UNDEFINED";
     }
 
     void Item::displayInfo() const {
@@ -67,7 +68,8 @@ namespace Lib {
     void Item::setQuantity(int) {}
     void Item::useItem() {}
 
-    // Implementasi bagian Non Tool Item
+    /* IMPLEMENTATION FIELD FOR CHILD CLASS: NonTool */
+
     NonTool::NonTool(int ID, string name, string type, string basetype, int quant)
         : Item(ID, name, type, basetype) {
         this->quantity = quant;
@@ -125,18 +127,26 @@ namespace Lib {
         Item::displayInfo();
         cout << " | QTY: " << this->quantity;
     }
-    // Implementasi bagian Tool Item
-    Tool::Tool(int ID, string name, string type, string basetype, int dur)
-        : Item(ID, name, type, basetype) {
-        this->durability = dur;
+
+    /* IMPLEMENTATION FIELD FOR CHILD CLASS : Tool */
+
+    /**
+     * @brief Construct a new Tool:: Tool object
+     * 
+     * @param ID ID of the tool
+     * @param name name of the tool
+     * @param durability durability of the tool
+     */
+    Tool::Tool(int ID, string name, int durability)
+        : Item(ID, name, "TOOL", "-") {
+        this->durability = durability; // Default durability = 10
     }
 
-    Tool::Tool(const TupleItem& item, int dur) : Tool(
+    Tool::Tool(const TupleItem& item, int durability) : 
+    Tool(
         stoi(get<0>(item)),
         get<1>(item),
-        get<2>(item),
-        get<3>(item),
-        dur
+        durability
     ) {}
 
     Tool::Tool(const Tool& t) : Item(t.ID, t.name, t.type, t.basetype) {
@@ -160,10 +170,13 @@ namespace Lib {
         return this->durability;
     }
 
+    /**
+     * @brief Decrease durability of the tool
+     * 
+     */
     void Tool::useItem() {
         this->durability--;
         if (this->durability == 0) {
-            //quite unsure about this part yet
             cout << "Your " << this->name << " broke." << endl;
             delete this;
         }

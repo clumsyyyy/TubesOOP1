@@ -12,6 +12,7 @@ namespace Lib {
 	public:
 		BaseException();
 		BaseException(string);
+		virtual string getException() = 0;
 		virtual void printMessage() = 0;
 	};
 
@@ -19,6 +20,7 @@ namespace Lib {
 	public:
 		AddException(string);
 		void printMessage();
+		string getException();
 	};
 
 	class CraftingException : public BaseException {
@@ -27,12 +29,14 @@ namespace Lib {
 	public:
 		CraftingException(string);
 		void printMessage();
+		string getException();
 	};
 
 	class UseException : public BaseException {
 	public:
 		UseException(string);
 		void printMessage();
+		string getException();
 
 	};
 
@@ -40,6 +44,7 @@ namespace Lib {
 	public:
 		MoveException(string);
 		void printMessage();
+		string getException();
 
 	};
 
@@ -47,12 +52,14 @@ namespace Lib {
 	public:
 		InvException(string);
 		void printMessage();
+		string getException();
 	};
 
 	class TableException : public BaseException {
 	public:
 		TableException(string);
 		void printMessage();
+		string getException();
 	};
 }
 #endif

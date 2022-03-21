@@ -39,18 +39,15 @@
     <ClCompile Include="core\components\GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="core\components\table.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\components\headers\crafting.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\components\headers\crafting_table.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="core\components\headers\handlers.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\components\headers\inventory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\components\headers\item.hpp">
@@ -69,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\components\headers\GameManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\components\headers\table.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

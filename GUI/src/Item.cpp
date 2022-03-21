@@ -1,30 +1,52 @@
 #include "headers/Item.h"
+#include "core/all_headers.hpp"
 
+using namespace Lib;
 namespace GUI {
 	void ItemSlot::BeginDrag(Object^ sender, MouseEventArgs^ e) {
 		if (e->Button == MouseButtons::Left)
-			to<Control^>(sender)->DoDragDrop(this, DragDropEffects::Move);
+			to<Control^>(sender)->DoDragDrop(pictBox, DragDropEffects::Move);
 	}
 
 	void ItemSlot::DragEnter(Object^ sender, DragEventArgs^ e) {
-		if (getItemData(e))
+		PictureBox^ FromObj = getItemData(e);
+		PictureBox^ ToObj = (PictureBox^)sender;
+		if (FromObj != nullptr && ToObj != nullptr && FromObj->Tag != ToObj->Tag)
 			e->Effect = DragDropEffects::Move;
 		else
 			e->Effect = DragDropEffects::None;
 	}
 
 	void ItemSlot::DragDrop(Object^ sender, DragEventArgs^ e) {
-		ItemSlot^ slot = getItemData(e);
+		PictureBox^ FromObj = getItemData(e);
+		PictureBox^ ToObj = (PictureBox^)sender;
+		try {
+			Lib::MoveHandler(
+				to<std::string>(FromObj->Tag),
+				1,
+				std::vector<std::string>{to<std::string>(ToObj->Tag)}
+			);
+		} catch (...) {
+			MessageBox::Show("Error when handling move.");
+		}
+		UpdateAll();
 	}
 
-	ItemSlot^ ItemSlot::getItemData(DragEventArgs^ e) {
-		return to<ItemSlot^>(e->Data->GetData("GUI.ItemSlot"));
+	PictureBox^ ItemSlot::getItemData(DragEventArgs^ e) {
+		return to<PictureBox^>(e->Data->GetData("System.Windows.Forms.PictureBox"));
 	}
-	
-	ItemSlot::ItemSlot(Control::ControlCollection^ controls, ContextMenuStrip^ contextItemMenu, SlotType type) {
+
+	ItemSlot::ItemSlot(Control::ControlCollection^ controls, SlotType type) :
+		ItemSlot(0, controls, nullptr, type) {}
+
+	ItemSlot::ItemSlot(int idx, Control::ControlCollection^ controls, SlotType type) :
+		ItemSlot(idx, controls, nullptr, type) {}
+
+	ItemSlot::ItemSlot(int idx, Control::ControlCollection^ controls, ContextMenuStrip^ contextItemMenu, SlotType type) {
 		//
 		// Create objects
 		//
+		this->idx = idx;
 		this->pictBox = (gcnew PictureBox());
 		this->damageBar = (gcnew ProgressBar());
 		this->itemQuantity = (gcnew System::Windows::Forms::Label());
@@ -79,12 +101,14 @@ namespace GUI {
 		this->itemQuantity->Font = (gcnew Font(L"Courier New", 8.25F, FontStyle::Bold, GraphicsUnit::Point,
 			static_cast<Byte>(0)));
 		this->itemQuantity->ForeColor = Color::White;
-		this->itemQuantity->Location = Point(26, 0);
+		this->itemQuantity->Location = Point(29, 0);
 		this->itemQuantity->Name = L"itemQuantity";
 		this->itemQuantity->Size = Size(21, 14);
 		this->itemQuantity->Text = L"64";
 		this->itemQuantity->Visible = false;
+		this->pictBox->Tag = (slotType == SlotType::INVENTORY ? "I" : (slotType == SlotType::CRAFTING ? "C" : "")) + to_str(idx);
 		controls->Add(this->container);
+		itemsIns->Add(this);
 	}
 
 	Lib::Item* ItemSlot::get_item() {
@@ -97,9 +121,63 @@ namespace GUI {
 	}
 
 	void ItemSlot::update() {
-		this->itemQuantity->Text = to_str(item->getQuantity());
-		this->itemQuantity->Visible = item->getQuantity() > 1;
-		this->damageBar->Value = item->getDurability();
-		this->damageBar->Visible = item->getDurability() < 10;
+		switch (slotType) {
+		case SlotType::CRAFTING:
+			item = gm.crftab[idx];
+			break;
+		case SlotType::INVENTORY:
+			item = gm.inv[idx];
+			break;
+		}
+		if (item != nullptr && item->getID() != UNDEFINED_ID) {
+			this->pictBox->Image = images[to<String^>(item->getName())];
+			this->itemQuantity->Text = to_str(item->getQuantity());
+			this->itemQuantity->Visible = item->getBType() == "NONTOOL" && item->getQuantity() > 1;
+			this->damageBar->Value = item->getDurability();
+			this->damageBar->Visible = item->getBType() == "TOOL" && item->getDurability() < 10;
+		}
+		else {
+			this->pictBox->Image = nullptr;
+			this->itemQuantity->Visible = false;
+			this->damageBar->Visible = false;
+		}
+	}
+
+	void ItemSlot::UpdateAll() {
+		for each(ItemSlot ^ s in itemsIns) {
+			s->update();
+		}
+	}
+
+	void ItemSlot::init_images() {
+		cli::array<String^>^ listImg = {
+			"OAK_LOG",
+			"SPRUCE_LOG",
+			"BIRCH_LOG",
+			"OAK_PLANK",
+			"SPRUCE_PLANK",
+			"BIRCH_PLANK",
+			"STICK",
+			"COBBLESTONE",
+			"BLACKSTONE",
+			"IRON_INGOT",
+			"IRON_NUGGET",
+			"DIAMOND",
+			"WOODEN_PICKAXE",
+			"STONE_PICKAXE",
+			"IRON_PICKAXE",
+			"DIAMOND_PICKAXE",
+			"WOODEN_AXE",
+			"STONE_AXE",
+			"IRON_AXE",
+			"DIAMOND_AXE",
+			"WOODEN_SWORD",
+			"STONE_SWORD",
+			"IRON_SWORD",
+			"DIAMOND_SWORD"
+		};
+		for (int i = 0; i < listImg->Length; i++) {
+			images[listImg[i]] = LOAD_IMG(listImg[i] + ".png");
+		}
 	}
 }

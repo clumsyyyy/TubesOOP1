@@ -1,9 +1,30 @@
 #include "headers/GameManager.hpp"
+#include <filesystem>
+#include <sstream>
 
 namespace Lib {
-    GameManager gm;
+    GameManager::GameManager() {
+        string configPath = "../config";
+        string itemConfigPath = configPath + "/item.txt";
 
-    GameManager::GameManager() {};
+        // read item from config file
+        ifstream itemConfigFile(itemConfigPath);
+        for (string line; getline(itemConfigFile, line);) {
+            itemConfig.push_back(parseItem(line));
+        }
+        // read recipes
+        for (const auto& entry :
+            filesystem::directory_iterator(configPath + "/recipe")) {
+            ifstream* recipeConfigFile = new ifstream(entry.path());
+            recipeConfig.push_back(parseRecipe(recipeConfigFile));
+            delete recipeConfigFile;
+            // read from file and do something
+        }
+    };
+    GameManager GameManager::getInstance() {
+        static GameManager gm;
+        return gm;
+    }
     tuple <string, string, string, string> GameManager::parseItem(string line) {
         istringstream iss(line);
         string ID;
@@ -61,24 +82,5 @@ namespace Lib {
             }
         }
         return make_tuple(make_tuple(n, m), recipeList, make_tuple(ID, name, type, btype), quantity);
-    }
-
-    void GameManager::Load() {
-        string configPath = "../config";
-        string itemConfigPath = configPath + "/item.txt";
-
-        // read item from config file
-        ifstream itemConfigFile(itemConfigPath);
-        for (string line; getline(itemConfigFile, line);) {
-            itemConfig.push_back(parseItem(line));
-        }
-        // read recipes
-        for (const auto& entry :
-            filesystem::directory_iterator(configPath + "/recipe")) {
-            ifstream* recipeConfigFile = new ifstream(entry.path());
-            recipeConfig.push_back(parseRecipe(recipeConfigFile));
-            delete recipeConfigFile;
-            // read from file and do something
-        }
     }
 }
