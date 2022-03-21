@@ -52,8 +52,8 @@ namespace Lib {
     private:
         int durability; // durability of the tool
     public:
-        Tool(int, string, string, string, int);
-        Tool(const TupleItem&, int);
+        Tool(int, string);
+        Tool(const TupleItem&);
         Tool(const Tool& t);
         ~Tool();
         Tool& operator=(const Tool& other);
