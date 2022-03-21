@@ -9,7 +9,9 @@ namespace GUI {
 	}
 
 	void ItemSlot::DragEnter(Object^ sender, DragEventArgs^ e) {
-		if (getItemData(e))
+		PictureBox^ FromObj = getItemData(e);
+		PictureBox^ ToObj = (PictureBox^)sender;
+		if (FromObj != nullptr && ToObj != nullptr && FromObj->Tag != ToObj->Tag)
 			e->Effect = DragDropEffects::Move;
 		else
 			e->Effect = DragDropEffects::None;
