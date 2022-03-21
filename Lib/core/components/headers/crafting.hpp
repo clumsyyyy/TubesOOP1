@@ -6,30 +6,34 @@
 #include "iostream"
 #include <tuple>
 #include <vector>
-#include <sstream>
-#include <string>
 
 namespace Lib {
     using namespace std;
 
     class Crafting {
     private:
-        string ID, name, type, btype;
+        // string ID, name, type, btype;
         TupleRecipe TupRecipe;
+        int i_sub, j_sub;
         int row, col;
+        int count, sum;
     public:
         Crafting();
-        Crafting(TupleRecipe TupRecipe);
+        // Crafting(TupleRecipe TupRecipe);
         ~Crafting();
         void set_bound(int row, int col);
-        void set_crafting_table(int min, int i, int j, bool reverse);
-        void set_result(const TupleItem& item);
-        void set_result(const Item& item);
-        TupleItem get_item_result() const;
-        int calculate_result(int i, int j, bool reverse);
-        bool is_another_space_free(int i, int j, bool reverse);
-        int recipe();
-        int tools();
+        void set_sub_matrix(int i, int j);
+        void set_crafting_table(int min);
+        // void set_result(const TupleItem& item);
+        // void set_result(const Item& item);
+        int get_count() const;
+        int get_sum() const;
+        // TupleItem get_item_result() const;
+        int calculate_result(bool reverse);
+        bool is_another_space_free();
+        Item* recipe();
+        Item* tools();
+        Item* crafting_preview();
         static void crafting_proses();
         void returning();
     };
