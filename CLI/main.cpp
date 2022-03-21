@@ -43,17 +43,12 @@ int main() {
             string slot;
             cin >> slot;
             int index = stoi(slot.substr(1, slot.length() - 1)); // Getting the index of the slot
+            int qty = 1;
             if (gm.inv[index]->isNonTool()) {
-                int qty;
                 cin >> qty;
-                DiscardHandler(slot, qty, index);
             }
-            else {
-                if (gm.inv[index]->isTool()) {
-                    DiscardHandler(slot, 1, index);
-                }
-            }
-
+            DiscardHandler(index, 1);
+      
         }
         else if (command == "USE") 
         {

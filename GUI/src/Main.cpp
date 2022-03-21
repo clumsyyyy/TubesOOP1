@@ -41,4 +41,8 @@ namespace GUI {
 		}
 		delete form;
 	}
+
+	void Main::itemDiscard_Click(Object^ sender, EventArgs^ e) {
+		
+	}
 }

@@ -57,18 +57,28 @@ namespace Lib {
                 if (get<1>(tup) == name) { // Checking if the item name is valid
                     found = true;
                     if (get<3>(tup) == "NONTOOL") { // Checking if the item is a non-tool
-                        NonTool* NT = new NonTool(tup, qty);
-                        gm.inv.addNonTool(NT, 0);
+                        if (qty > MAX_STACK * INV_SIZE) {
+                            throw new AddException("NONTOOL", "OVERCAP");
+                        }
+                        else {
+                            NonTool* NT = new NonTool(tup, qty);
+                            gm.inv.addNonTool(NT, 0);
+                        }
                     }
                     else { // Checking if the item is a tool
-                        Tool* T = new Tool(tup, 10);
-                        gm.inv.addTool(T, qty);
+                        if (qty > INV_SIZE) {
+                            throw new AddException("TOOL", "OVERCAP");
+                        }
+                        else {
+                            Tool* T = new Tool(tup, 10);
+                            gm.inv.addTool(T, qty);
+                        }
                     }
                     return;
                 }
             }
             if (!found) {
-                throw new AddException(name);
+                throw new AddException(name, "INVALID");
             }
         }
         catch (BaseException* exc) {
@@ -83,7 +93,7 @@ namespace Lib {
      * @param slot Inventory slot ID to be discarded
      * @param qty Quantity of the item to be discarded
      */
-    void DiscardHandler(string slot, int qty, int index) {
+    void DiscardHandler(int index, int qty) {
         try {
             if (gm.inv[index]->isNonTool()) { // Checking if the item is NonTool 
                 gm.inv.discard(index, qty); // If the item is NonTool, discard by quantity

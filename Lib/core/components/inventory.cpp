@@ -145,7 +145,6 @@ namespace Lib {
         bool tool = itInv->isTool();
 
         if (tool) {
-            cout << "MEMEK" << endl;
             item_inv = new Tool(*((Tool*)itInv));
         }
         else {

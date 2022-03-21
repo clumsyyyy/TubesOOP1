@@ -28,8 +28,9 @@ namespace Lib {
         bool isUndef();
         virtual void displayInfo() const;
         virtual int getQuantity() const;
-        virtual void setQuantity(int);
         virtual int getDurability() const;
+        virtual void setQuantity(int);
+        virtual void setDurability(int);
         virtual void useItem();
     };
     class NonTool : public Item {
@@ -43,8 +44,6 @@ namespace Lib {
         NonTool& operator=(const NonTool& other);
         int getQuantity() const;
         void setQuantity(int);
-        void useItem(int);
-        void addItem(int);
         void displayInfo() const;
     };
 
@@ -58,6 +57,7 @@ namespace Lib {
         ~Tool();
         Tool& operator=(const Tool& other);
         int getDurability() const;
+        void setDurability(int);
         void useItem();
         void displayInfo() const;
     };

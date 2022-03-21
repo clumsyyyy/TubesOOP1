@@ -45,15 +45,15 @@ namespace Lib {
     }
 
     bool Item::isTool() {
-        return this->type == "TOOL";
+        return this->basetype == "TOOL";
     }
 
     bool Item::isNonTool() {
-        return this->type == "NONTOOL";
+        return this->basetype == "NONTOOL";
     }
 
     bool Item::isUndef() {
-        return this->type == "UNDEFINED";
+        return this->basetype == "UNDEFINED";
     }
 
     void Item::displayInfo() const {
@@ -66,6 +66,7 @@ namespace Lib {
     int Item::getQuantity() const{ return 0; }
     int Item::getDurability() const { return 0; }
     void Item::setQuantity(int) {}
+    void Item::setDurability(int) {}
     void Item::useItem() {}
 
     /* IMPLEMENTATION FIELD FOR CHILD CLASS: NonTool */
@@ -108,21 +109,6 @@ namespace Lib {
         this->quantity = quant;
     }
 
-    void NonTool::addItem(int quant) {
-        //quite unsure about this part
-        //semua item bertipe sama mo dijadiin satu item yang sama
-        //ato dikelompokin berdasarkan stack?
-        //ato masalah stacking diatur di inventory?
-
-        // sementara dicap dulu, this is friday night
-        this->quantity += quant;
-    }
-
-    void NonTool::useItem(int quant) {
-        //sama dengan yang diatas
-        this->quantity -= quant;
-    }
-
     void NonTool::displayInfo() const {
         Item::displayInfo();
         cout << " | QTY: " << this->quantity;
@@ -138,7 +124,7 @@ namespace Lib {
      * @param durability durability of the tool
      */
     Tool::Tool(int ID, string name, int durability)
-        : Item(ID, name, "TOOL", "-") {
+        : Item(ID, name, "-", "TOOL") {
         this->durability = durability; // Default durability = 10
     }
 
@@ -168,6 +154,10 @@ namespace Lib {
 
     int Tool::getDurability() const {
         return this->durability;
+    }
+
+    void Tool::setDurability(int dur) {
+        this->durability = (dur > 10 ? dur : 10);
     }
 
     /**

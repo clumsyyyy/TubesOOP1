@@ -194,6 +194,7 @@ namespace GUI {
 			this->itemDiscard->Name = L"itemDiscard";
 			this->itemDiscard->Size = System::Drawing::Size(113, 22);
 			this->itemDiscard->Text = L"Discard";
+			this->itemDiscard->Click += gcnew System::EventHandler(this, &Main::itemDiscard_Click);
 			// 
 			// craftingResult
 			// 
@@ -223,7 +224,9 @@ namespace GUI {
 #pragma endregion
 
 
-	private: void itemAdd_Click(Object^ sender, EventArgs^ e);
+	private: 
+		void itemAdd_Click(Object^ sender, EventArgs^ e);
+		void itemDiscard_Click(Object^ sender, EventArgs^ e);
 };
 }
 

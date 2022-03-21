@@ -10,14 +10,36 @@ namespace Lib {
 	}
 
 	string AddException::getException(){
-		string exc = "[ADD-EXC] Item " + this->name + " doesn't exist!"; 
-		return exc;
+		if (btype == "INVALID") {
+			return "[ADD-EXC] Item " + name + " doesn't exist!\n";
+		}
+		else if (btype == "OVERCAP") {
+			if (name == "TOOL") {
+				return "[ADD-EXC] Too many tools quantity! (MAX 27)";
+			}
+			else if (name == "NONTOOL") {
+				return "[ADD-EXC] Too many non-tool quantity!";
+			}
+		}
 	}
 
-	AddException::AddException(string name) : BaseException(name) { }
+	AddException::AddException(string name, string btype) : BaseException(name) { 
+		this->btype = btype;
+	}
 
 	void AddException::printMessage() {
-		cout << "[ADD-EXC] Item " << name << " doesn't exist!" << endl;
+		if (btype == "INVALID") {
+			cout << "[ADD-EXC] Item " << name << " doesn't exist!" << endl;
+		}
+		else if (btype == "OVERCAP") {
+			if (name == "TOOL") {
+				cout << "[ADD-EXC] Too many tools quantity! (MAX 27)" << endl;
+			}
+			else if (name == "NONTOOL") {
+				cout << "[ADD-EXC] Too many non-tool quantity!" << endl;
+			}
+		}
+
 	}
 
 	CraftingException::CraftingException(string btype) {

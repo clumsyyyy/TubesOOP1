@@ -17,8 +17,10 @@ namespace Lib {
 	};
 
 	class AddException : public BaseException {
+	private:
+		string btype;
 	public:
-		AddException(string);
+		AddException(string, string);
 		void printMessage();
 		string getException();
 	};
