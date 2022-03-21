@@ -2,8 +2,7 @@
 #define HANDLERS_HPP
 
 #include "item.hpp"
-#include "inventory.hpp"
-#include "crafting_table.hpp"
+#include "table.hpp"
 #include <string>
 
 namespace Lib {

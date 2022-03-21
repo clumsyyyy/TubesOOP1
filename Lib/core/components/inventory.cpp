@@ -1,69 +1,17 @@
-#include "headers/inventory.hpp"
-#include "headers/GameManager.hpp"
+#include "headers/table.hpp"
 #include "../globals.hpp"
 
 namespace Lib {
 
+    // IMPLEMENTATION FIELD FOR CHILD CLASS: Inventory
     /**
      * @brief Default Constructor for Class Inventory
      *  Initializes the inventory with a default size of INV ROWS x INV COLS slots
      *  Each slot (buffer) is initialized with a default Item Constructor
-     * 
-     * @param 
-     * 
+     *
+     *
      */
-    Inventory::Inventory() {
-        this->inv_buffer = new Item * [INV_ROWS * INV_COLS]; // Size = 3x9 = 27 slots
-        for (int i = 0; i < INV_ROWS * INV_COLS; i++) {
-            this->inv_buffer[i] = new Item(); // Each slot initialized with a default Item Constructor
-        }
-    }
-
-    /**
-     * @brief Destroy the Inventory:: Inventory object
-     *   Buffer is dynamicly allocated on memory (heap) and should be freed
-     */
-    Inventory::~Inventory() {
-        delete[] this->inv_buffer;
-    }
-
-    /**
-     * @brief Get the Inventory Buffer at a specific slot
-     * 
-     * @param pos Index of the slot
-     * @return Item* Pointer to the Item object
-     */
-    Item* Inventory::get(int pos) {
-        if (pos < 0 || pos >= INV_SIZE) {
-            throw new InvException("INVALID");
-        }
-        return this->inv_buffer[pos];
-    }
-
-    /**
-     * @brief Overload the [] operator to get the Inventory Buffer at a specific slot
-     * 
-     * @param pos Index of the slot
-     * @return Item* Pointer to the Item object
-     */
-    Item* Inventory::operator[](int pos) {
-        return get(pos);
-    }
-
-    /**
-     * @brief set the Item at the specified position
-     * 
-     * @param pos  Index of the slot
-     * @param item Item to be set in the slot
-     */
-    void Inventory::set(int pos, Item* item) {
-        if (pos < 0 || pos >= INV_SIZE) {
-            throw new InvException("INVALID");
-        }
-        if (inv_buffer[pos] != nullptr)
-            delete inv_buffer[pos];
-        this->inv_buffer[pos] = item;
-    };
+    Inventory::Inventory() : Table(INV_ROWS, INV_COLS){}
 
     /**
      * @brief Overload the << operator to display the Inventory
@@ -76,10 +24,10 @@ namespace Lib {
         os << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {
             os << "[(I" << i << ") "
-                << (inven.inv_buffer[i])->getID() << " "
-                << (inven.inv_buffer[i]->isTool() ?
-                    inven.inv_buffer[i]->getDurability() :
-                    inven.inv_buffer[i]->getQuantity()) << "] ";
+                << (inven.slot[i])->getID() << " "
+                << (inven.slot[i]->isTool() ?
+                    inven.slot[i]->getDurability() :
+                    inven.slot[i]->getQuantity()) << "] ";
             if ((i + 1) % INV_COLS == 0) {
                 os << endl;
             }
@@ -103,7 +51,7 @@ namespace Lib {
             << setw(WIDTH) << "Type" << " | "
             << setw(WIDTH) << "Base Type" << endl;
         for (int i = 0; i < INV_SIZE; i++) {
-            if (inven->inv_buffer[i]->getID() != UNDEFINED_ID) {
+            if (inven->slot[i]->getID() != UNDEFINED_ID) {
                 undef_count--;
                 os << setw(NUMWIDTH - to_string(i).length()) << "I" << i << " | ";
                 inven->specify(i);
@@ -116,17 +64,6 @@ namespace Lib {
         return os;
     }
 
-    /**
-     * @brief Display info of specific slot in inventory
-     * 
-     * @param pos 
-     */
-    void Inventory::specify(int pos) {
-        if (pos < 0 || pos >= CRAFT_SIZE) {
-            throw new TableException("INVALID");
-        }
-        (this->inv_buffer[pos])->displayInfo();
-    }
 
     void Inventory::addNonTool(NonTool* item, int start){
         Item* currItem = nullptr;
@@ -187,7 +124,7 @@ namespace Lib {
     }
 
     void Inventory::discard(int index, int qty) {
-        Item* target = this->inv_buffer[index];
+        Item* target = this->slot[index];
         if (target->getQuantity() - qty > 0) {
             target->setQuantity(target->getQuantity() - qty);
         }

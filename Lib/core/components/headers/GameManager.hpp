@@ -6,8 +6,8 @@
 #include <tuple>
 #include <string>
 #include <fstream>
-#include "crafting_table.hpp"
-#include "inventory.hpp"
+#include <filesystem>
+#include "table.hpp"
 using namespace std;
 
 namespace Lib {

@@ -135,19 +135,18 @@ namespace Lib {
      * 
      * @param ID ID of the tool
      * @param name name of the tool
-     * @param type type of the tool 
-     * @param basetype basetype of the tool
-     * @param dur durability of the tool
+     * @param durability durability of the tool
      */
-    Tool::Tool(int ID, string name)
+    Tool::Tool(int ID, string name, int durability)
         : Item(ID, name, "TOOL", "-") {
-        this->durability = 10; // Default durability = 10
+        this->durability = durability; // Default durability = 10
     }
 
-    Tool::Tool(const TupleItem& item) : 
+    Tool::Tool(const TupleItem& item, int durability) : 
     Tool(
         stoi(get<0>(item)),
-        get<1>(item)
+        get<1>(item),
+        durability
     ) {}
 
     Tool::Tool(const Tool& t) : Item(t.ID, t.name, t.type, t.basetype) {

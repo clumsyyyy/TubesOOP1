@@ -53,7 +53,7 @@ namespace Lib {
                     gm.inv.addNonTool(NT, 0);
                 }
                 else { // Checking if the item is a tool
-                    Tool* T = new Tool(tup);
+                    Tool* T = new Tool(tup, 10);
                     gm.inv.addTool(T, qty);
                 }
                 return;
