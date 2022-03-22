@@ -118,6 +118,7 @@ namespace GUI {
 			this->itemQty->Name = L"itemQty";
 			this->itemQty->Size = System::Drawing::Size(87, 20);
 			this->itemQty->TabIndex = 6;
+			this->itemQty->Maximum = 2000;
 			this->itemQty->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
 			// 
 			// AddItemForm

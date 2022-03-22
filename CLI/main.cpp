@@ -1,4 +1,3 @@
-// sample main file, replace this with your own code
 #include <string>
 #include <vector>
 #include "core/all_headers.hpp"

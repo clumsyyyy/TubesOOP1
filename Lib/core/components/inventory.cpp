@@ -104,7 +104,7 @@ namespace Lib {
             }
         }
         // case 2: if not found, find from the first slot
-        for (int i = start; i < INV_SIZE; i++){
+        for (int i = 0; i < INV_SIZE; i++){
             currItem = this->get(i);
             if (currItem->getID() == UNDEFINED_ID) {
                 if (item->getQuantity() <= MAX_STACK) {

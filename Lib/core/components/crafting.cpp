@@ -148,7 +148,7 @@ namespace Lib {
                 return new Item();
             } else if (item->isTool()) {
                 if (sum_tool > 0 && tool->getName() != item->getName()) {
-                    this->count;
+                    //this->count++;
                     return new Item();
                 }
                 tool = (Tool*)item;
@@ -159,9 +159,12 @@ namespace Lib {
                 }
             }
         }
+        this->count++;
         if (sum_tool != 2) {
             return new Item();
         }
+        this->set_bound(CRAFT_ROWS, CRAFT_COLS);
+        this->set_sub_matrix(0, 0);
         tool->setDurability(durability);
         return tool;
     }

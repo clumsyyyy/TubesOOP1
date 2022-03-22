@@ -42,8 +42,6 @@ namespace GUI {
 
 
 
-
-
 	private: System::Windows::Forms::ContextMenuStrip^ itemMenu;
 	private: System::Windows::Forms::ToolStripMenuItem^ itemUse;
 
