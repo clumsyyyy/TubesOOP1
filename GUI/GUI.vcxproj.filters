@@ -128,4 +128,7 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="resources\Minecraft.ttf" />
+  </ItemGroup>
 </Project>

@@ -11,6 +11,12 @@ namespace GUI {
 	Main::Main() {
 		InitializeComponent();
 		//Lib::gm.Load();
+		PrivateFontCollection^ pfc = (gcnew System::Drawing::Text::PrivateFontCollection());
+		String^ path = (Application::StartupPath->Remove(Application::StartupPath->LastIndexOf('\\')));
+		pfc->AddFontFile(path->Remove(path->LastIndexOf('\\')) + "\\GUI\\resources\\Minecraft.ttf");
+
+		InventoryLabel->Font = gcnew System::Drawing::Font(pfc->Families[0], 16);
+		CraftingLabel->Font = gcnew System::Drawing::Font(pfc->Families[0], 16);
 		ItemSlot::InitImages();
 		this->inventoryPanel->SuspendLayout();
 		this->craftingPanel->SuspendLayout();
@@ -85,6 +91,15 @@ namespace GUI {
 			catch (UseException* e) {
 				MessageBox::Show(to<String^>(e->getException()));
 			}
+		}
+	}
+
+	void Main::systemExport_Click(Object^ sender, EventArgs^ e) {
+		SaveFileDialog^ exportDialog = gcnew SaveFileDialog();
+		exportDialog->Filter = "*.out | All Files (*.*)";
+		//DialogResult^ result = saveDialog->ShowDialog();
+		if (exportDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+			Lib::ExportHandler(to<std::string>(exportDialog->FileName));
 		}
 	}
 }

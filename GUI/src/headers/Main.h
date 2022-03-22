@@ -11,7 +11,9 @@ namespace GUI {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-
+	using namespace System::Drawing::Text;
+	using namespace System::Web;
+	using namespace std;
 	/// <summary>
 	/// Summary for Main
 	/// </summary>
@@ -48,6 +50,10 @@ namespace GUI {
 	private: System::Windows::Forms::ToolStripMenuItem^ itemDiscard;
 	private: System::Windows::Forms::FlowLayoutPanel^ craftingResult;
 
+	private: System::Windows::Forms::Label^ CraftingLabel;
+	private: System::Windows::Forms::Label^ InventoryLabel;
+
+
 
 
 
@@ -74,6 +80,7 @@ namespace GUI {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Main::typeid));
 			this->craftingPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->inventoryPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->menuBar = (gcnew System::Windows::Forms::MenuStrip());
@@ -85,6 +92,8 @@ namespace GUI {
 			this->itemUse = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->itemDiscard = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->craftingResult = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->CraftingLabel = (gcnew System::Windows::Forms::Label());
+			this->InventoryLabel = (gcnew System::Windows::Forms::Label());
 			this->menuBar->SuspendLayout();
 			this->itemMenu->SuspendLayout();
 			this->SuspendLayout();
@@ -98,7 +107,7 @@ namespace GUI {
 				50)));
 			this->craftingPanel->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
 				50)));
-			this->craftingPanel->Location = System::Drawing::Point(180, 45);
+			this->craftingPanel->Location = System::Drawing::Point(151, 72);
 			this->craftingPanel->Margin = System::Windows::Forms::Padding(0);
 			this->craftingPanel->Name = L"craftingPanel";
 			this->craftingPanel->RowCount = 3;
@@ -129,7 +138,7 @@ namespace GUI {
 				50)));
 			this->inventoryPanel->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
 				50)));
-			this->inventoryPanel->Location = System::Drawing::Point(79, 217);
+			this->inventoryPanel->Location = System::Drawing::Point(90, 282);
 			this->inventoryPanel->Margin = System::Windows::Forms::Padding(0);
 			this->inventoryPanel->Name = L"inventoryPanel";
 			this->inventoryPanel->RowCount = 3;
@@ -145,7 +154,7 @@ namespace GUI {
 			this->menuBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) { this->itemMenuBar, this->systemMenuBar });
 			this->menuBar->Location = System::Drawing::Point(0, 0);
 			this->menuBar->Name = L"menuBar";
-			this->menuBar->Size = System::Drawing::Size(646, 24);
+			this->menuBar->Size = System::Drawing::Size(646, 30);
 			this->menuBar->TabIndex = 3;
 			this->menuBar->Text = L"menuStrip1";
 			// 
@@ -153,13 +162,13 @@ namespace GUI {
 			// 
 			this->itemMenuBar->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->itemAdd });
 			this->itemMenuBar->Name = L"itemMenuBar";
-			this->itemMenuBar->Size = System::Drawing::Size(43, 20);
+			this->itemMenuBar->Size = System::Drawing::Size(53, 26);
 			this->itemMenuBar->Text = L"Item";
 			// 
 			// itemAdd
 			// 
 			this->itemAdd->Name = L"itemAdd";
-			this->itemAdd->Size = System::Drawing::Size(180, 22);
+			this->itemAdd->Size = System::Drawing::Size(120, 26);
 			this->itemAdd->Text = L"Add";
 			this->itemAdd->Click += gcnew System::EventHandler(this, &Main::itemAdd_Click);
 			// 
@@ -167,52 +176,81 @@ namespace GUI {
 			// 
 			this->systemMenuBar->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->systemExport });
 			this->systemMenuBar->Name = L"systemMenuBar";
-			this->systemMenuBar->Size = System::Drawing::Size(57, 20);
+			this->systemMenuBar->Size = System::Drawing::Size(70, 26);
 			this->systemMenuBar->Text = L"System";
 			// 
 			// systemExport
 			// 
 			this->systemExport->Name = L"systemExport";
-			this->systemExport->Size = System::Drawing::Size(108, 22);
+			this->systemExport->Size = System::Drawing::Size(135, 26);
 			this->systemExport->Text = L"Export";
+			this->systemExport->Click += gcnew System::EventHandler(this, &Main::systemExport_Click);
 			// 
 			// itemMenu
 			// 
 			this->itemMenu->ImageScalingSize = System::Drawing::Size(20, 20);
 			this->itemMenu->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) { this->itemUse, this->itemDiscard });
 			this->itemMenu->Name = L"contextMenuStrip1";
-			this->itemMenu->Size = System::Drawing::Size(181, 70);
+			this->itemMenu->Size = System::Drawing::Size(129, 52);
 			this->itemMenu->Opening += gcnew System::ComponentModel::CancelEventHandler(this, &Main::itemMenu_Opening);
 			// 
 			// itemUse
 			// 
 			this->itemUse->Name = L"itemUse";
-			this->itemUse->Size = System::Drawing::Size(180, 22);
+			this->itemUse->Size = System::Drawing::Size(128, 24);
 			this->itemUse->Text = L"Use";
 			this->itemUse->Click += gcnew System::EventHandler(this, &Main::itemUse_Click);
 			// 
 			// itemDiscard
 			// 
 			this->itemDiscard->Name = L"itemDiscard";
-			this->itemDiscard->Size = System::Drawing::Size(180, 22);
+			this->itemDiscard->Size = System::Drawing::Size(128, 24);
 			this->itemDiscard->Text = L"Discard";
 			this->itemDiscard->Click += gcnew System::EventHandler(this, &Main::itemDiscard_Click);
 			// 
 			// craftingResult
 			// 
-			this->craftingResult->Location = System::Drawing::Point(429, 91);
+			this->craftingResult->Location = System::Drawing::Point(429, 119);
 			this->craftingResult->Name = L"craftingResult";
 			this->craftingResult->Size = System::Drawing::Size(50, 50);
 			this->craftingResult->TabIndex = 10;
 			// 
+			// CraftingLabel
+			// 
+			this->CraftingLabel->AutoSize = true;
+			this->CraftingLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->CraftingLabel->ForeColor = System::Drawing::SystemColors::WindowText;
+			this->CraftingLabel->Location = System::Drawing::Point(146, 47);
+			this->CraftingLabel->Name = L"CraftingLabel";
+			this->CraftingLabel->Size = System::Drawing::Size(88, 25);
+			this->CraftingLabel->TabIndex = 12;
+			this->CraftingLabel->Text = L"Crafting";
+			// 
+			// InventoryLabel
+			// 
+			this->InventoryLabel->AutoSize = true;
+			this->InventoryLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->InventoryLabel->ForeColor = System::Drawing::SystemColors::WindowText;
+			this->InventoryLabel->Location = System::Drawing::Point(85, 257);
+			this->InventoryLabel->Name = L"InventoryLabel";
+			this->InventoryLabel->Size = System::Drawing::Size(101, 25);
+			this->InventoryLabel->TabIndex = 13;
+			this->InventoryLabel->Text = L"Inventory";
+			// 
 			// Main
 			// 
-			this->ClientSize = System::Drawing::Size(646, 398);
+			this->BackColor = System::Drawing::SystemColors::MenuBar;
+			this->ClientSize = System::Drawing::Size(646, 454);
+			this->Controls->Add(this->InventoryLabel);
+			this->Controls->Add(this->CraftingLabel);
 			this->Controls->Add(this->craftingResult);
 			this->Controls->Add(this->inventoryPanel);
 			this->Controls->Add(this->craftingPanel);
 			this->Controls->Add(this->menuBar);
-			this->ForeColor = System::Drawing::SystemColors::ControlLight;
+			this->ForeColor = System::Drawing::SystemColors::ScrollBar;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MainMenuStrip = this->menuBar;
 			this->Name = L"Main";
 			this->Text = L"Minecraft Crafting Table";
@@ -231,6 +269,7 @@ namespace GUI {
 		void itemDiscard_Click(Object^ sender, EventArgs^ e);
 		void itemUse_Click(Object^ sender, EventArgs^ e);
 		void itemMenu_Opening(Object^ sender, CancelEventArgs^ e);
+		void systemExport_Click(Object^ sender, EventArgs^ e);
 };
 }
 

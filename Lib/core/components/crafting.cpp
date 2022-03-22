@@ -159,6 +159,9 @@ namespace Lib {
                 }
             }
         }
+        if (sum_tool != 2) {
+            return new Item();
+        }
         tool->setDurability(durability);
         return tool;
     }

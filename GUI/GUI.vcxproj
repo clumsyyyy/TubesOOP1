@@ -229,6 +229,9 @@
       <Project>{2cfce30d-fefb-432b-a8b2-3f77361ea300}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="resources\Minecraft.ttf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
