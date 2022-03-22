@@ -155,16 +155,19 @@ namespace Lib {
                 sum_tool++;
                 durability = min(durability + item->getDurability(), 10);
                 if (sum_tool > 2) {
+                    this->count = -2;
                     return new Item();
                 }
             }
         }
-        this->count++;
-        if (sum_tool != 2) {
+        
+        if (sum_tool == 1) {
+            this->count = -1;
             return new Item();
         }
-        this->set_bound(CRAFT_ROWS, CRAFT_COLS);
+        this->count = 1;
         this->set_sub_matrix(0, 0);
+        this->set_bound(CRAFT_ROWS, CRAFT_COLS);
         tool->setDurability(durability);
         return tool;
     }
@@ -188,7 +191,6 @@ namespace Lib {
             this->sum = 1;
             return result_item; 
         }
-        this->count = -1;
         return new Item();
     }
 
@@ -206,27 +208,29 @@ namespace Lib {
             gm.inv.addTool((Tool*)item,sum);
             crf.set_crafting_table(count);
         } else if (count == -1) {
-            throw new CraftingException("RECIPE");
+            throw new CraftingException("TOOL1");
+        } else if (count == -2) {
+            throw new CraftingException("TOOL2");
         } else if (item->isUndef()) {
-            throw new CraftingException("TOOL");
+            throw new CraftingException("RECIPE");
         }
     }
 
-    void Crafting::returning() {
-        cout << "Returning item :" << endl;
-        for (int i = 0; i < CRAFT_SIZE; i++) {
-            Item* item = gm.crftab[i];
-            if (item->getID() != UNDEFINED_ID) {
-                if (item->isNonTool()) {
-                    NonTool *NT = new NonTool(*((NonTool*)item));
-                    gm.inv.addNonTool(NT, 0);
-                    gm.crftab.discard(item->getQuantity(), i);
-                } else if (item->isTool()) {
-                    Tool *T = new Tool(*((Tool*)item));
-                    gm.inv.addTool(T, 1);
-                    gm.crftab.discard(item->getQuantity(), i);
-                }
-            }           
-        }
-    }
+    // void Crafting::returning() {
+    //     cout << "Returning item :" << endl;
+    //     for (int i = 0; i < CRAFT_SIZE; i++) {
+    //         Item* item = gm.crftab[i];
+    //         if (item->getID() != UNDEFINED_ID) {
+    //             if (item->isNonTool()) {
+    //                 NonTool *NT = new NonTool(*((NonTool*)item));
+    //                 gm.inv.addNonTool(NT, 0);
+    //                 gm.crftab.discard(item->getQuantity(), i);
+    //             } else if (item->isTool()) {
+    //                 Tool *T = new Tool(*((Tool*)item));
+    //                 gm.inv.addTool(T, 1);
+    //                 gm.crftab.discard(item->getQuantity(), i);
+    //             }
+    //         }           
+    //     }
+    // }
 }

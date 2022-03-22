@@ -37,7 +37,9 @@ namespace Lib {
 	};
 
 	void CraftingException::printMessage() {
-		if (btype == "TOOL") {
+		if (btype == "TOOL1") {
+			cout << "[CRF-EXC] Can't craft only with one tool!" << endl;
+		} else if (btype == "TOOL1") {
 			cout << "[CRF-EXC] Can't craft more than two tools!" << endl;
 		} else {
 			cout << "[CRF-EXC] Recipe not found!" << endl;
