@@ -28,10 +28,10 @@ namespace Lib {
 
     void Crafting::set_crafting_table(int min) {
         int i = this->i_sub, j = this->j_sub;
-        for (int idx = i; idx < this->row+i; idx++) {
+        for (int index = i; index < this->row+i; index++) {
             for (int idj = j; idj < this->col+j; idj++ ) {
-                if (!GET_CRAFT(idx, idj)->isUndef()) {
-                    gm.crftab.discard(min, CRAFT_IDX(idx, idj));
+                if (!GET_CRAFT(index, idj)->isUndef()) {
+                    gm.crftab.discard(min, CRAFT_IDX(index, idj));
                 }
             }
         }
@@ -107,11 +107,11 @@ namespace Lib {
     }
 
     Item* Crafting::recipe() {
-        auto& idxRecipe = get<0>(this->TupRecipe);
+        auto& indexRecipe = get<0>(this->TupRecipe);
         auto& itemResRecipe = get<2>(this->TupRecipe);
         int itemResCntRecipe = get<3>(this->TupRecipe);
 
-        set_bound(get<0>(idxRecipe), get<1>(idxRecipe));
+        set_bound(get<0>(indexRecipe), get<1>(indexRecipe));
         for (int i = 0; i <= CRAFT_ROWS-this->row; i++) {
             for (int j = 0; j <= CRAFT_ROWS-this->col; j++) {
                 int min;

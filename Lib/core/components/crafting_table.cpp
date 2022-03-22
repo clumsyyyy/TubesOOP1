@@ -75,9 +75,9 @@ namespace Lib {
 
     void CraftingTable::toInv(int slotSrc,int destSlot[]){
         Item* undef_item = new Item();
-        Item* item_inv = NULL;
-        Item* item_craft = NULL;
-        Item* item_moved = NULL;
+        Item* item_inv = nullptr;
+        Item* item_craft = nullptr;
+        Item* item_moved = nullptr;
         Item* crfItem = gm.crftab[slotSrc];
         bool tool = crfItem->isTool();
         if (tool) {

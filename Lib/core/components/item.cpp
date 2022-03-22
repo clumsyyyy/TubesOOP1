@@ -157,7 +157,7 @@ namespace Lib {
     }
 
     void Tool::setDurability(int dur) {
-        this->durability = (dur > 10 ? dur : 10);
+        this->durability = (dur < 10 ? dur : 10);
     }
 
     /**

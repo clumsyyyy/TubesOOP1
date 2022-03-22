@@ -14,12 +14,7 @@ namespace Lib {
 			return "[ADD-EXC] Item " + name + " doesn't exist!\n";
 		}
 		else if (btype == "OVERCAP") {
-			if (name == "TOOL") {
-				return "[ADD-EXC] Too many tools quantity! (MAX 27)";
-			}
-			else if (name == "NONTOOL") {
-				return "[ADD-EXC] Too many non-tool quantity!";
-			}
+			return "[ADD-EXC] Quantity exceeded current capacity!";
 		}
 	}
 
@@ -32,12 +27,7 @@ namespace Lib {
 			cout << "[ADD-EXC] Item " << name << " doesn't exist!" << endl;
 		}
 		else if (btype == "OVERCAP") {
-			if (name == "TOOL") {
-				cout << "[ADD-EXC] Too many tools quantity! (MAX 27)" << endl;
-			}
-			else if (name == "NONTOOL") {
-				cout << "[ADD-EXC] Too many non-tool quantity!" << endl;
-			}
+			cout << "[ADD-EXC] Quantity exceeded current capacity!" << endl;
 		}
 
 	}
@@ -146,6 +136,9 @@ namespace Lib {
 		else if (this->name == "EMPTY") {
 			cout << "This slot is empty; couldn't discard anything!" << endl;
 		}
+		else if (this->name == "OVER") {
+			cout << "You're attempting to discard more than the available quantity!" << endl;
+		}
 	}
 
 	string InvException::getException(){
@@ -158,6 +151,9 @@ namespace Lib {
 		}
 		else if (this->name == "EMPTY") {
 			return exc + "This slot is empty; couldn't discard anything!\n";
+		}
+		else if (this->name == "OVER") {
+			return exc + "You're attempting to discard more than the available quantity!\n";
 		}
 	}
 

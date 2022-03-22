@@ -27,6 +27,7 @@ namespace Lib {
 	    Inventory();
 	    friend ostream& operator<<(ostream& os, Inventory* inven);
 	    friend ostream& operator<<(ostream& os, Inventory& inven);
+		int filledSlots();
 	    void addNonTool(NonTool* item, int start);
 	    void addTool(Tool* item, int quant);
 	    void discard(int quant, int slot);

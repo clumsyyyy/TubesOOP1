@@ -57,7 +57,7 @@ namespace Lib {
                 if (get<1>(tup) == name) { // Checking if the item name is valid
                     found = true;
                     if (get<3>(tup) == "NONTOOL") { // Checking if the item is a non-tool
-                        if (qty > MAX_STACK * INV_SIZE) {
+                        if (qty > MAX_STACK * (INV_SIZE - gm.inv.filledSlots())) {
                             throw new AddException("NONTOOL", "OVERCAP");
                         }
                         else {
@@ -66,7 +66,7 @@ namespace Lib {
                         }
                     }
                     else { // Checking if the item is a tool
-                        if (qty > INV_SIZE) {
+                        if (qty > (INV_SIZE - gm.inv.filledSlots())) {
                             throw new AddException("TOOL", "OVERCAP");
                         }
                         else {
@@ -102,7 +102,7 @@ namespace Lib {
                 gm.inv.set(index, new Item()); // If the item is Tool, discard by setting the slot to empty
             }
             else if (gm.inv[index]->isUndef()) {
-                throw new InvException("INVALID");
+                throw new InvException("EMPTY");
             }
         }
         catch (BaseException* exc) {
@@ -123,9 +123,12 @@ namespace Lib {
                 throw new UseException(used_item->getName());
             }
             else {
-                used_item->useItem();
-                if (used_item->getDurability() == 1) // If the tool durability is 1, after being used, discard the item
+                if (used_item->getDurability() == 1){ // If the tool durability is 1, after being used, discard the item
+                    used_item->useItem();
                     gm.inv.set(index, new Item());
+                } else {
+                    used_item->useItem();
+                }
             }
         }
         catch (BaseException* exc) {

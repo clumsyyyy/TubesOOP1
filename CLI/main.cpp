@@ -47,7 +47,7 @@ int main() {
             if (gm.inv[index]->isNonTool()) {
                 cin >> qty;
             }
-            DiscardHandler(index, 1);
+            DiscardHandler(index, qty);
       
         }
         else if (command == "USE") 

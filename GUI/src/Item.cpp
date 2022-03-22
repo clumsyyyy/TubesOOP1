@@ -65,20 +65,20 @@ namespace GUI {
 	ItemSlot::ItemSlot(Control::ControlCollection^ controls, SlotType type) :
 		ItemSlot(0, controls, nullptr, type) {}
 
-	ItemSlot::ItemSlot(int idx, Control::ControlCollection^ controls, SlotType type) :
-		ItemSlot(idx, controls, nullptr, type) {}
+	ItemSlot::ItemSlot(int index, Control::ControlCollection^ controls, SlotType type) :
+		ItemSlot(index, controls, nullptr, type) {}
 
-	ItemSlot::ItemSlot(int idx, Control::ControlCollection^ controls, ContextMenuStrip^ contextItemMenu, SlotType type) {
+	ItemSlot::ItemSlot(int index, Control::ControlCollection^ controls, ContextMenuStrip^ contextItemMenu, SlotType type) {
 		//
 		// Create objects
 		//
-		this->idx = idx;
+		this->index = index;
 		this->pictBox = (gcnew PictureBox());
 		this->damageBar = (gcnew ProgressBar());
 		this->itemQuantity = (gcnew System::Windows::Forms::Label());
 		this->container = (gcnew System::Windows::Forms::Panel());
 		this->slotType = type;
-		this->ID = (type == SlotType::INVENTORY ? "I" : (type == SlotType::CRAFTING ? "C" : "")) + to_str(idx);
+		this->ID = (type == SlotType::INVENTORY ? "I" : (type == SlotType::CRAFTING ? "C" : "")) + to_str(index);
 		// 
 		// container
 		// 
@@ -156,7 +156,7 @@ namespace GUI {
 	}
 
 	int ItemSlot::GetIndex() {
-		return idx;
+		return index;
 	}
 
 	ItemSlot::SlotType ItemSlot::GetSlotType() {
@@ -166,10 +166,10 @@ namespace GUI {
 	void ItemSlot::Update() {
 		switch (slotType) {
 		case SlotType::CRAFTING:
-			item = gm.crftab[idx];
+			item = gm.crftab[index];
 			break;
 		case SlotType::INVENTORY:
-			item = gm.inv[idx];
+			item = gm.inv[index];
 			break;
 		}
 		if (item != nullptr && item->getID() != UNDEFINED_ID) {

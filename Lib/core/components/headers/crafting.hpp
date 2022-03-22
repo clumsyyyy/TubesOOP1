@@ -19,16 +19,12 @@ namespace Lib {
         int count, sum;
     public:
         Crafting();
-        // Crafting(TupleRecipe TupRecipe);
         ~Crafting();
         void set_bound(int row, int col);
         void set_sub_matrix(int i, int j);
         void set_crafting_table(int min);
-        // void set_result(const TupleItem& item);
-        // void set_result(const Item& item);
         int get_count() const;
         int get_sum() const;
-        // TupleItem get_item_result() const;
         int calculate_result(bool reverse);
         bool is_another_space_free();
         Item* recipe();

@@ -64,6 +64,25 @@ namespace Lib {
         return os;
     }
 
+    /**
+     * @brief Returns the number of filled slots in the inventory
+     *
+     * @return The number of filled slots
+     */
+    int Inventory::filledSlots() {
+        int count = 0;
+        while (this->get(count)->getID() != UNDEFINED_ID) {
+            count++;
+        }
+        return count;
+    }
+
+    /**
+     * @brief Adds a non-tool item to the inventory
+     *
+     * @param item item to be added
+     * @param start start index to begin adding
+     */
 
     void Inventory::addNonTool(NonTool* item, int start){
         Item* currItem = nullptr;
@@ -104,24 +123,39 @@ namespace Lib {
         return;
     }
 
-    void Inventory::addTool(Tool* item, int quant){
+    /**
+     * @brief Adds a tool item to the inventory
+     *
+     * @param item item to be added
+     * @param quant quantity of the item
+     */
+    void Inventory::addTool(Tool* item, int qty){
         bool added = false;
-        for (int i = 0; i < quant; i++) {
+        Tool* temp;
+        for (int i = 0; i < qty; i++) {
+            temp = new Tool(*item);
             added = false;
             for (int j = 0; j < INV_SIZE; j++) {
                 // base case if no such item exists in inventory
                 if (this->get(j)->getID() == UNDEFINED_ID) {
-                    this->set(j, item);
+                    this->set(j, temp);
                     added = true;
                     break;
                 }
             }
             if (!added) {
                 throw new InvException("FULL");
+                delete temp;
             }
         }
-     
     }
+
+     /**
+     * @brief Discards an item from a slot in the inventory
+     *
+     * @param index the destination index to be discarded
+     * @param qty quantity of the item
+     */
 
     void Inventory::discard(int index, int qty) {
         Item* target = this->slot[index];
@@ -132,7 +166,7 @@ namespace Lib {
             set(index, new Item());
         }
         else {
-            throw new InvException("EMPTY");
+            throw new InvException("OVER");
         }
     }
 

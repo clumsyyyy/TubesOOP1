@@ -28,7 +28,7 @@ namespace GUI {
 		ProgressBar^ damageBar;
 		Label^ itemQuantity;
 		Lib::Item* item = nullptr;
-		int idx;
+		int index;
 
 		static List<ItemSlot^>^ itemsIns = gcnew List<ItemSlot^>();
 		static ItemSlot^ itemRes;
@@ -42,8 +42,8 @@ namespace GUI {
 		static ItemSlot^ FromDragEvent(DragEventArgs^ e);
 	public:
 		ItemSlot(Control::ControlCollection^ controls, SlotType type);
-		ItemSlot(int idx, Control::ControlCollection^ controls, SlotType type);
-		ItemSlot(int idx, Control::ControlCollection^ controls, ContextMenuStrip^ contextItemMenu, SlotType type);
+		ItemSlot(int index, Control::ControlCollection^ controls, SlotType type);
+		ItemSlot(int index, Control::ControlCollection^ controls, ContextMenuStrip^ contextItemMenu, SlotType type);
 		Lib::Item* GetItem();
 		String^ GetID();
 		int GetIndex();
