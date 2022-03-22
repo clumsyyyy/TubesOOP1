@@ -99,6 +99,7 @@ int main() {
             cout << "Invalid command!" << endl;
         }
         cout << "Input command: ";
+        ClearBuffer();
     }
     return 0;
 }
