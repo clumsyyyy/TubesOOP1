@@ -47,6 +47,7 @@ namespace Lib {
 		MoveException(string);
 		void printMessage();
 		string getException();
+		static void createThenPrintExc(string);
 
 	};
 

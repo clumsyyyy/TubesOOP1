@@ -158,20 +158,21 @@ namespace Lib {
      */
     void MoveHandler(string source, int slotCount, vector<string> slotDestV) {
         if (slotCount < 1) {
-            throw new MoveException("INVALIDSLOT");
+            MoveException::createThenPrintExc("INVALIDSLOT");
+            return;
         }
         char src = source[0];
         string source1 = source;
         source1.erase(0, 1);
         int slotSrc = stoi(source1);
         if (src != 'C' && src != 'I') {  //Checking validity of source slot
-            ClearBuffer();
-            throw new MoveException("INVALID");
+            MoveException::createThenPrintExc("INVALID");
+            return;
         }
 
         if ((src == 'C' && slotSrc >= CRAFT_SIZE) || (src == 'I' && slotSrc >= INV_SIZE)) {
-            ClearBuffer();
-            throw new MoveException("INVALID");
+            MoveException::createThenPrintExc("INVALID");
+            return;
         }
 
         bool sourceCraft = false, sourceInv = false;
@@ -196,8 +197,8 @@ namespace Lib {
             nontool = true;
 
         if (tool && slotCount != 1) {
-            ClearBuffer();
-            throw new MoveException("INVALIDSLOT");
+            MoveException::createThenPrintExc("INVALIDSLOT");
+            return;
         }
 
         //INPUT DESTINATION SLOT
@@ -213,22 +214,25 @@ namespace Lib {
                 bool_inv = true;
             }
             else {
-                ClearBuffer();
-                throw new MoveException("INVALIDDEST");
+                MoveException::createThenPrintExc("INVALIDDEST");
+                return;
             }
             if (bool_inv && craft) {
-                ClearBuffer();
-                throw new MoveException("DOUBLETYPEDEST");
+                MoveException::createThenPrintExc("DOUBLETYPEDEST");
+                return;
             }
             slotDest.erase(0, 1);
             allSlot[i] = stoi(slotDest);
-            if ((craft && slotSrc >= CRAFT_SIZE) || (bool_inv && slotSrc >= INV_SIZE)) {
-                throw new MoveException("INVALIDDEST");
+            
+            if ((craft && allSlot[i] >= CRAFT_SIZE) || (bool_inv && allSlot[i] >= INV_SIZE)) {
+                MoveException::createThenPrintExc("INVALIDDEST");
+                return;
             }
         }
 
         if (sourceInv && bool_inv && slotCount != 1) {
-            throw new MoveException("MOVETO2INV");
+            MoveException::createThenPrintExc("MOVETO2INV");
+            return;
         }
         try {
             MoveItemHandler(source, slotCount, allSlot, bool_inv);

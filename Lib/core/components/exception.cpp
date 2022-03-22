@@ -122,7 +122,10 @@ namespace Lib {
 		}
 		return exc;
 	}
-
+	void MoveException::createThenPrintExc(string type){
+		MoveException *err = new MoveException(type);
+		err->printMessage();
+	};
 	InvException::InvException(string name) : BaseException(name) {}
 
 	void InvException::printMessage() {
