@@ -11,25 +11,16 @@ namespace Lib {
     CraftingTable::CraftingTable() : Table(CRAFT_ROWS, CRAFT_COLS){}
 
     ostream& operator<<(ostream& os, CraftingTable& ct) {
-        os << "Crafting Table : " << endl;
+        os << "\nCrafting Table : " << endl;
         for (int i = 0; i < CRAFT_SIZE; i++) {
-            Item* item = ct.get(i);
-            Item* itemCrf = ct.slot[i];
-            os << "[(C" << i << ") "
-                << item->getID() << " "
-                << item->getName();
-            if (itemCrf->getType() == "-") {
-                os << " " << itemCrf->getBType();
-            }
-            if (itemCrf->isTool()) {
-                os << " " << itemCrf->getDurability();
-            } else if (itemCrf->isNonTool()) {
-                os << " " << itemCrf->getQuantity();
-            }
-            os << "] ";
-            if ((i + 1) % CRAFT_COLS == 0) {
-                os << endl;
-            }
+            os << "[C" << i << " "
+                << (ct.slot[i]->getID()) << " "
+                << (ct.slot[i]->isTool() ?
+                    ct.slot[i]->getDurability() :
+                    ct.slot[i]->getQuantity()) << "] ";
+                if ((i + 1) % CRAFT_COLS == 0) {
+                    os << endl;
+                }
         }
         return os;
     }

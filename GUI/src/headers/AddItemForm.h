@@ -71,11 +71,12 @@ namespace GUI {
 			// itemSelection
 			// 
 			this->itemSelection->FormattingEnabled = true;
-			this->itemSelection->Items->AddRange(gcnew cli::array< System::Object^  >(24) {
+			this->itemSelection->Items->AddRange(gcnew cli::array< System::Object^  >(31) {
 				L"OAK_LOG", L"SPRUCE_LOG", L"BIRCH_LOG", L"OAK_PLANK",
 					L"SPRUCE_PLANK", L"BIRCH_PLANK", L"STICK", L"COBBLESTONE", L"BLACKSTONE", L"IRON_INGOT", L"IRON_NUGGET", L"DIAMOND", L"WOODEN_PICKAXE",
 					L"STONE_PICKAXE", L"IRON_PICKAXE", L"DIAMOND_PICKAXE", L"WOODEN_AXE", L"STONE_AXE", L"IRON_AXE", L"DIAMOND_AXE", L"WOODEN_SWORD",
-					L"STONE_SWORD", L"IRON_SWORD", L"DIAMOND_SWORD"
+					L"STONE_SWORD", L"IRON_SWORD", L"DIAMOND_SWORD", L"GOLD_INGOT", L"GOLDEN_SWORD",
+					L"WOODEN_HOE", L"STONE_HOE", L"IRON_HOE", L"GOLDEN_HOE", L"DIAMOND_HOE"
 			});
 			this->itemSelection->Location = System::Drawing::Point(101, 37);
 			this->itemSelection->Name = L"itemSelection";

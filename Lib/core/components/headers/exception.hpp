@@ -48,7 +48,6 @@ namespace Lib {
 		void printMessage();
 		string getException();
 		static void createThenPrintExc(string);
-
 	};
 
 	class InvException : public BaseException {

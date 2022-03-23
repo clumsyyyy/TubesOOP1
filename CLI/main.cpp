@@ -4,8 +4,22 @@
 
 using namespace Lib;
 
+void title() {
+    cout << "" << endl;
+    cout << " ___ ___    ___  ____   ____  ____    ____  ____  ____  ____  " << endl;
+    cout << "|   |   |  /  _]|    | /    ||    \\  /    ||    ||    ||    \\ " << endl;
+    cout << "| _   _ | /  [_ |__  ||  o  ||  D  )|  o  ||__  | |  | |  _  |" << endl;
+    cout << "|  \\_/  ||    _]__|  ||     ||    / |     |__|  | |  | |  |  |" << endl;
+    cout << "|   |   ||   [_/  |  ||  _  ||    \\ |  _  /  |  | |  | |  |  |" << endl;
+    cout << "|   |   ||     \\  `  ||  |  ||  .  \\|  |  \\  `  | |  | |  |  |" << endl;
+    cout << "|___|___||_____|\\____||__|__||__|\\_||__|__|\\____||____||__|__|" << endl;
+    cout << "[ A MineCraft crafting table simulator ]" << endl;
+    cout << "[ Use command `HELP` to display available commands! ]" << endl;
+}
+
 int main() {
-    cout << "Input command: ";
+    title();
+    cout << "\n[INPUT COMMAND] | >> ";
     string command;
     while (cin >> command) {
         if (command == "SHOW")
@@ -91,13 +105,54 @@ int main() {
             string outputPath;
             cin >> outputPath;
             ExportHandler(outputPath);
-            cout << "Exported" << endl;
+            cout << "Exported file to path " << outputPath << "!" << endl;
+        }
+        else if (command == "HELP") {
+            // USAGE: HELP
+            cout << "=================================== HELP MENU ==================================\n" << endl;
+            cout << "| >> SHOW" << endl;
+            cout << "To display both the crafting table and the inventory." << endl;
+            cout << "Inventory: [(<SLOT_ID>) <ITEM_ID> <QUANTITY/DURABILITY>)]" << endl;
+            cout << "Crafting table: [(<SLOT_ID>) <ITEM_ID> <QUANTITY/DURABILITY)]\n" << endl;
+
+            cout << "| >> DETAILS ALL" << endl;
+            cout << "To display details of items in the crafting table and the inventory.\n" << endl;
+
+            cout << "| >> DETAILS ITEM <SLOT_ID>" << endl;
+            cout << "To display details of a specific item in a slot.\n" << endl;
+
+            cout << "| >> GIVE <ITEM_NAME> <ITEM_QTY>" << endl;
+            cout << "Adds item to the inventory as much as quantity.\n" << endl;
+
+            cout << "| >> DISCARD <INVENTORY_SLOT_ID> <ITEM_QTY>" << endl;
+            cout << "Discards item from an inventory slot as much as quantity." << endl;
+            cout << "[IMPORTANT] For discarding a tool item, use `DISCARD <INVENTORY_SLOT_ID>\n" << endl;
+
+            cout << "| >> USE <INVENTORY_SLOT_ID>" << endl;
+            cout << "Uses a tool item from an inventory slot. Cannot be used with a non-tool item.\n" << endl;
+
+            cout << "| >> MOVE <INVENTORY_SLOT_ID> N <CRAFTING_SLOT_ID_1> <CRAFTING_SLOT_ID_2> ..." << endl;
+            cout << "Moves N amount of items from the inventory to crafting slots." << endl;
+            cout << "[IMPORTANT] Enter as much crafting slots as the N items!\n" << endl;
+
+            cout << "| >> MOVE <INVENTORY_SLOT_ID_SRC> 1 <INVENTORY_SLOT_ID_DEST>" << endl;
+            cout << "Moves all items from one inventory slot to another slot.\n" << endl;
+
+            cout << "| >> MOVE <CRAFTING_SLOT_ID> 1 <INVENTORY_SLOT_ID>" << endl;
+            cout << "Moves all items from one crafting slot to one inventory slot.\n" << endl;
+
+            cout << "| >> EXPORT <DIRECTORY>" << endl;
+            cout << "Exports inventory into a file." << endl;
+            cout << "[IMPORTANT] Exported file will be saved with the relative path to this program." << endl;
+            cout << "Enter the desired path and save with a .out filetype (e.g. export/test.out)\n" << endl;
+
+            cout << "================================================================================\n" << endl;
         }
         else 
         {
-            cout << "Invalid command!" << endl;
+            cout << "Invalid command! Type `HELP` to see available commands." << endl;
         }
-        cout << "Input command: ";
+        cout << "\n[INPUT COMMAND] | >> ";
         ClearBuffer();
     }
     return 0;

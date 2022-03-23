@@ -224,7 +224,14 @@ namespace GUI {
 			"WOODEN_SWORD",
 			"STONE_SWORD",
 			"IRON_SWORD",
-			"DIAMOND_SWORD"
+			"DIAMOND_SWORD",
+			"GOLD_INGOT",
+			"GOLDEN_SWORD",
+			"WOODEN_HOE",
+			"STONE_HOE",
+			"IRON_HOE",
+			"GOLDEN_HOE",
+			"DIAMOND_HOE"
 		};
 		for (int i = 0; i < listImg->Length; i++) {
 			images[listImg[i]] = LOAD_IMG(listImg[i] + ".png");

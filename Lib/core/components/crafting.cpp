@@ -4,15 +4,10 @@
 
 namespace Lib {
     Crafting::Crafting() {
-        // this->ID = "-999"; this->name = "UNDEFINED"; this->type = "UNDEFINED"; this->btype = "UNDEFINED";
         this->count = 0; this->sum = 0;
         this->i_sub = 0; this->j_sub = 0;
         this->row = 0; this->col = 0;
     }
-
-    // Crafting::Crafting(TupleRecipe TupRecipe) : Crafting() {
-    //     this->TupRecipe = TupRecipe;
-    // }
 
     Crafting::~Crafting() { }
 
@@ -36,24 +31,6 @@ namespace Lib {
             }
         }
     }
-    // Monumen
-    // void Crafting::set_result(const TupleItem& item) {//string ID, string name, string type, string btype) {
-    //     this->ID = get<0>(item);
-    //     this->name = get<1>(item);
-    //     this->type = get<2>(item);
-    //     this->btype = get<3>(item);
-    // }
-
-    // void Crafting::set_result(const Item& item) {
-    //     this->ID = to_string(item.getID());
-    //     this->name = item.getName();
-    //     this->type = item.getType();
-    //     this->btype = item.getBType();
-    // }
-
-    // TupleItem Crafting::get_item_result() const {
-    //     return make_tuple(this->ID,this->name,this->type,this->btype);
-    // }
 
     int Crafting::get_count() const {
         return this->count;
@@ -62,6 +39,7 @@ namespace Lib {
     int Crafting::get_sum() const {
         return this->sum;
     }
+
     int Crafting::calculate_result(bool reverse) {
         int min = UNDEFINED_QUANTITY;
         auto& itemsRecipe = get<1>(this->TupRecipe);
@@ -126,7 +104,7 @@ namespace Lib {
                         }
                         this->count = min;
                         this->sum = min*itemResCntRecipe;
-                        if (get<3>(itemResRecipe) == "TOOL") {    
+                        if (get<3>(itemResRecipe) == "TOOL") {
                             return new Tool(itemResRecipe,10);
                         } else if (get<3>(itemResRecipe) == "NONTOOL") {
                             return new NonTool(itemResRecipe,this->sum);
@@ -200,12 +178,12 @@ namespace Lib {
         int count = crf.get_count();
         int sum = crf.get_sum();
         if (item->isNonTool()) {
-            cout << "crafted " << sum << " " << item->getName() << endl;
+            cout << "Item " << item->getName() << " successfully crafted! (Quantity: " << sum << ") " << endl;
             gm.inv.addNonTool((NonTool*)item,0);
             crf.set_crafting_table(count);
         } else if (item->isTool()) {
-            cout << "crafted " << sum << " " << item->getName() << " with durability " << item->getDurability() << endl;
-            gm.inv.addTool((Tool*)item,sum);
+            cout << "Tool " << item->getName() << " successfully crafted! (Durability: " << item->getDurability() << ") " << endl;
+            gm.inv.addTool((Tool*)item, 1);
             crf.set_crafting_table(count);
         } else if (count == -1) {
             throw new CraftingException("TOOL1");
@@ -215,22 +193,4 @@ namespace Lib {
             throw new CraftingException("RECIPE");
         }
     }
-
-    // void Crafting::returning() {
-    //     cout << "Returning item :" << endl;
-    //     for (int i = 0; i < CRAFT_SIZE; i++) {
-    //         Item* item = gm.crftab[i];
-    //         if (item->getID() != UNDEFINED_ID) {
-    //             if (item->isNonTool()) {
-    //                 NonTool *NT = new NonTool(*((NonTool*)item));
-    //                 gm.inv.addNonTool(NT, 0);
-    //                 gm.crftab.discard(item->getQuantity(), i);
-    //             } else if (item->isTool()) {
-    //                 Tool *T = new Tool(*((Tool*)item));
-    //                 gm.inv.addTool(T, 1);
-    //                 gm.crftab.discard(item->getQuantity(), i);
-    //             }
-    //         }           
-    //     }
-    // }
 }
