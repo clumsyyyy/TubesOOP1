@@ -82,7 +82,12 @@ int main() {
                 cin >> slotDest;
                 slotDestV.push_back(slotDest);
             }
+            try{
                 MoveHandler(slotSrc,slotQty, slotDestV);
+            }catch(MoveException * err){
+                err->printMessage();
+            }
+                
             
         }
         else if (command == "EXPORT") 

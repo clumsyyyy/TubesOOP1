@@ -158,21 +158,18 @@ namespace Lib {
      */
     void MoveHandler(string source, int slotCount, vector<string> slotDestV) {
         if (slotCount < 1) {
-            MoveException::createThenPrintExc("INVALIDSLOT");
-            return;
+            throw new MoveException("INVALIDSLOT");
         }
         char src = source[0];
         string source1 = source;
         source1.erase(0, 1);
         int slotSrc = stoi(source1);
         if (src != 'C' && src != 'I') {  //Checking validity of source slot
-            MoveException::createThenPrintExc("INVALID");
-            return;
+            throw new MoveException("INVALID");
         }
 
         if ((src == 'C' && slotSrc >= CRAFT_SIZE) || (src == 'I' && slotSrc >= INV_SIZE)) {
-            MoveException::createThenPrintExc("INVALID");
-            return;
+            throw new MoveException("INVALID");
         }
 
         bool sourceCraft = false, sourceInv = false;
@@ -197,8 +194,7 @@ namespace Lib {
             nontool = true;
 
         if (tool && slotCount != 1) {
-            MoveException::createThenPrintExc("INVALIDSLOT");
-            return;
+            throw new MoveException("INVALIDSLOT");
         }
 
         //INPUT DESTINATION SLOT
@@ -214,30 +210,26 @@ namespace Lib {
                 bool_inv = true;
             }
             else {
-                MoveException::createThenPrintExc("INVALIDDEST");
-                return;
+                throw new MoveException("INVALIDDEST");
             }
             if (bool_inv && craft) {
-                MoveException::createThenPrintExc("DOUBLETYPEDEST");
-                return;
+                throw new MoveException("DOUBLETYPEDEST");
             }
             slotDest.erase(0, 1);
             allSlot[i] = stoi(slotDest);
             
             if ((craft && allSlot[i] >= CRAFT_SIZE) || (bool_inv && allSlot[i] >= INV_SIZE)) {
-                MoveException::createThenPrintExc("INVALIDDEST");
-                return;
+                throw new MoveException("INVALIDDEST");
             }
         }
 
         if (sourceInv && bool_inv && slotCount != 1) {
-            MoveException::createThenPrintExc("MOVETO2INV");
-            return;
+            throw new MoveException("MOVETO2INV");
         }
         try {
             MoveItemHandler(source, slotCount, allSlot, bool_inv);
         } catch(MoveException* err) {
-            err->printMessage();
+            throw err;
         }
     }
 
@@ -261,14 +253,14 @@ namespace Lib {
                 try{
                     gm.inv.toCraft(slotSrc,destSlot,N);
                 }catch(MoveException* err){
-                    err->printMessage();
+                    throw err;
                 }
             }
             if (destInv) {
                 try{
                     gm.inv.toAnotherSlot(slotSrc,destSlot);
                 }catch(MoveException* err){
-                    err->printMessage();
+                    throw err;
                 }
             }
         }
