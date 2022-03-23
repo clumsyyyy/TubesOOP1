@@ -23,7 +23,7 @@ namespace Lib {
     ostream& operator<<(ostream& os, Inventory& inven) {
         os << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {
-            os << "[(I" << i << ") "
+            os << "[I" << i << " "
                 << (inven.slot[i])->getID() << " "
                 << (inven.slot[i]->isTool() ?
                     inven.slot[i]->getDurability() :
@@ -92,7 +92,8 @@ namespace Lib {
             if (currItem->getID() == item->getID()) {
                 // if current slot less than max stack, increase quantity
                 if (currItem->getQuantity() + item->getQuantity() <= MAX_STACK) {
-                    this->get(i)->setQuantity(this->get(i)->getQuantity() + item->getQuantity());
+                    currItem->setQuantity(currItem->getQuantity() + item->getQuantity());
+                    cout << "Item " << item->getName() << " successfully added!" << endl;
                     return;
                 }
                 else {
@@ -109,6 +110,7 @@ namespace Lib {
             if (currItem->getID() == UNDEFINED_ID) {
                 if (item->getQuantity() <= MAX_STACK) {
                     this->set(i, item);
+                    cout << "Item " << item->getName() << " successfully added!" << endl;
                     return;
                 }
                 else {
@@ -148,6 +150,7 @@ namespace Lib {
                 delete temp;
             }
         }
+        cout << "Tool " << item->getName() << " successfully added!" << endl;
     }
 
      /**
@@ -219,6 +222,7 @@ namespace Lib {
                         item_inv->setQuantity(item_inv->getQuantity() - N);
                         gm.inv.set(slotSrc, item_inv);
                     }
+                    cout << "Item " << item_moved->getName() << " successfully moved to the crafting table!" << endl;
                 }
             }
             else {
@@ -230,6 +234,7 @@ namespace Lib {
                     Tool* item_moved = new Tool(*((Tool*)gm.inv.get(slotSrc)));
                     gm.inv.set(slotSrc, undef_item);
                     gm.crftab.set(destSlot[0], item_moved);
+                    cout << "Tool " << item_moved->getName() << " successfully moved to the crafting table!" << endl;
                 }
             }
         }
@@ -251,15 +256,19 @@ namespace Lib {
         else {
             item_inv = new NonTool(*((NonTool*)itInv));
         }
+
         if (item_inv->getID() == UNDEFINED_ID) {
             throw new MoveException("VOID");
         }
+
         if (item_inv2->getID() != UNDEFINED_ID) {
             destKosong = false;
         }
+
         if (!destKosong && item_inv2->getID() != item_inv->getID()) {
             throw new MoveException("DIFFTYPE");
         }
+
         if (destKosong) {
             gm.inv.set(destSlot[0], item_inv);
             gm.inv.set(slotSrc, undef_item);
@@ -280,6 +289,7 @@ namespace Lib {
                     gm.inv.set(slotSrc, undef_item);
                     gm.inv.set(destSlot[0], item_inv2);
                 }
+                cout << "Item " << item_inv2->getName() << " successfully moved to another slot!" << endl;
             }
             else {
                 throw new MoveException("TOOL");

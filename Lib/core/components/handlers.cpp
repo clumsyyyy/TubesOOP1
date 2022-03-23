@@ -96,9 +96,11 @@ namespace Lib {
     void DiscardHandler(int index, int qty) {
         try {
             if (gm.inv[index]->isNonTool()) { // Checking if the item is NonTool 
+                cout << "Discarded item " << gm.inv[index]->getName() << " from slot I" << index << "." << endl;
                 gm.inv.discard(index, qty); // If the item is NonTool, discard by quantity
             }
             else if (gm.inv[index]->isTool()) {
+                cout << "Discarded tool " << gm.inv[index]->getName() << " from slot I" << index << "." << endl;
                 gm.inv.set(index, new Item()); // If the item is Tool, discard by setting the slot to empty
             }
             else if (gm.inv[index]->isUndef()) {
@@ -142,7 +144,12 @@ namespace Lib {
      * 
      */
     void CraftingHandler() {
-        Crafting::crafting_proses();
+        try {
+            Crafting::crafting_proses();
+        }
+        catch (BaseException* exc) {
+            exc->printMessage();
+        }
     }
 
     void ClearBuffer() {

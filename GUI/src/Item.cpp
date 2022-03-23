@@ -212,19 +212,29 @@ namespace GUI {
 			"BLACKSTONE",
 			"IRON_INGOT",
 			"IRON_NUGGET",
+			"GOLD_INGOT",
+			"GOLD_NUGGET",
 			"DIAMOND",
 			"WOODEN_PICKAXE",
 			"STONE_PICKAXE",
 			"IRON_PICKAXE",
+			"GOLDEN_PICKAXE",
 			"DIAMOND_PICKAXE",
 			"WOODEN_AXE",
 			"STONE_AXE",
 			"IRON_AXE",
+			"GOLDEN_AXE",
 			"DIAMOND_AXE",
 			"WOODEN_SWORD",
 			"STONE_SWORD",
 			"IRON_SWORD",
-			"DIAMOND_SWORD"
+			"GOLDEN_SWORD",
+			"DIAMOND_SWORD",
+			"WOODEN_HOE",
+			"STONE_HOE",
+			"IRON_HOE",
+			"GOLDEN_HOE",
+			"DIAMOND_HOE"
 		};
 		for (int i = 0; i < listImg->Length; i++) {
 			images[listImg[i]] = LOAD_IMG(listImg[i] + ".png");

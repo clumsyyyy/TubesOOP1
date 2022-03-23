@@ -166,8 +166,10 @@ namespace Lib {
      */
     void Tool::useItem() {
         this->durability--;
+        cout << "Used item " << this->getName() << "!" << endl;
+        cout << "Remaining durability: " << this->durability << endl;
         if (this->durability == 0) {
-            cout << "Your " << this->name << " broke." << endl;
+            cout << "Your " << this->name << " broke!\n" << endl;
             delete this;
         }
     }
