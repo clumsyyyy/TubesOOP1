@@ -25,9 +25,11 @@ MejaRajin adalah sebuah program berbasis _Command-Line Interface_ dan _Graphical
 
 #### Melalui Visual Studio
 - Buka _Visual Studio_, Navigasikan ke folder dan buka file _solution_ `MinecraftCraftingTable.sln`
+![image](https://user-images.githubusercontent.com/74661051/159973488-fe6fbe70-6101-4537-bae0-d11a27213aeb.png)
+
 - Pada _Solution Explorer_, klik kanan pada **CLI** dan pilih _Select as Startup Project_. Pastikan tulisan **CLI** telah tercetak tebal.
 
-![image](https://user-images.githubusercontent.com/71161031/159953407-36bb9941-0eff-4ad4-aac6-031089b7912c.png)
+![image](https://user-images.githubusercontent.com/74661051/159973620-1d598d07-9b76-468b-bd44-ab0866988c93.png)
 - Jalankan _CLI_ dengan menekan tombol F5 atau menggunakan opsi _Local Windows Debugger_ pada _toolbar_ bagian atas.
 ![image](https://user-images.githubusercontent.com/71161031/159953110-ab476a8e-be15-4783-9a49-34496f5797ea.png)
 
@@ -35,6 +37,7 @@ MejaRajin adalah sebuah program berbasis _Command-Line Interface_ dan _Graphical
 #### Melalui Visual Studio
 **[IMPORTANT]** Fitur ini harus diakses lewat Visual Studio!
 - Buka _Visual Studio_, navigasikan ke folder dan buka file _solution_ `MinecraftCraftingTable.sln`
+![image](https://user-images.githubusercontent.com/74661051/159973467-9cb0a872-a659-4f17-9dc4-afd2f4b8b9a8.png)
 - Pada _Solution Explorer_, klik kanan pada **GUI** dan pilih _Select as Startup Project_. Pastikan tulisan **GUI** telah tercetak tebal.
 
 ![image](https://user-images.githubusercontent.com/71161031/159953407-36bb9941-0eff-4ad4-aac6-031089b7912c.png)
