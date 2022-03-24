@@ -23,13 +23,7 @@ namespace Lib {
 	}
 
 	void AddException::printMessage() {
-		if (btype == "INVALID") {
-			cout << "[ADD-EXC] Item " << name << " doesn't exist!" << endl;
-		}
-		else if (btype == "OVERCAP") {
-			cout << "[ADD-EXC] Quantity exceeded current capacity!" << endl;
-		}
-
+		cout << getException();
 	}
 
 	CraftingException::CraftingException(string btype) {
@@ -37,13 +31,7 @@ namespace Lib {
 	};
 
 	void CraftingException::printMessage() {
-		if (btype == "TOOL1") {
-			cout << "[CRF-EXC] Can't craft only with one tool!" << endl;
-		} else if (btype == "TOOL1") {
-			cout << "[CRF-EXC] Can't craft more than two tools!" << endl;
-		} else {
-			cout << "[CRF-EXC] Recipe not found!" << endl;
-		}
+		cout << getException();
 	}
 	string CraftingException::getException(){
 		string exc = "[CRF-EXC]";
@@ -59,8 +47,7 @@ namespace Lib {
 	UseException::UseException(string name) : BaseException(name) {}
 
 	void UseException::printMessage() {
-		cout << "[USE-EXC] Couldn't use a Non-Tool item! ("
-			<< name << ")\nUse command 'DISCARD' to use nontool items.\n" << endl;
+		cout << getException();
 	}
 
 	string UseException::getException(){
@@ -71,30 +58,7 @@ namespace Lib {
 	MoveException::MoveException(string name) : BaseException(name) {}
 
 	void MoveException::printMessage(){
-		cout << "[MOV-EXC] ";
-		if(this->name == "VOID"){
-			cout << "You are trying to move the void...\n";
-		}else if(this->name == "INVALID"){
-			cout << "You move an invalid slot!\n";
-		}else if(this->name == "INVALIDDEST"){
-			cout << "You entered an invalid destination slot!\n";
-		}else if(this->name == "DOUBLETYPEDEST"){
-			cout << "You can only move the item to one type of slot!\n";
-		}else if(this->name == "MOVETO2INV"){
-			cout << "You can only move this item to 1 inventory slot\n";
-		}else if(this->name == "CRAFTTOCRAFT"){
-			cout << "You can't move item from crafting slot to another crafting slot.\n";
-		}else if(this->name == "DIFFTYPE"){
-			cout << "The item you are trying to move to is not of the same type!\n";
-		}else if(this->name == "FULL"){
-			cout << "The slot is full, you can't move it there!\n";
-		}else if(this->name == "TOOL"){
-			cout << "There's a tool already here!\n";
-		}else if(this->name == "NOTENOUGH"){
-			cout << "You don't have enough item to move\n";
-		}else if(this->name == "INVALIDSLOT"){
-			cout << "Invalid slot count\n";
-		}
+		cout << getException();
 	}
 
 	string MoveException::getException(){
@@ -124,26 +88,11 @@ namespace Lib {
 		}
 		return exc;
 	}
-	void MoveException::createThenPrintExc(string type){
-		MoveException *err = new MoveException(type);
-		err->printMessage();
-	};
+
 	InvException::InvException(string name) : BaseException(name) {}
 
 	void InvException::printMessage() {
-		cout << "[INV-EXC] ";
-		if (this->name == "INVALID") {
-			cout << "Invalid index! Index ranges from 0-26" << endl;
-		}
-		else if (this->name == "FULL") {
-			cout << "Inventory full!" << endl;
-		}
-		else if (this->name == "EMPTY") {
-			cout << "This slot is empty; couldn't discard / use anything!" << endl;
-		}
-		else if (this->name == "OVER") {
-			cout << "You're attempting to discard more than the available quantity!" << endl;
-		}
+		cout << getException();
 	}
 
 	string InvException::getException(){
