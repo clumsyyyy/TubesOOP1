@@ -116,19 +116,7 @@ namespace Lib {
 	TableException::TableException(string name) : BaseException(name) {}
 
 	void TableException::printMessage() {
-		cout << "[TAB-EXC] ";
-		if (this->name == "INVALID") {
-			cout << "Invalid index! Index ranges from 0-9" << endl;
-		}
-		else if (this->name == "OCCUPIED") {
-			cout << "This slot is already occupied!" << endl;
-		}
-		else if (this->name == "FULL") {
-			cout << "This slot has reached its maximum capacity!" << endl;
-		}
-		else if (this->name == "EMPTY") {
-			cout << "This slot is empty; couldn't discard anything!" << endl;
-		}
+		cout << getException();
 	}
 
 	string TableException::getException(){
