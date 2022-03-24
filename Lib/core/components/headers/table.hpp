@@ -10,7 +10,6 @@ namespace Lib {
 		Item** slot;
 		const int ROWS;
 		const int COLS;
-
 		Table(int, int);
 		~Table();
 		bool isIndexValid(int);

@@ -169,8 +169,7 @@ namespace Lib {
         cout << "Used item " << this->getName() << "!" << endl;
         cout << "Remaining durability: " << this->durability << endl;
         if (this->durability == 0) {
-            cout << "Your " << this->name << " broke!\n" << endl;
-            delete this;
+            cout << "Your " << this->name << " broke!" << endl;
         }
     }
 

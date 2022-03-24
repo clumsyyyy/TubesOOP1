@@ -121,16 +121,22 @@ namespace Lib {
         try {
             int index = stoi(slot.substr(1, slot.length() - 1));
             Item* used_item = gm.inv[index];
-            if (used_item->isNonTool()) { // Item can't be used unless it's a tool
-                throw new UseException(used_item->getName());
+            if (!used_item->isUndef()) {
+                if (used_item->isNonTool()) { // Item can't be used unless it's a tool
+                    throw new UseException(used_item->getName());
+                }
+                else {
+                    if (used_item->getDurability() == 1) { // If the tool durability is 1, after being used, discard the item
+                        used_item->useItem();
+                        gm.inv.set(index, new Item());
+                    }
+                    else {
+                        used_item->useItem();
+                    }
+                }
             }
             else {
-                if (used_item->getDurability() == 1){ // If the tool durability is 1, after being used, discard the item
-                    used_item->useItem();
-                    gm.inv.set(index, new Item());
-                } else {
-                    used_item->useItem();
-                }
+                throw new InvException("EMPTY");
             }
         }
         catch (BaseException* exc) {

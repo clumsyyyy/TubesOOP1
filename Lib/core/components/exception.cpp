@@ -139,7 +139,7 @@ namespace Lib {
 			cout << "Inventory full!" << endl;
 		}
 		else if (this->name == "EMPTY") {
-			cout << "This slot is empty; couldn't discard anything!" << endl;
+			cout << "This slot is empty; couldn't discard / use anything!" << endl;
 		}
 		else if (this->name == "OVER") {
 			cout << "You're attempting to discard more than the available quantity!" << endl;
