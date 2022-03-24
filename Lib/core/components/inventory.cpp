@@ -4,22 +4,8 @@
 namespace Lib {
 
     // IMPLEMENTATION FIELD FOR CHILD CLASS: Inventory
-    /**
-     * @brief Default Constructor for Class Inventory
-     *  Initializes the inventory with a default size of INV ROWS x INV COLS slots
-     *  Each slot (buffer) is initialized with a default Item Constructor
-     *
-     *
-     */
     Inventory::Inventory() : Table(INV_ROWS, INV_COLS){}
 
-    /**
-     * @brief Overload the << operator to display the Inventory
-     * 
-     * @param os Output Stream
-     * @param inven inventory to be displayed
-     * @return ostream& reference to the output stream
-     */
     ostream& operator<<(ostream& os, Inventory& inven) {
         os << "\nInventory: " << endl;
         for (int i = 0; i < INV_SIZE; i++) {

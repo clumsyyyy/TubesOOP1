@@ -16,6 +16,7 @@ namespace Lib {
 		else if (btype == "OVERCAP") {
 			return "[ADD-EXC] Quantity exceeded current capacity!";
 		}
+		return "";
 	}
 
 	AddException::AddException(string name, string btype) : BaseException(name) { 
@@ -109,6 +110,7 @@ namespace Lib {
 		else if (this->name == "OVER") {
 			return exc + "You're attempting to discard more than the available quantity!\n";
 		}
+		return "";
 	}
 
 	TableException::TableException(string name) : BaseException(name) {}
@@ -143,5 +145,6 @@ namespace Lib {
 		else if (this->name == "EMPTY") {
 			return exc + "This slot is empty; couldn't discard anything!\n";
 		}
+		return "";
 	}
 }

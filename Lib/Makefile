@@ -8,10 +8,13 @@ ALL_SRCS := $(call rwildcard, core,*.cpp)
 SRCS     := $(filter-out check.cpp, $(ALL_SRCS))
 
 all: compile test check
-
+run: compile exec
 # Compile all cpp files except check.cpp
 compile:
 	g++ -std=c++17 -o $(EXECUTABLE_FILENAME) $(SRCS) ../CLI/main.cpp
+
+# Runs the compiled executable
+exec:
 	./$(EXECUTABLE_FILENAME)
 # Test
 test: $(TC_FOLDER)/*.$(EXT_IN) $(EXECUTABLE_FILENAME)

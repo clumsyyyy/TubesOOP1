@@ -4,10 +4,6 @@
 namespace Lib {
 
     // IMPLEMENTATION FIELD FOR CHILD CLASS: CraftingTable
-    /**
-     * @brief Construct a new Crafting Table:: Crafting Table object    
-     * 
-     */
     CraftingTable::CraftingTable() : Table(CRAFT_ROWS, CRAFT_COLS){}
 
     ostream& operator<<(ostream& os, CraftingTable& ct) {

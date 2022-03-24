@@ -6,6 +6,12 @@
 namespace Lib {
 	using namespace std;
 
+	// Exceptions thrown for processes
+
+	/**
+	 * @brief Base class for exceptions
+	 * 
+	 */
 	class BaseException {
 	protected:
 		string name;
@@ -15,7 +21,7 @@ namespace Lib {
 		virtual string getException() = 0;
 		virtual void printMessage() = 0;
 	};
-
+	
 	class AddException : public BaseException {
 	private:
 		string btype;
@@ -33,7 +39,6 @@ namespace Lib {
 		void printMessage();
 		string getException();
 	};
-
 	class UseException : public BaseException {
 	public:
 		UseException(string);

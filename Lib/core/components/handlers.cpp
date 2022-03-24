@@ -7,13 +7,7 @@
 #include <iostream>
 
 namespace Lib {
-    /**
-     * @brief Show current inventory and crafting table item info
-     *  
-     * 
-     * @param mode "ALL" = show all items, "ITEM" = specific item info
-     * @param slot_id Slot ID
-     */
+
     void DetailsHandler(string mode, int slot_id) {
         if (mode == "ALL") { // Showing info for all items
             cout << &(gm.inv);
@@ -25,13 +19,7 @@ namespace Lib {
         }
     }
 
-    /**
-     * @brief Invoke GiveChecker to check if the item can be given
-     *  
-     * 
-     * @param name Item Name
-     * @param qty Item Quantity
-     */
+
     void GiveHandler(string name, int qty) {
         try {
             GiveChecker(name, qty);
@@ -41,14 +29,6 @@ namespace Lib {
         }
     }
 
-    /**
-     * @brief Checking if the item can be given (valid)
-     *  Valid when name and quantity of the item are valid 
-     *  
-     * 
-     * @param name Item name
-     * @param qty Item quantity
-     */
     void GiveChecker(string name, int qty) {
         try {
             bool found = false;
@@ -84,12 +64,7 @@ namespace Lib {
 
     }
 
-    /**
-     * @brief Discard spesific item from the Inventory
-     * 
-     * @param slot Inventory slot ID to be discarded
-     * @param qty Quantity of the item to be discarded
-     */
+
     void DiscardHandler(int index, int qty) {
         try {
             Item* it = gm.inv[index];
@@ -111,11 +86,6 @@ namespace Lib {
         }
     }
 
-    /**
-     * @brief Decrease durability of the tool item by 1
-     * 
-     * @param slot Inventory slot ID to be used (Must be a tool item)
-     */
     void UseHandler(string slot) {
         try {
             int index = stoi(slot.substr(1, slot.length() - 1));
@@ -139,10 +109,6 @@ namespace Lib {
 
     }
 
-    /**
-     * @brief Invoke crafting_proses to craft the current items in the crafting table
-     * 
-     */
     void CraftingHandler() {
         try {
             Crafting::crafting_proses();
@@ -152,17 +118,7 @@ namespace Lib {
         }
     }
 
-    void ClearBuffer() {
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    }
 
-    /**
-     * @brief Moving item from a slot to another slot
-     * 
-     * @param source 
-     * @param slotCount 
-     * @param slotDestV 
-     */
     void MoveHandler(string source, int slotCount, vector<string> slotDestV) {
         if (slotCount < 1) {
             throw new MoveException("INVALIDSLOT");
@@ -239,12 +195,7 @@ namespace Lib {
         }
         
     }
-    
-    /**
-     * @brief Export inventory state to a file
-     * 
-     * @param path 
-     */
+
     void ExportHandler(string path) {
         ofstream outputFile(path);
         for (int i = 0; i < 27; i++) {
@@ -258,7 +209,11 @@ namespace Lib {
                     outputFile << it->getID() << ":" << Tool::FromItem(it).getDurability() << endl;
             }
         }
-        cout << "Exported" << endl;
+        cout << "Exported file to path " << path << "!" << endl;
         outputFile.close();
+    }
+
+    void ClearBuffer() {
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }

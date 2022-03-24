@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-#include "core/all_headers.hpp"
+#include "../Lib/core/all_headers.hpp"
 
 using namespace Lib;
 
@@ -34,7 +34,7 @@ int main() {
             string mode;
             cin >> mode;
             if (mode == "ALL") {
-                DetailsHandler(mode, NULL);
+                DetailsHandler(mode, -1);
             }
             else if (mode == "ITEM") {
                 int i;
@@ -112,6 +112,10 @@ int main() {
             ExportHandler(outputPath);
             cout << "Exported file to path " << outputPath << "!" << endl;
         }
+        else if (command == "EXIT"){
+            cout << "Exiting program..." << endl;
+            return 0;
+        }
         else if (command == "HELP") {
             // USAGE: HELP
             cout << "=================================== HELP MENU ==================================\n" << endl;
@@ -151,6 +155,12 @@ int main() {
             cout << "[IMPORTANT] Exported file will be saved with the relative path to this program." << endl;
             cout << "Enter the desired path and save with a .out filetype (e.g. export/test.out)\n" << endl;
 
+            cout << "| >> HELP" << endl;
+            cout << "Displays this menu.\n" << endl;
+
+            cout << "| >> EXIT" << endl;
+            cout << "Exits this CLI program.\n" << endl;
+            
             cout << "================================================================================\n" << endl;
         }
         else 
@@ -160,6 +170,6 @@ int main() {
         cout << "\n[INPUT COMMAND] | >> ";
         ClearBuffer();
     }
-    return 0;
+    // return 0;
 }
 
