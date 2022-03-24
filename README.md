@@ -15,10 +15,21 @@ MejaRajin adalah sebuah program berbasis _Command-Line Interface_ dan _Graphical
 
 ## Cara Menggunakan
 ### Command-Line Interface
+#### Melalui WSL
 - Dari WSL, navigasi ke folder Lib dari root dengan perintah `cd Lib`
 - Untuk melakukan _testing_ dengan file yang ada, jalankan perintah `make all`. _Testing_ akan berjalan dan hasil akhir akan ditampilkan
+![image](https://user-images.githubusercontent.com/74661051/159971908-8bd0b668-09b4-429b-aefe-b67230c594db.png)
 - Untuk melakukan penggunaan CLI, jalankan perintah `make run`. CLI akan terbuka dalam OS.
 - Untuk membuka daftar perintah pada CLI, ketikkan perintah `HELP` dalam interface.
+![image](https://user-images.githubusercontent.com/74661051/159972030-91c213d3-0620-4707-960d-58c56aa3b1b4.png)
+
+#### Melalui Visual Studio
+- Buka _Visual Studio_, Navigasikan ke folder dan buka file _solution_ `MinecraftCraftingTable.sln`
+- Pada _Solution Explorer_, klik kanan pada **CLI** dan pilih _Select as Startup Project_. Pastikan tulisan **CLI** telah tercetak tebal.
+
+![image](https://user-images.githubusercontent.com/71161031/159953407-36bb9941-0eff-4ad4-aac6-031089b7912c.png)
+- Jalankan _CLI_ dengan menekan tombol F5 atau menggunakan opsi _Local Windows Debugger_ pada _toolbar_ bagian atas.
+![image](https://user-images.githubusercontent.com/71161031/159953110-ab476a8e-be15-4783-9a49-34496f5797ea.png)
 
 ### Graphical User Interface
 #### Melalui Visual Studio
@@ -40,4 +51,11 @@ MejaRajin adalah sebuah program berbasis _Command-Line Interface_ dan _Graphical
 
 ![image](https://user-images.githubusercontent.com/71161031/159953110-ab476a8e-be15-4783-9a49-34496f5797ea.png)
 
+## Anggota Kelompok
+- Timothy Stanley Setiawan  - 13520028
+- Andreas Indra Kurniawan   - 13520091
+- Amar Fadil                - 13520103
+- Owen Christian Wijaya     - 13520124
+- Fachry Dennis Heraldi     - 13520139
+- Thirafi Najwan Kurniatama - 13520157
 
