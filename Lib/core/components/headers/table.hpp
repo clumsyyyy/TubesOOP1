@@ -31,7 +31,7 @@ namespace Lib {
 	    void addTool(Tool* item, int quant);
 	    void discard(int quant, int slot);
 	    void toCraft(int slotSrc, int destSlot[], int N);
-	    void toAnotherSlot(int slotSrc, int destSlot[]);
+	    void toAnotherSlot(int slotSrc, int destSlot);
     };
 
     class CraftingTable: public Table
@@ -42,7 +42,7 @@ namespace Lib {
 	    friend ostream& operator<<(ostream& os, CraftingTable* ct);
 	    friend ostream& operator<<(ostream& os, CraftingTable& ct);
 	    void discard(int quant, int slot);
-	    void toInv(int slotSrc, int destSlot[]);
+	    void toInv(int slotSrc, int destSlot);
     };
 }
 

@@ -5,9 +5,9 @@ namespace GUI {
 	{
 		InitializeComponent();
 		lblSlot->Text = "How much to delete the item in slot " + item->GetID() + "?";
-		Lib::Item* it = item->GetItem();
-		pictBox->Image = item->GetImage(to<String^>(it->getName()));
-		int max = it->getQuantity();
+		Lib::NonTool& it = Lib::NonTool::FromItem(item->GetItem());
+		pictBox->Image = item->GetImage(to<String^>(it.getName()));
+		int max = it.getQuantity();
 		itemQty->Maximum = max;
 		lblQty->Text = "out of " + max;
 	}

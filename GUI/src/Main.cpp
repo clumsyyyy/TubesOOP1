@@ -55,7 +55,7 @@ namespace GUI {
 			e->Cancel = true;
 		else {
 			Lib::Item* item = it->GetItem();
-			if (item != nullptr && !item->isUndef()) {
+			if (item != nullptr) {
 				itemMenu->Items[0]->Visible = item->isTool();
 			} else
 				e->Cancel = true;
@@ -66,7 +66,7 @@ namespace GUI {
 		ItemSlot^ it = ItemSlot::FromGenericContextMenuItem(sender);
 		if (it != nullptr) {
 			Lib::Item* item = it->GetItem();
-			if (item != nullptr && !item->isUndef()) {
+			if (item != nullptr) {
 				int qty = 1;
 				if (item->isNonTool()) {
 					DiscardItemForm^ form = gcnew DiscardItemForm(it);

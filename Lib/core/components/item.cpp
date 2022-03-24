@@ -2,13 +2,6 @@
 
 namespace Lib {
     /* IMPLEMENTATION FIELD FOR PARENT CLASS: Item */
-    Item::Item() {
-        this->ID = UNDEFINED_ID;
-        this->name = "UNDEFINED";
-        this->type = "UNDEFINED";
-        this->basetype = "UNDEFINED";
-    }
-
     // Implementasi Item
     Item::Item(int ID, string name, string type, string basetype) {
         this->ID = ID;
@@ -24,8 +17,11 @@ namespace Lib {
         this->basetype = i.basetype;
     }
 
-    Item::~Item() {
-
+    Item* Item::copy() {
+        if (this->isTool())
+            return new Tool(Tool::FromItem(this));
+        else
+            return new NonTool(NonTool::FromItem(this));
     }
 
     int Item::getID() const {
@@ -52,22 +48,12 @@ namespace Lib {
         return this->basetype == "NONTOOL";
     }
 
-    bool Item::isUndef() {
-        return this->basetype == "UNDEFINED";
-    }
-
     void Item::displayInfo() const {
         cout << setw(NUMWIDTH) << this->ID << " | "
             << setw(WIDTH) << this->name << " | "
             << setw(WIDTH) << this->type << " | "
             << setw(WIDTH) << this->basetype;
     }
-
-    int Item::getQuantity() const{ return 0; }
-    int Item::getDurability() const { return 0; }
-    void Item::setQuantity(int) {}
-    void Item::setDurability(int) {}
-    void Item::useItem() {}
 
     /* IMPLEMENTATION FIELD FOR CHILD CLASS: NonTool */
 
@@ -88,8 +74,8 @@ namespace Lib {
         this->quantity = nt.quantity;
     }
 
-    NonTool::~NonTool() {
-
+    NonTool& NonTool::FromItem(const Item* it) {
+        return *((NonTool*)it);
     }
 
     NonTool& NonTool::operator=(const NonTool& other) {
@@ -125,8 +111,18 @@ namespace Lib {
      */
     Tool::Tool(int ID, string name, int durability)
         : Item(ID, name, "-", "TOOL") {
-        this->durability = durability; // Default durability = 10
+        this->durability = durability; 
     }
+
+    Tool::Tool(int ID, string name)
+        : Tool(ID, name, MAX_DURABILITY) { // Default durability = 10
+    }
+
+    Tool::Tool(const TupleItem& item) :
+    Tool(
+        stoi(get<0>(item)),
+        get<1>(item)
+    ) {}
 
     Tool::Tool(const TupleItem& item, int durability) : 
     Tool(
@@ -139,8 +135,8 @@ namespace Lib {
         this->durability = t.durability;
     }
 
-    Tool::~Tool() {
-
+    Tool& Tool::FromItem(const Item* it) {
+        return *((Tool*)it);
     }
 
     Tool& Tool::operator=(const Tool& other) {
@@ -157,7 +153,7 @@ namespace Lib {
     }
 
     void Tool::setDurability(int dur) {
-        this->durability = (dur < 10 ? dur : 10);
+        this->durability = (dur < MAX_DURABILITY ? dur : MAX_DURABILITY);
     }
 
     /**

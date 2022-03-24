@@ -14,9 +14,8 @@ namespace Lib
 	Table::Table(int row, int col) : ROWS(row), COLS(col)
 	{
 		this->slot = new Item * [ROWS * COLS];
-		for (int i = 0; i < ROWS * COLS; i++) {
-			this->slot[i] = new Item();
-		}
+		for (int i = 0; i < ROWS * COLS; i++)
+			this->slot[i] = nullptr;
 	}
 
 	/**
@@ -38,7 +37,6 @@ namespace Lib
 	{
 		return (0 <= pos && pos < ROWS * COLS);
 	}
-
 
 	/**
      * @brief Get the Inventory Buffer at a specific slot
@@ -74,9 +72,8 @@ namespace Lib
         if (!isIndexValid(pos)) {
             throw new InvException("INVALID");
         }
-        if (this->slot[pos] != nullptr) {
+        if (this->slot[pos] != nullptr)
             delete this->slot[pos];
-        }
         (this->slot[pos]) = item;
     }
 
@@ -90,10 +87,5 @@ namespace Lib
             throw new TableException("INVALID");
         }
         slot[pos]->displayInfo();
-    }   
-
-
-
-
-
+    }
 }

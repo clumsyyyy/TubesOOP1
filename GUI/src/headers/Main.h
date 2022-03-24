@@ -152,7 +152,7 @@ namespace GUI {
 			this->menuBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) { this->itemMenuBar, this->systemMenuBar });
 			this->menuBar->Location = System::Drawing::Point(0, 0);
 			this->menuBar->Name = L"menuBar";
-			this->menuBar->Size = System::Drawing::Size(646, 30);
+			this->menuBar->Size = System::Drawing::Size(646, 24);
 			this->menuBar->TabIndex = 3;
 			this->menuBar->Text = L"menuStrip1";
 			// 
@@ -160,13 +160,13 @@ namespace GUI {
 			// 
 			this->itemMenuBar->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->itemAdd });
 			this->itemMenuBar->Name = L"itemMenuBar";
-			this->itemMenuBar->Size = System::Drawing::Size(53, 26);
+			this->itemMenuBar->Size = System::Drawing::Size(43, 20);
 			this->itemMenuBar->Text = L"Item";
 			// 
 			// itemAdd
 			// 
 			this->itemAdd->Name = L"itemAdd";
-			this->itemAdd->Size = System::Drawing::Size(120, 26);
+			this->itemAdd->Size = System::Drawing::Size(96, 22);
 			this->itemAdd->Text = L"Add";
 			this->itemAdd->Click += gcnew System::EventHandler(this, &Main::itemAdd_Click);
 			// 
@@ -174,13 +174,13 @@ namespace GUI {
 			// 
 			this->systemMenuBar->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->systemExport });
 			this->systemMenuBar->Name = L"systemMenuBar";
-			this->systemMenuBar->Size = System::Drawing::Size(70, 26);
+			this->systemMenuBar->Size = System::Drawing::Size(57, 20);
 			this->systemMenuBar->Text = L"System";
 			// 
 			// systemExport
 			// 
 			this->systemExport->Name = L"systemExport";
-			this->systemExport->Size = System::Drawing::Size(135, 26);
+			this->systemExport->Size = System::Drawing::Size(108, 22);
 			this->systemExport->Text = L"Export";
 			this->systemExport->Click += gcnew System::EventHandler(this, &Main::systemExport_Click);
 			// 
@@ -189,20 +189,20 @@ namespace GUI {
 			this->itemMenu->ImageScalingSize = System::Drawing::Size(20, 20);
 			this->itemMenu->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) { this->itemUse, this->itemDiscard });
 			this->itemMenu->Name = L"contextMenuStrip1";
-			this->itemMenu->Size = System::Drawing::Size(129, 52);
+			this->itemMenu->Size = System::Drawing::Size(114, 48);
 			this->itemMenu->Opening += gcnew System::ComponentModel::CancelEventHandler(this, &Main::itemMenu_Opening);
 			// 
 			// itemUse
 			// 
 			this->itemUse->Name = L"itemUse";
-			this->itemUse->Size = System::Drawing::Size(128, 24);
+			this->itemUse->Size = System::Drawing::Size(113, 22);
 			this->itemUse->Text = L"Use";
 			this->itemUse->Click += gcnew System::EventHandler(this, &Main::itemUse_Click);
 			// 
 			// itemDiscard
 			// 
 			this->itemDiscard->Name = L"itemDiscard";
-			this->itemDiscard->Size = System::Drawing::Size(128, 24);
+			this->itemDiscard->Size = System::Drawing::Size(113, 22);
 			this->itemDiscard->Text = L"Discard";
 			this->itemDiscard->Click += gcnew System::EventHandler(this, &Main::itemDiscard_Click);
 			// 
@@ -221,7 +221,7 @@ namespace GUI {
 			this->CraftingLabel->ForeColor = System::Drawing::SystemColors::WindowText;
 			this->CraftingLabel->Location = System::Drawing::Point(146, 47);
 			this->CraftingLabel->Name = L"CraftingLabel";
-			this->CraftingLabel->Size = System::Drawing::Size(88, 25);
+			this->CraftingLabel->Size = System::Drawing::Size(73, 20);
 			this->CraftingLabel->TabIndex = 12;
 			this->CraftingLabel->Text = L"Crafting";
 			// 
@@ -233,7 +233,7 @@ namespace GUI {
 			this->InventoryLabel->ForeColor = System::Drawing::SystemColors::WindowText;
 			this->InventoryLabel->Location = System::Drawing::Point(85, 257);
 			this->InventoryLabel->Name = L"InventoryLabel";
-			this->InventoryLabel->Size = System::Drawing::Size(101, 25);
+			this->InventoryLabel->Size = System::Drawing::Size(83, 20);
 			this->InventoryLabel->TabIndex = 13;
 			this->InventoryLabel->Text = L"Inventory";
 			// 
@@ -250,6 +250,7 @@ namespace GUI {
 			this->ForeColor = System::Drawing::SystemColors::ScrollBar;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MainMenuStrip = this->menuBar;
+			this->MaximizeBox = false;
 			this->Name = L"Main";
 			this->Text = L"Minecraft Crafting Table";
 			this->menuBar->ResumeLayout(false);

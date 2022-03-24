@@ -15,23 +15,17 @@ namespace Lib {
         string type;     // item type (TOOL/NONTOOL)
         string basetype; // basetype (oak log basetypenya log)
     public:
-        Item(); //default constructor
         Item(int, string, string, string); // user-defined constructor
         Item(const Item& i); // copy constructor
-        virtual ~Item(); // virtual destructor
+        Item* copy(); // proper copy with inheritance
+        //virtual ~Item() = 0; // virtual destructor
         int getID() const;
         string getName() const;
         string getType() const;
         string getBType() const;
         bool isTool();
         bool isNonTool();
-        bool isUndef();
         virtual void displayInfo() const;
-        virtual int getQuantity() const;
-        virtual int getDurability() const;
-        virtual void setQuantity(int);
-        virtual void setDurability(int);
-        virtual void useItem();
     };
     class NonTool : public Item {
     private:
@@ -40,7 +34,8 @@ namespace Lib {
         NonTool(int, string, string, string, int);
         NonTool(const TupleItem&, int);
         NonTool(const NonTool& nt);
-        ~NonTool();
+        static NonTool& FromItem(const Item*);
+        //~NonTool();
         NonTool& operator=(const NonTool& other);
         int getQuantity() const;
         void setQuantity(int);
@@ -52,9 +47,12 @@ namespace Lib {
         int durability; // durability of the tool
     public:
         Tool(int, string, int);
+        Tool(int, string);
         Tool(const TupleItem&, int);
+        Tool(const TupleItem&);
         Tool(const Tool&);
-        ~Tool();
+        static Tool& FromItem(const Item*);
+        //~Tool();
         Tool& operator=(const Tool& other);
         int getDurability() const;
         void setDurability(int);

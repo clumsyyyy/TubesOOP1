@@ -5,6 +5,8 @@
 using namespace Lib;
 namespace GUI {
 	void ItemSlot::Craft(Object^ sender, MouseEventArgs^ e) {
+		if (e->Button != MouseButtons::Left)
+			return;
 		try {
 			Lib::CraftingHandler();
 			ItemSlot::UpdateAll();
@@ -172,12 +174,20 @@ namespace GUI {
 			item = gm.inv[index];
 			break;
 		}
-		if (item != nullptr && item->getID() != UNDEFINED_ID) {
+		if (item != nullptr) {
 			this->pictBox->Image = images[to<String^>(item->getName())];
-			this->itemQuantity->Text = to_str(item->getQuantity());
-			this->itemQuantity->Visible = item->getBType() == "NONTOOL" && item->getQuantity() > 1;
-			this->damageBar->Value = item->getDurability();
-			this->damageBar->Visible = item->getBType() == "TOOL" && item->getDurability() < 10;
+			if (item->isTool()) {
+				Tool& t = Tool::FromItem(item);
+				this->itemQuantity->Visible = false;
+				this->damageBar->Value = t.getDurability();
+				this->damageBar->Visible = t.getDurability() < 10;
+			}
+			else {
+				NonTool& t = NonTool::FromItem(item);
+				this->itemQuantity->Text = to_str(t.getQuantity());
+				this->itemQuantity->Visible = t.getQuantity() > 1;
+				this->damageBar->Visible = false;
+			}
 		}
 		else {
 			this->pictBox->Image = nullptr;
@@ -193,6 +203,14 @@ namespace GUI {
 		Crafting craft;
 		itemRes->item = craft.crafting_preview();
 		itemRes->Update();
+		if (itemRes->item != nullptr) {
+			int sum = craft.get_sum();
+			if (sum > 1) {
+				itemRes->itemQuantity->Text = to_str(sum);
+				itemRes->itemQuantity->Visible = true;
+			}
+			delete itemRes->item;
+		}
 	}
 
 	Image^ ItemSlot::GetImage(String^ key) {

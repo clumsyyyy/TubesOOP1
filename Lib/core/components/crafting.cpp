@@ -25,7 +25,7 @@ namespace Lib {
         int i = this->i_sub, j = this->j_sub;
         for (int index = i; index < this->row+i; index++) {
             for (int idj = j; idj < this->col+j; idj++ ) {
-                if (!GET_CRAFT(index, idj)->isUndef()) {
+                if (GET_CRAFT(index, idj) != nullptr) {
                     gm.crftab.discard(min, CRAFT_IDX(index, idj));
                 }
             }
@@ -51,21 +51,25 @@ namespace Lib {
                 (reverse? l--: l++), m++
             ) {
                 Item* item = GET_CRAFT(k, l);
-                if (item->getName() != itemsRecipe[n*col+m]
-                    && item->getType() != itemsRecipe[n*col+m]
-                ) {
+                // if recipe undefined and item nullptr
+                // or item is defined but different than recipe
+                string comp1 = UNDEFINED, comp2 = UNDEFINED;
+                if (item != nullptr) {
+                    comp1 = item->getName();
+                    comp2 = item->getType();
+                    int qty = NonTool::FromItem(item).getQuantity();
+                    if (qty < min)
+                        min = qty;
+                }
+                int idx = n * col + m;
+                if (comp1 != itemsRecipe[idx] &&
+                    comp2 != itemsRecipe[idx]) {
                     min = 0;
                     break;
                 }
-                if (item->getQuantity() < min
-                    && item->getID() != UNDEFINED_ID
-                ) {
-                    min = item->getQuantity();
-                }
             }
-            if (min == 0) {
+            if (min == 0)
                 break;
-            }
         }
         return min;
     }
@@ -75,7 +79,7 @@ namespace Lib {
         for (int k = 0; k < CRAFT_ROWS; k++) {
             for (int l = 0; l < CRAFT_COLS; l++) {              
                 if (!(i <= k && k < this->row+i && j <= l && l < this->col+j)) {
-                    if (GET_CRAFT(k, l)->getID() != UNDEFINED_ID) {
+                    if (GET_CRAFT(k, l) != nullptr) {
                         return false;
                     }
                 }
@@ -99,98 +103,106 @@ namespace Lib {
                     if (min > 0) {
                         if (this->row != 3 || this->col != 3) {
                             if (!is_another_space_free()) {
-                                return new Item();
+                                return nullptr;
                             }
                         }
                         this->count = min;
                         this->sum = min*itemResCntRecipe;
                         if (get<3>(itemResRecipe) == "TOOL") {
-                            return new Tool(itemResRecipe,10);
+                            return new Tool(itemResRecipe);
                         } else if (get<3>(itemResRecipe) == "NONTOOL") {
-                            return new NonTool(itemResRecipe,this->sum);
+                            return new NonTool(itemResRecipe, this->sum);
                         }
                     }
                 }
             }
         } 
-        return new Item();
+        return nullptr;
     }
 
     Item* Crafting::tools() {
         int durability = 0;
         int sum_tool = 0;
-        Tool* tool = (Tool*)new Item();
+        Tool* tool = nullptr;
         for (int i = 0; i < CRAFT_SIZE; i++) {
             Item* item = gm.crftab[i];
-            if (item->isNonTool()) {
-                return new Item();
-            } else if (item->isTool()) {
-                if (sum_tool > 0 && tool->getName() != item->getName()) {
-                    //this->count++;
-                    return new Item();
+            if (item != nullptr) {
+                if (item->isNonTool()) {
+                    return nullptr;
                 }
-                tool = (Tool*)item;
-                sum_tool++;
-                durability = min(durability + item->getDurability(), 10);
-                if (sum_tool > 2) {
-                    this->count = -2;
-                    return new Item();
+                else if (item->isTool()) {
+                    Tool& t = Tool::FromItem(item);
+                    if (sum_tool == 0)
+                        tool = new Tool(t);
+                    else if (tool->getName() != item->getName()) {
+                        delete tool; // cleanup
+                        return nullptr;
+                    }
+                    sum_tool++;
+                    if (sum_tool > 2) {
+                        this->count = -2;
+                        delete tool; // cleanup
+                        return nullptr;
+                    }
+                    durability = min(durability + t.getDurability(), MAX_DURABILITY);
                 }
             }
         }
-        
         if (sum_tool == 1) {
             this->count = -1;
-            return new Item();
+            delete tool; // cleanup
+            return nullptr;
         }
         this->count = 1;
         this->set_sub_matrix(0, 0);
         this->set_bound(CRAFT_ROWS, CRAFT_COLS);
-        tool->setDurability(durability);
+        if (tool != nullptr)
+            tool->setDurability(durability);
         return tool;
     }
 
     Item* Crafting::crafting_preview() {
+        // Crafting from Recipe
         for (tuple tup : gm.recipeConfig) {
             this->TupRecipe = tup;
             Item* result_item = this->recipe();
-            if (!result_item->isUndef()) {
-                if (result_item->isNonTool()) {
-                    return result_item;
-                } else if (result_item->isTool()) {
-                    return result_item;                       
-                }                
-            }
+            if (result_item != nullptr)
+                return result_item;
         }
+        // Crafting to combine item durability
         Item* result_item = this->tools();
-        if (!result_item->isUndef()) {
+        if (result_item != nullptr) {
             this->set_sub_matrix(0,0);
             this->count = 1;
             this->sum = 1;
             return result_item; 
         }
-        return new Item();
+        return nullptr;
     }
 
     void Crafting::crafting_proses() {
         Crafting crf;
         Item* item = crf.crafting_preview();
         int count = crf.get_count();
-        int sum = crf.get_sum();
-        if (item->isNonTool()) {
-            cout << "Item " << item->getName() << " successfully crafted! (Quantity: " << sum << ") " << endl;
-            gm.inv.addNonTool((NonTool*)item,0);
-            crf.set_crafting_table(count);
-        } else if (item->isTool()) {
-            cout << "Tool " << item->getName() << " successfully crafted! (Durability: " << item->getDurability() << ") " << endl;
-            gm.inv.addTool((Tool*)item, 1);
-            crf.set_crafting_table(count);
-        } else if (count == -1) {
+        if (count == -1) {
             throw new CraftingException("TOOL1");
-        } else if (count == -2) {
+        }
+        else if (count == -2) {
             throw new CraftingException("TOOL2");
-        } else if (item->isUndef()) {
+        }
+        else if (item == nullptr) {
             throw new CraftingException("RECIPE");
         }
+        int sum = crf.get_sum();
+        if (item->isNonTool()) {
+            cout << "Item " << item->getName() << " successfully crafted! (Quantity: "
+                << sum << ") " << endl;
+            gm.inv.addNonTool((NonTool*)item, 0);
+        } else {
+            cout << "Tool " << item->getName() << " successfully crafted! (Durability: "
+                << Tool::FromItem(item).getDurability() << ") " << endl;
+            gm.inv.addTool((Tool*)item, sum);
+        }
+        crf.set_crafting_table(count);
     }
 }
