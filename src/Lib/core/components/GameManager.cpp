@@ -29,10 +29,7 @@ namespace Lib {
         istringstream iss(line);
         string ID;
         string nameTok, typeTok, btypeTok;
-        getline(iss, ID, ' ');
-        getline(iss, nameTok, ' ');
-        getline(iss, typeTok, ' ');
-        getline(iss, btypeTok, ' ');
+        iss >> ID >> nameTok >> typeTok >> btypeTok;
         return make_tuple(ID, nameTok, typeTok, btypeTok);
     }
     tuple <tuple<int, int>, vector<string>, TupleItem, int> GameManager::parseRecipe(ifstream* file) {
@@ -44,8 +41,7 @@ namespace Lib {
             if (i == 0) {
                 istringstream iss(line);
                 string row, col;
-                getline(iss, row, ' ');
-                getline(iss, col, ' ');
+                iss >> row >> col;
                 n = stoi(row);
                 m = stoi(col);
             }
@@ -53,7 +49,7 @@ namespace Lib {
                 istringstream iss(line);
                 for (int j = 0; j < m; j++) {
                     string temp;
-                    getline(iss, temp, ' ');
+                    iss >> temp;
                     if (temp == "-") {
                         recipeList.push_back("UNDEFINED");
                     }
@@ -66,8 +62,7 @@ namespace Lib {
             else {
                 istringstream iss(line);
                 string tempname, tempquantity;
-                getline(iss, tempname, ' ');
-                getline(iss, tempquantity, ' ');
+                iss >> tempname >> tempquantity;
                 name = tempname;
                 quantity = stoi(tempquantity);
             }
