@@ -213,6 +213,7 @@ namespace Lib {
         if (itInv2 == nullptr) { // if dest empty, copy to dest and set empty source
             gm.inv.set(destSlot, itInv->copy());
             gm.inv.set(slotSrc, nullptr);
+            cout << "Item " << itInv->getName() << " successfully moved to the inventory!" << endl;
             return;
         }
         else if (itInv->getID() != itInv2->getID()) { // if dest not empty throw error

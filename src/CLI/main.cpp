@@ -116,7 +116,6 @@ int main() {
             string outputPath;
             cin >> outputPath;
             ExportHandler(outputPath);
-            cout << "Exported file to path " << outputPath << "!" << endl;
         }
         else if (command == "EXIT"){
             cout << "Exiting program..." << endl;

@@ -107,7 +107,7 @@ namespace Lib {
 			return exc + "Inventory full!\n";
 		}
 		else if (this->name == "EMPTY") {
-			return exc + "This slot is empty; couldn't discard anything!\n";
+			return exc + "This slot is empty; couldn't discard / use anything!\n";
 		}
 		else if (this->name == "OVER") {
 			return exc + "You're attempting to discard more than the available quantity!\n";
@@ -133,7 +133,7 @@ namespace Lib {
 			return exc + "This slot has reached its maximum capacity!\n";
 		}
 		else if (this->name == "EMPTY") {
-			return exc + "This slot is empty; couldn't discard anything!\n";
+			return exc + "This slot is empty; couldn't discard / use anything!\n";
 		}
 		return "";
 	}
