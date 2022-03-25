@@ -17,6 +17,7 @@ constexpr auto CRAFT_ROWS = 3;
 #define GET_CRAFT(i,j) gm.crftab[CRAFT_IDX(i,j)]
 constexpr auto MAX_STACK = 64;
 constexpr auto UNDEFINED_QUANTITY = 999;
+constexpr auto UNDEFINED_ID = -999;
 constexpr auto MAX_DURABILITY = 10;
 constexpr auto WIDTH = 12;
 constexpr auto NUMWIDTH = 4;

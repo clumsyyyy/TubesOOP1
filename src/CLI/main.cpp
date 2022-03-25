@@ -61,7 +61,6 @@ int main() {
                 cin >> qty;
             }
             DiscardHandler(index, qty);
-      
         }
         else if (command == "USE") 
         {

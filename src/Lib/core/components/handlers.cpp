@@ -1,4 +1,5 @@
 #include "headers/handlers.hpp"
+#include "headers/vars.hpp"
 #include "headers/exception.hpp"
 #include "headers/GameManager.hpp"
 #include "../globals.hpp"
@@ -68,7 +69,7 @@ namespace Lib {
     void DiscardHandler(int index, int qty) {
         try {
             Item* it = gm.inv[index];
-            if (it == nullptr) {
+            if (it->getID() == UNDEFINED_ID) {
                 throw new InvException("EMPTY");
             }
             else {

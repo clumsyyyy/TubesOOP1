@@ -91,6 +91,7 @@ namespace Lib {
                 item_inv.setQuantity(item_inv.getQuantity() + craft_qty);
                 gm.inv.set(destSlot, invItem->copy());
                 gm.crftab.set(slotSrc, nullptr);
+                cout << "Item " << invItem->getName() << " successfully moved to the inventory!" << endl;
             }
             else { // should be tool
                 throw new MoveException("TOOL");
@@ -99,6 +100,7 @@ namespace Lib {
         else { // dest empty, direct set
             gm.inv.set(destSlot, crfItem->copy());
             gm.crftab.set(slotSrc, nullptr);
+            cout << "Item " << crfItem->getName() << " successfully moved to the inventory!" << endl;
         }
     }
 }
