@@ -75,6 +75,7 @@ namespace Lib {
      * @param start start index to begin adding
      */
     void Inventory::addNonTool(NonTool* item, int start){
+        int emptyCount = 0;
         for (int i = start; i < INV_SIZE; i++) {
             if (this->get(i) != nullptr) {
                 NonTool& currItem = NonTool::FromItem(this->get(i));
@@ -87,12 +88,39 @@ namespace Lib {
                         return;
                     }
                     else {
-                        item->setQuantity(item->getQuantity() - (MAX_STACK - currItem.getQuantity()));
-                        currItem.setQuantity(MAX_STACK);
-                        this->addNonTool(item, i + 1);
-                        return;
+                        if (emptyCount == 0) {
+                            item->setQuantity(item->getQuantity() - (MAX_STACK - currItem.getQuantity()));
+                            currItem.setQuantity(MAX_STACK);
+                            this->addNonTool(item, i + 1);
+                            return;
+                        }
+                        else {
+                            for (int j = 0; j < INV_SIZE && emptyCount != 0; j++) {
+                                if (this->get(j) == nullptr && item->getQuantity() > MAX_STACK) {
+                                    emptyCount--;
+                                    NonTool* NT = new NonTool(*item);
+                                    NT->setQuantity(MAX_STACK);
+                                    this->set(j, NT);
+                                    item->setQuantity(item->getQuantity() - MAX_STACK);
+                                }
+                            }
+                            if (currItem.getQuantity() + item->getQuantity() <= MAX_STACK) {
+                                currItem.setQuantity(currItem.getQuantity() + item->getQuantity());
+                                cout << "Item " << item->getName() << " successfully added!" << endl;
+                                return;
+                            }
+                            else {
+                                item->setQuantity(item->getQuantity() - (MAX_STACK - currItem.getQuantity()));
+                                currItem.setQuantity(MAX_STACK);
+                                this->addNonTool(item, i + 1);
+                                return;
+                            }
+                        }
                     }
                 }
+            }
+            else {
+                emptyCount++;
             }
         }
         // case 2: if not found, find from the first slot
