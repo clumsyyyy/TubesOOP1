@@ -162,6 +162,9 @@ namespace Lib {
         if (it != nullptr && it->isTool() && slotCount != 1) {
             throw new MoveException("INVALIDSLOT");
         }
+        if(sourceCraft && slotCount != 1){
+            throw new MoveException("INVALIDSLOT");
+        }
 
         //INPUT DESTINATION SLOT
         string slotDest;
