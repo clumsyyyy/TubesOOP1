@@ -55,10 +55,17 @@ int main() {
             // USAGE: DISCARD <INVENTORY_SLOT_ID> <ITEM_QTY>
             string slot;
             cin >> slot;
-            int index = stoi(slot.substr(1, slot.length() - 1)); // Getting the index of the slot
+            int index = -1;
             int qty = 1;
-            if (gm.inv[index]->isNonTool()) {
-                cin >> qty;
+            try {
+                index = stoi(slot.substr(1, slot.length() - 1));
+                if (gm.inv[index] != nullptr && gm.inv[index]->isNonTool()) {
+                    cin >> qty;
+                }
+            }
+            catch (...) {
+                index = -1;
+                qty = 1;
             }
             DiscardHandler(index, qty);
         }
@@ -167,6 +174,7 @@ int main() {
             cout << "Invalid command! Type `HELP` to see available commands." << endl;
         }
         cout << "\n[INPUT COMMAND] | >> ";
+        cin.clear();
         ClearBuffer();
     }
     // return 0;

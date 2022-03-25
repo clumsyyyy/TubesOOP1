@@ -69,16 +69,20 @@ namespace Lib {
     void DiscardHandler(int index, int qty) {
         try {
             Item* it = gm.inv[index];
-            if (it->getID() == UNDEFINED_ID) {
+            if (it == nullptr) {
                 throw new InvException("EMPTY");
             }
             else {
                 if (it->isNonTool()) { // Checking if the item is NonTool 
-                    cout << "Discarded item " << it->getName() << " from slot I" << index << "." << endl;
+                    string nameNT = it->getName();
                     gm.inv.discard(index, qty); // If the item is NonTool, discard by quantity
+                    cout << "Discarded item " << nameNT << " from slot I" << index << "." << endl;
+                    
                 } else {
-                    cout << "Discarded tool " << it->getName() << " from slot I" << index << "." << endl;
+                    string nameTool = it->getName();
                     gm.inv.set(index, nullptr); // If the item is Tool, discard by setting the slot to empty
+                    cout << "Discarded tool " << nameTool << " from slot I" << index << "." << endl;
+                    
                 }
             }
         }
@@ -89,7 +93,13 @@ namespace Lib {
 
     void UseHandler(string slot) {
         try {
-            int index = stoi(slot.substr(1, slot.length() - 1));
+            int index = -1;
+            try {
+                index = stoi(slot.substr(1, slot.length() - 1));
+            }
+            catch (...) {
+                index = -1;
+            }
             Item* used_item = gm.inv[index];
             if (used_item != nullptr) {
                 if (used_item->isNonTool()) // Item can't be used unless it's a tool

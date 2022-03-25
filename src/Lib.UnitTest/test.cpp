@@ -207,3 +207,44 @@ TEST(CRAFTING, WOODEN_SWORD) {
 	std::string slot = "I0";
 	Lib::DiscardHandler(stoi(slot.substr(1, slot.length() - 1)), 1);
 }
+
+// BERANTEM TESTING
+
+TEST(WRONGCOMMAND, DISCARD_EMPTY) {
+	std::string slot = "I0";
+	EXPECT_NO_THROW(Lib::DiscardHandler(stoi(slot.substr(1, slot.length() - 1)), 10000));
+}
+
+TEST(WRONGCOMMAND, DISCARD_MORE_THAN_AVAILABLE) {
+	Lib::GiveHandler("DIAMOND", 6);
+	std::string slot = "I0";
+	EXPECT_NO_THROW(Lib::DiscardHandler(stoi(slot.substr(1, slot.length() - 1)), 10000));
+	Lib::DiscardHandler(stoi(slot.substr(1, slot.length() - 1)), 6);
+}
+
+TEST(WRONGCOMMAND, GIVE_MORE_THAN_AVAILABLE) {
+	EXPECT_NO_THROW(Lib::GiveHandler("STICK", 27 * 64 + 1)); cout << endl;
+}
+
+TEST(WRONGCOMMAND, MOVE_ALLSTR) {
+	std::vector<std::string> sd = { "A", "B", "C", "D", "E"};
+	EXPECT_ANY_THROW(Lib::MoveHandler("C0", 5, sd));
+}
+
+TEST(WRONGCOMMAND, USE_EMPTY_INV) {
+	EXPECT_NO_THROW(Lib::UseHandler("I0"));
+}
+
+TEST(WRONGCOMMAND, USE_NONEXISTENT) {
+	EXPECT_NO_THROW(Lib::UseHandler("CRINGE"));
+}
+
+TEST(WRONGCOMMAND, USE_CRAFTINGTABLE) {
+	Lib::GiveHandler("DIAMOND_SWORD", 1);
+	std::vector<std::string> sd = { "C0"};
+	Lib::MoveHandler("I0", 1, sd);
+	EXPECT_NO_THROW(Lib::UseHandler("C0"));
+	sd = { "I0" };
+	Lib::MoveHandler("C0", 1, sd);
+	Lib::DiscardHandler(0, 2);
+}

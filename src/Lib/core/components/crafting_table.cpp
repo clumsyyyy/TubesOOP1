@@ -89,18 +89,20 @@ namespace Lib {
                 }
                 // Set total quantity
                 item_inv.setQuantity(item_inv.getQuantity() + craft_qty);
+                cout << "Item " << invItem->getName() << " successfully moved to the inventory!" << endl;
                 gm.inv.set(destSlot, invItem->copy());
                 gm.crftab.set(slotSrc, nullptr);
-                cout << "Item " << invItem->getName() << " successfully moved to the inventory!" << endl;
+
             }
             else { // should be tool
                 throw new MoveException("TOOL");
             }
         }
         else { // dest empty, direct set
+            cout << "Item " << crfItem->getName() << " successfully moved to the inventory!" << endl;
             gm.inv.set(destSlot, crfItem->copy());
             gm.crftab.set(slotSrc, nullptr);
-            cout << "Item " << crfItem->getName() << " successfully moved to the inventory!" << endl;
+
         }
     }
 }
