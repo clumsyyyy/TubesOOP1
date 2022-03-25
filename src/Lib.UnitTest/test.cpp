@@ -208,6 +208,37 @@ TEST(CRAFTING, WOODEN_SWORD) {
 	Lib::DiscardHandler(stoi(slot.substr(1, slot.length() - 1)), 1);
 }
 
+// COMMAND TEST
+
+TEST(RIGHTCOMMAND, SHOW) {
+	cout << Lib::gm.crftab;
+	cout << Lib::gm.inv;
+}
+
+TEST(RIGHTCOMMAND, GIVE) {
+	Lib::GiveHandler("OAK_PLANK", 2);
+	Lib::GiveHandler("STICK", 1);
+}
+
+TEST(RIGHTCOMMAND, MOVE) {
+	std::vector<std::string> sd = { "C1", "C4" };
+	Lib::MoveHandler("I0", 2, sd);
+	sd = { "C7" };
+	Lib::MoveHandler("I1", 1, sd);
+}
+
+TEST(RIGHTCOMMAND, CRAFT) {
+	Lib::CraftingHandler();
+}
+
+TEST(RIGHTCOMMAND, DISCARD) {
+	EXPECT_NO_THROW(Lib::DiscardHandler(0, 1));
+}
+
+TEST(RIGHTCOMMAND, EXPORT) {
+	Lib::ExportHandler("test.txt");
+}
+
 // BERANTEM TESTING
 
 TEST(WRONGCOMMAND, DISCARD_EMPTY) {
