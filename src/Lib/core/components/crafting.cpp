@@ -200,31 +200,15 @@ namespace Lib {
             throw new CraftingException("RECIPE");
         }
         int sum = crf.get_sum();
-        
+        crf.set_crafting_table(count);
         if (item->isNonTool()) {
-            Item* last_item = gm.inv.get(CRAFT_SIZE-1);
-            crf.set_crafting_table(count);
-            if (last_item != nullptr && 
-                last_item->getID() != item->getID()) {
-                cout << sum << " Item " << item->getName() << " thrown away!"  << endl;
-                throw new InvException("FULL");
-            }
-            else if (last_item->getID() == item->getID() && 
-                (NonTool::FromItem(last_item).getQuantity() + sum) > 64) {
-                cout << sum << " Item " << item->getName() << " thrown away!" << endl;
-                throw new InvException("FULL");
-            }
             cout << "Item " << item->getName() << " successfully crafted! (Quantity: "
                 << sum << ") " << endl;
             gm.inv.addNonTool((NonTool*)item, 0);
         } else {
             cout << "Tool " << item->getName() << " successfully crafted! (Durability: "
                 << Tool::FromItem(item).getDurability() << ") " << endl;
-            while (count > 0) {
-                crf.set_crafting_table(1);
-                gm.inv.addTool((Tool*)item,1);
-                count--;
-            }
-        }
+            gm.inv.addTool((Tool*)item, sum);
+        }   
     }
 }
