@@ -86,6 +86,8 @@ namespace Lib {
 			return exc + "You don't have enough item to move\n";
 		}else if(this->name == "INVALIDSLOT"){
 			return exc + "Invalid slot count\n";
+		}else if(this->name == "INVALIDSLOTCOMMAND"){
+			return exc + "Invalid move slot command\n";
 		}
 		return exc;
 	}

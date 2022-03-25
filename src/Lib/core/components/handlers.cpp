@@ -124,12 +124,18 @@ namespace Lib {
         if (slotCount < 1) {
             throw new MoveException("INVALIDSLOT");
         }
-        
+        char src = 'F';
+        int slotSrc = -99;
         // get source
-        char src = source[0];;
-        string source1 = source;
-        source1.erase(0, 1);
-        int slotSrc = stoi(source1);
+        try{
+            src = source[0];;
+            string source1 = source;
+            source1.erase(0, 1);
+            slotSrc = stoi(source1);
+        }catch(...){
+            throw new MoveException("INVALIDSLOTCOMMAND");
+        }
+        
         if (src != 'C' && src != 'I') {  //Checking validity of source slot
             throw new MoveException("INVALID");
         }
@@ -162,8 +168,14 @@ namespace Lib {
             // if there's destination in two table (inventory and crafting), throw exception
             if (toInv && toCraft)
                 throw new MoveException("DOUBLETYPEDEST");
+
             slotDest.erase(0, 1);
-            allSlot[i] = stoi(slotDest);
+            try{
+                allSlot[i] = stoi(slotDest);
+            }catch(...){
+                throw new MoveException("INVALIDSLOTCOMMAND");
+            }
+            
             if ((toCraft && allSlot[i] >= CRAFT_SIZE) || (toInv && allSlot[i] >= INV_SIZE))
                 throw new MoveException("INVALIDDEST");
         }
