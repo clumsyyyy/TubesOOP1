@@ -7,7 +7,7 @@
 // "AS IT SHOULD BE" TESTING 
 
 TEST(CRAFTING, EMPTY_SLOT) {
-	EXPECT_ANY_THROW(Lib::CraftingHandler());
+	EXPECT_NO_THROW(Lib::CraftingHandler());
 }
 
 TEST(CRAFTING, BIRCH_PLANK) {
