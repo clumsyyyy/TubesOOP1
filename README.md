@@ -11,16 +11,18 @@ MejaRajin adalah sebuah program berbasis _Command-Line Interface_ dan _Graphical
 - Make Compiler pada **WSL2 / Linux**
 
   > Gunakan perintah `sudo apt install gcc make` apabila kedua kebutuhan tersebut belum terpasang 
-- _Visual Studio 2022_, dapat diunduh pada <a href = "https://visualstudio.microsoft.com/vs/community/"><b>tautan berikut</b></a>
+- **[RECOMMENDED]** _Visual Studio 2022_, dapat diunduh pada <a href = "https://visualstudio.microsoft.com/vs/community/"><b>tautan berikut</b></a>
+> Visual Studio dipakai untuk menggunakan GUI dan _unit tester_ sekaligus dapat digunakan untuk CLI.
 
 ## Cara Menggunakan
 ### Command-Line Interface
 #### Melalui WSL
-- Dari WSL, navigasi ke folder Lib dari root dengan perintah `cd Lib`
-- Untuk melakukan _testing_ dengan file yang ada, jalankan perintah `make all`. _Testing_ akan berjalan dan hasil akhir akan ditampilkan
+- Dari WSL, navigasi ke folder Lib dari root dengan perintah `cd src/Lib`
+- **Untuk melakukan _testing_ dengan file yang ada, jalankan perintah `make all`.**
+> Testing akan dilakukan terhadap file berekstensi .in pada folder `src/Lib/tests`
 ![image](https://user-images.githubusercontent.com/74661051/159971908-8bd0b668-09b4-429b-aefe-b67230c594db.png)
-- Untuk melakukan penggunaan CLI, jalankan perintah `make run`. CLI akan terbuka dalam OS.
-- Untuk membuka daftar perintah pada CLI, ketikkan perintah `HELP` dalam interface.
+- **Untuk melakukan penggunaan CLI, jalankan perintah `make run`. CLI akan terbuka dalam OS.**
+> Untuk membuka daftar perintah pada CLI, ketikkan perintah `HELP` dalam interface.
 ![image](https://user-images.githubusercontent.com/74661051/159972030-91c213d3-0620-4707-960d-58c56aa3b1b4.png)
 
 #### Melalui Visual Studio
@@ -43,16 +45,19 @@ MejaRajin adalah sebuah program berbasis _Command-Line Interface_ dan _Graphical
 ![image](https://user-images.githubusercontent.com/71161031/159953407-36bb9941-0eff-4ad4-aac6-031089b7912c.png)
 - Jalankan _GUI_ dengan menekan tombol F5 atau menggunakan opsi _Local Windows Debugger_ pada _toolbar_ bagian atas.
 ![image](https://user-images.githubusercontent.com/71161031/159953110-ab476a8e-be15-4783-9a49-34496f5797ea.png)
+- GUI akan muncul, dan dapat digunakan sebagaimana GUI Minecraft!
+![image](https://user-images.githubusercontent.com/71161031/160142866-896fee53-29dd-4b73-bfc4-317d1b2330f9.png)
 
 ### Unit Testing (GoogleTest)
 **[IMPORTANT]** Fitur ini harus diakses lewat Visual Studio!
 - Buka _Visual Studio_, navigasikan ke folder dan buka file _solution_ `MinecraftCraftingTable.sln`
 - Pada _Solution Explorer_, klik kanan pada **Lib.UnitTest** dan pilih _Select as Startup Project_. Pastikan tulisan **Lib.UnitTest** telah tercetak tebal.
-
 ![image](https://user-images.githubusercontent.com/71161031/159952730-c82b6d88-7185-4816-b1a6-3840dee21e84.png)
 - Jalankan _unit tester_ dengan menekan tombol F5 atau menggunakan opsi _Local Windows Debugger_ pada _toolbar_ bagian atas.
-
 ![image](https://user-images.githubusercontent.com/71161031/159953110-ab476a8e-be15-4783-9a49-34496f5797ea.png)
+- Unit tester akan berjalan dan hasil akan muncul.
+![image](https://user-images.githubusercontent.com/71161031/160143049-f0681dc2-7a08-4ab7-9c76-055536300868.png)
+
 
 ## Anggota Kelompok
 - Timothy Stanley Setiawan  - 13520028
